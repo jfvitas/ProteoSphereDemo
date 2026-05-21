@@ -179,13 +179,20 @@ REM ---- spawn the browser-opener watchdog ----------------------
 REM Instead of a fixed 2-second delay (which races torch's cold
 REM import, especially when Defender is scanning .pyd files), we
 REM spawn a background poller that waits for the port to actually
-REM be in LISTENING state before opening the browser. Polls every
-REM 1 second, gives up + prints the URL if not bound within 120s.
+REM accept TCP connections before opening the browser.
 REM
-REM Inline the polling script via cmd /v:on /c so we can use
-REM delayed expansion to update a counter inside the loop.
+REM We use PowerShell's TcpClient (not netstat) because:
+REM   1. PowerShell's exit code reliably signals success/failure
+REM   2. TcpClient works for both IPv4 and IPv6 listeners
+REM   3. The previous cmd /v:on /c "...:loop...goto loop..."
+REM      one-liner was fragile -- labels inside single-string
+REM      cmd /c invocations don't always resolve, which caused
+REM      the watcher to silently no-op on some machines.
+REM
+REM On success we open the URL via PowerShell's Start-Process,
+REM which uses the user's default browser association reliably.
 if /I not "%GUI_FLAG%"=="nogui" (
-    start "ProteoSphere browser-opener" /MIN cmd /v:on /c "set N=0 & :loop & timeout /t 1 /nobreak ^>nul & netstat -ano ^| findstr /R /C:":%PORT% .*LISTENING" ^>nul & if not errorlevel 1 (start "" http://127.0.0.1:%PORT%/v2/ & exit /b 0) & set /a N+=1 & if !N! LSS 120 goto loop & echo Server did not bind port %PORT% within 120 seconds. Open http://127.0.0.1:%PORT%/v2/ manually once the server log says 'Listening on'. & exit /b 1"
+    start "ProteoSphere browser-opener" /MIN powershell -NoProfile -ExecutionPolicy Bypass -Command "$port = %PORT%; $url = 'http://127.0.0.1:' + $port + '/v2/'; for ($i = 0; $i -lt 120; $i++) { try { $c = New-Object System.Net.Sockets.TcpClient; $c.Connect('127.0.0.1', $port); $c.Close(); Start-Sleep -Milliseconds 400; Start-Process $url; exit 0 } catch { Start-Sleep -Seconds 1 } }; Write-Host ('Server did not bind port ' + $port + ' within 120s. Open ' + $url + ' manually.'); exit 1"
 )
 
 echo.
