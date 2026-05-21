@@ -36,37 +36,43 @@ splitter / analyzer / training pipeline interactively.
   fallbacks — see `LIMITATIONS.md` if you remember the "results always
   identical" issue).
 
-## Quickstart (Windows) — 3 steps
+## Quickstart (Windows) — 4 steps
 
 > **You need Python 3.10+ installed** (check with `python --version`).
 > If not, get it from https://python.org/downloads — make sure to tick
 > "Add Python to PATH" during install.
 
 ```cmd
+REM 1. Clone (or unzip from "Code -> Download ZIP")
 git clone https://github.com/jfvitas/ProteoSphereDemo.git
 cd ProteoSphereDemo
 
-REM On first run only: install dependencies (~3 min)
+REM 2. Install Python dependencies (~3 minutes)
 pip install -r requirements.txt
 
-REM Then any time you want to launch the GUI:
+REM 3. RIGHT-CLICK setup_windows_defender.bat -> "Run as administrator"
+REM    This adds Defender exclusions for python.exe + torch + nvidia
+REM    so the server boots in <5 seconds instead of being held up
+REM    for minutes by real-time antivirus scanning. One-time only.
+
+REM 4. Launch the GUI:
 launch_model_studio.bat
 ```
 
-If you skip the `pip install` step and just double-click the .bat,
-the launcher will detect missing dependencies and **offer to install
-them for you** — just answer `Y` at the prompt.
-
 The launcher will:
 
-1. Check for prior listeners on port 8765 and kill them if found
-2. **Verify duckdb + pyarrow are importable**, and offer to `pip
-   install` if not
+1. Kill any prior listener on port 8765
+2. Filesystem-check that duckdb/pyarrow/torch are installed (no
+   `python.exe` probe — that path used to hang on machines where
+   Defender held python imports)
 3. Start the slim HTTP server in this terminal
-4. Open `http://127.0.0.1:8765/v2/` in your default browser
+4. **Poll for the port to actually bind**, then open the browser to
+   `http://127.0.0.1:8765/v2/` only once the server is ready (no
+   more "site can't be reached" because the browser opened too early)
 
-First boot includes a one-time torch warmup (~10 seconds). Subsequent
-launches are <2 seconds.
+If the server takes longer than 60 seconds to bind, it's almost
+certainly Defender holding torch — run `setup_windows_defender.bat`
+as administrator and try again.
 
 ## Quickstart (macOS/Linux)
 

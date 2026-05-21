@@ -100,20 +100,30 @@ echo   GUI URL   : http://127.0.0.1:%PORT%/v2/
 echo  ============================================================
 echo.
 
-REM ---- dependency check ----------------------------------------
-REM On a fresh `git clone` (or unzipped GitHub download), nothing is
-REM installed yet. We probe for duckdb + pyarrow and surface a clear
-REM "run pip install first" message rather than letting Python crash
-REM silently after the banner with ModuleNotFoundError.
+REM ---- dependency check (FILESYSTEM-based, no python.exe spawn) -
+REM We DO NOT spawn `python -c "import duckdb"` as a dependency probe
+REM because Windows Defender's real-time scan of python.exe + large
+REM .pyd files (torch especially) can hang the probe for minutes on
+REM machines where the file-locking heuristic has been triggered.
+REM Instead we inspect site-packages on disk directly.
 REM
-REM Uses GOTO labels instead of nested-paren if-blocks because
-REM cmd.exe evaluates `if errorlevel` at PARSE time inside
-REM parenthesised blocks, not at runtime -- which silently swallows
-REM the pip-install failure case. Goto-based flow control sidesteps
-REM the whole class of bugs.
-echo  Checking Python dependencies...
-"%PY%" -X utf8 -c "import duckdb, pyarrow" 1>nul 2>nul
-if not errorlevel 1 goto deps_ok
+REM Derive site-packages from the python.exe path:
+REM   <python_dir>/python.exe -> <python_dir>/Lib/site-packages
+REM This is the standard layout for the python.org installer. Conda
+REM environments use the same layout. Virtualenvs use Scripts/ so
+REM we check both.
+for %%F in ("%PY%") do set "PY_DIR=%%~dpF"
+if "%PY_DIR:~-1%"=="\" set "PY_DIR=%PY_DIR:~0,-1%"
+set "SITE_PKG=%PY_DIR%\Lib\site-packages"
+if not exist "%SITE_PKG%" set "SITE_PKG=%PY_DIR%\..\Lib\site-packages"
+
+echo  Checking Python dependencies in %SITE_PKG%...
+set "MISSING="
+if not exist "%SITE_PKG%\duckdb"  set "MISSING=!MISSING! duckdb"
+if not exist "%SITE_PKG%\pyarrow" set "MISSING=!MISSING! pyarrow"
+if not exist "%SITE_PKG%\torch"   set "MISSING=!MISSING! torch"
+if "!MISSING!"=="" goto deps_ok
+echo   Missing packages:!MISSING!
 
 echo.
 echo  -----------------------------------------------------------
@@ -165,19 +175,37 @@ exit /b 3
 
 :deps_ok
 
-REM ---- open the browser shortly after the server starts ------
-REM We schedule the open in a detached cmd so the server's
-REM stdout stays in the foreground window.
+REM ---- spawn the browser-opener watchdog ----------------------
+REM Instead of a fixed 2-second delay (which races torch's cold
+REM import, especially when Defender is scanning .pyd files), we
+REM spawn a background poller that waits for the port to actually
+REM be in LISTENING state before opening the browser. Polls every
+REM 1 second, gives up + prints the URL if not bound within 120s.
+REM
+REM Inline the polling script via cmd /v:on /c so we can use
+REM delayed expansion to update a counter inside the loop.
 if /I not "%GUI_FLAG%"=="nogui" (
-    start "" /MIN cmd /c "timeout /t 2 /nobreak >nul && start "" http://127.0.0.1:%PORT%/v2/"
+    start "ProteoSphere browser-opener" /MIN cmd /v:on /c "set N=0 & :loop & timeout /t 1 /nobreak ^>nul & netstat -ano ^| findstr /R /C:":%PORT% .*LISTENING" ^>nul & if not errorlevel 1 (start "" http://127.0.0.1:%PORT%/v2/ & exit /b 0) & set /a N+=1 & if !N! LSS 120 goto loop & echo Server did not bind port %PORT% within 120 seconds. Open http://127.0.0.1:%PORT%/v2/ manually once the server log says 'Listening on'. & exit /b 1"
 )
+
+echo.
+echo  Starting server (first launch can take 30-60 seconds while
+echo  torch loads its native libraries)...
+echo  The browser will open automatically once the server is ready.
+echo.
+echo  If it takes more than 60 seconds, your antivirus is probably
+echo  scanning torch's .pyd files on first load. Run
+echo  setup_windows_defender.bat (one-time, as admin) to add the
+echo  needed exclusions.
+echo.
 
 REM ---- launch the slim v2 server from inside the worktree ----
 REM This entry point is deliberately minimal:
 REM    * static GUI assets at /v2/*
 REM    * API routes at /api/v2/*
-REM No torch / sklearn at boot -- those load lazily on the first
-REM training launch from the Pipeline screen.
+REM Torch loads lazily on the first training launch from the
+REM Pipeline screen; the server itself binds the port in <2s
+REM on a non-Defender-blocked machine.
 pushd "%WORKTREE%"
 "%PY%" -X utf8 -m api.model_studio.server_v2 --port %PORT%
 set "RC=%ERRORLEVEL%"
@@ -186,7 +214,16 @@ popd
 if not "%RC%"=="0" (
     echo.
     echo  Server exited with code %RC%.
+    echo.
+    echo  Most common cause: torch import hung due to Windows
+    echo  Defender. Try running setup_windows_defender.bat once
+    echo  as an administrator, then re-launch.
+    echo.
     echo  Press any key to close...
+    pause >nul
+) else (
+    echo.
+    echo  Server stopped cleanly. Press any key to close...
     pause >nul
 )
 
