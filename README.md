@@ -36,19 +36,32 @@ splitter / analyzer / training pipeline interactively.
   fallbacks — see `LIMITATIONS.md` if you remember the "results always
   identical" issue).
 
-## Quickstart (Windows)
+## Quickstart (Windows) — 3 steps
+
+> **You need Python 3.10+ installed** (check with `python --version`).
+> If not, get it from https://python.org/downloads — make sure to tick
+> "Add Python to PATH" during install.
 
 ```cmd
-git clone https://github.com/<your-handle>/proteosphere-model-studio.git
-cd proteosphere-model-studio
+git clone https://github.com/jfvitas/ProteoSphereDemo.git
+cd ProteoSphereDemo
+
+REM On first run only: install dependencies (~3 min)
+pip install -r requirements.txt
+
+REM Then any time you want to launch the GUI:
 launch_model_studio.bat
 ```
+
+If you skip the `pip install` step and just double-click the .bat,
+the launcher will detect missing dependencies and **offer to install
+them for you** — just answer `Y` at the prompt.
 
 The launcher will:
 
 1. Check for prior listeners on port 8765 and kill them if found
-   (the dual-process issue documented in `docs/ARCHITECTURE.md`)
-2. Find a Python 3.10+ interpreter
+2. **Verify duckdb + pyarrow are importable**, and offer to `pip
+   install` if not
 3. Start the slim HTTP server in this terminal
 4. Open `http://127.0.0.1:8765/v2/` in your default browser
 

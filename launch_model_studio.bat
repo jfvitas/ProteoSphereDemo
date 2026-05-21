@@ -100,6 +100,55 @@ echo   GUI URL   : http://127.0.0.1:%PORT%/v2/
 echo  ============================================================
 echo.
 
+REM ---- dependency check ----------------------------------------
+REM On a fresh `git clone` (or unzipped GitHub download), nothing is
+REM installed yet. We probe for duckdb + pyarrow + torch and surface
+REM a clear "run pip install first" message rather than letting
+REM Python crash silently after the banner with ModuleNotFoundError.
+echo  Checking Python dependencies...
+"%PY%" -X utf8 -c "import duckdb, pyarrow" 2>nul
+if errorlevel 1 (
+    echo.
+    echo  -----------------------------------------------------------
+    echo  MISSING DEPENDENCIES
+    echo  -----------------------------------------------------------
+    echo.
+    echo  The Model Studio needs duckdb + pyarrow + torch installed
+    echo  in your active Python environment. They are not yet present.
+    echo.
+    echo  Would you like me to install them now? ^(takes ~3-4 minutes
+    echo  on a normal connection, no admin rights needed^)
+    echo.
+    set "INSTALL_REPLY="
+    set /p INSTALL_REPLY=Install dependencies? [Y/n] ^>
+    if /I not "!INSTALL_REPLY!"=="n" (
+        echo.
+        echo  Running: pip install -r requirements.txt
+        "%PY%" -m pip install --upgrade pip
+        "%PY%" -m pip install -r "%REPO_ROOT%\requirements.txt"
+        if errorlevel 1 (
+            echo.
+            echo  pip install failed. See the messages above. Common fixes:
+            echo    * make sure you're online
+            echo    * try: %PY% -m pip install --upgrade pip
+            echo    * try: %PY% -m pip install -r "%REPO_ROOT%\requirements.txt" --user
+            echo.
+            pause
+            exit /b 4
+        )
+        echo.
+        echo  Dependencies installed. Continuing with launch...
+        echo.
+    ) else (
+        echo.
+        echo  Aborted. To install manually, run:
+        echo    %PY% -m pip install -r "%REPO_ROOT%\requirements.txt"
+        echo.
+        pause
+        exit /b 3
+    )
+)
+
 REM ---- open the browser shortly after the server starts ------
 REM We schedule the open in a detached cmd so the server's
 REM stdout stays in the foreground window.
