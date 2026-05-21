@@ -102,52 +102,68 @@ echo.
 
 REM ---- dependency check ----------------------------------------
 REM On a fresh `git clone` (or unzipped GitHub download), nothing is
-REM installed yet. We probe for duckdb + pyarrow + torch and surface
-REM a clear "run pip install first" message rather than letting
-REM Python crash silently after the banner with ModuleNotFoundError.
+REM installed yet. We probe for duckdb + pyarrow and surface a clear
+REM "run pip install first" message rather than letting Python crash
+REM silently after the banner with ModuleNotFoundError.
+REM
+REM Uses GOTO labels instead of nested-paren if-blocks because
+REM cmd.exe evaluates `if errorlevel` at PARSE time inside
+REM parenthesised blocks, not at runtime — which silently swallows
+REM the pip-install failure case. Goto-based flow control sidesteps
+REM the whole class of bugs.
 echo  Checking Python dependencies...
-"%PY%" -X utf8 -c "import duckdb, pyarrow" 2>nul
-if errorlevel 1 (
-    echo.
-    echo  -----------------------------------------------------------
-    echo  MISSING DEPENDENCIES
-    echo  -----------------------------------------------------------
-    echo.
-    echo  The Model Studio needs duckdb + pyarrow + torch installed
-    echo  in your active Python environment. They are not yet present.
-    echo.
-    echo  Would you like me to install them now? ^(takes ~3-4 minutes
-    echo  on a normal connection, no admin rights needed^)
-    echo.
-    set "INSTALL_REPLY="
-    set /p INSTALL_REPLY=Install dependencies? [Y/n] ^>
-    if /I not "!INSTALL_REPLY!"=="n" (
-        echo.
-        echo  Running: pip install -r requirements.txt
-        "%PY%" -m pip install --upgrade pip
-        "%PY%" -m pip install -r "%REPO_ROOT%\requirements.txt"
-        if errorlevel 1 (
-            echo.
-            echo  pip install failed. See the messages above. Common fixes:
-            echo    * make sure you're online
-            echo    * try: %PY% -m pip install --upgrade pip
-            echo    * try: %PY% -m pip install -r "%REPO_ROOT%\requirements.txt" --user
-            echo.
-            pause
-            exit /b 4
-        )
-        echo.
-        echo  Dependencies installed. Continuing with launch...
-        echo.
-    ) else (
-        echo.
-        echo  Aborted. To install manually, run:
-        echo    %PY% -m pip install -r "%REPO_ROOT%\requirements.txt"
-        echo.
-        pause
-        exit /b 3
-    )
-)
+"%PY%" -X utf8 -c "import duckdb, pyarrow" 1>nul 2>nul
+if not errorlevel 1 goto deps_ok
+
+echo.
+echo  -----------------------------------------------------------
+echo   MISSING DEPENDENCIES
+echo  -----------------------------------------------------------
+echo.
+echo   The Model Studio needs duckdb + pyarrow + torch installed
+echo   in your active Python environment. They are not yet present.
+echo.
+echo   Would you like me to install them now?
+echo   ^(takes ~3-4 minutes, no admin rights needed^)
+echo.
+set "INSTALL_REPLY=Y"
+set /p "INSTALL_REPLY=Install dependencies? [Y/n] "
+if /I "!INSTALL_REPLY!"=="n"  goto deps_user_skipped
+if /I "!INSTALL_REPLY!"=="no" goto deps_user_skipped
+
+echo.
+echo   Running: %PY% -m pip install --upgrade pip
+"%PY%" -m pip install --upgrade pip
+if errorlevel 1 goto deps_install_failed
+echo.
+echo   Running: %PY% -m pip install -r requirements.txt
+"%PY%" -m pip install -r "%REPO_ROOT%\requirements.txt"
+if errorlevel 1 goto deps_install_failed
+echo.
+echo   Dependencies installed. Continuing with launch...
+echo.
+goto deps_ok
+
+:deps_install_failed
+echo.
+echo   pip install failed. Common fixes:
+echo     * make sure you're online
+echo     * try the --user flag:  %PY% -m pip install -r "%REPO_ROOT%\requirements.txt" --user
+echo.
+echo  Press any key to close...
+pause >nul
+exit /b 4
+
+:deps_user_skipped
+echo.
+echo   Skipped. To install manually:
+echo     %PY% -m pip install -r "%REPO_ROOT%\requirements.txt"
+echo.
+echo  Press any key to close...
+pause >nul
+exit /b 3
+
+:deps_ok
 
 REM ---- open the browser shortly after the server starts ------
 REM We schedule the open in a detached cmd so the server's
