@@ -724,21 +724,29 @@ def register_handlers(handler_class) -> None:
     except Exception as exc:
         print(f"[v2] CUDA warmup skipped: {exc}", flush=True)
 
-    # Boot-time inventory log. Prints the templates this process accepts
-    # so a user inspecting server logs can quickly tell whether the
-    # running build supports their feature ("flow" especially — Python
-    # doesn't hot-reload, so an old server process can silently lag the
-    # on-disk source. If a launch returns 501 for "flow" but this log
-    # shows "flow" in the supported set, the GUI is talking to a
-    # different process; if "flow" is missing from this log, restart.)
-    try:
-        from .models import TEMPLATE_BUILDERS
-        supported = sorted(TEMPLATE_BUILDERS) + ["flow"]
-        print(f"[v2] supported templates ({len(supported)}): {supported}", flush=True)
-        print(f"[v2] flow compiler: enabled (POST /api/v2/pipeline/launch "
-              f"with template_id='flow' + effective_config.flow=...)", flush=True)
-    except Exception as exc:
-        print(f"[v2] template inventory log skipped: {exc}", flush=True)
+    # Boot-time inventory log. We deliberately AVOID importing
+    # `.models` here because that pulls torch synchronously on the
+    # main thread, and torch's cold import can take 30-120 seconds
+    # on Windows when antivirus is scanning its ~700 .pyd files.
+    # That delay used to make the launcher appear hung and the
+    # browser auto-open hit ERR_CONNECTION_REFUSED.
+    #
+    # Instead we hardcode the template list. Templates are stable
+    # across releases; if a new one ships, update this list. The
+    # actual dispatch in handle_get / handle_post still imports
+    # `.models` lazily on the first /pipeline/launch request, at
+    # which point the user is explicitly asking to train and can
+    # afford a few seconds of torch cold-load.
+    _DECLARED_TEMPLATES = (
+        "baseline_mlp", "conplex", "deepdta", "drugban", "graphdta",
+        "moltrans", "ppi_gnn_siamese", "struct_gnn_dta",
+        "tabular_mlp", "thermo_mlp", "flow",
+    )
+    print(f"[v2] supported templates ({len(_DECLARED_TEMPLATES)}): "
+          f"{list(_DECLARED_TEMPLATES)} (declared; torch import deferred to "
+          f"first /pipeline/launch request)", flush=True)
+    print(f"[v2] flow compiler: enabled (POST /api/v2/pipeline/launch "
+          f"with template_id='flow' + effective_config.flow=...)", flush=True)
 
     def new_do_get(self):
         # Note: keep the query string here so handle_get can read it.
