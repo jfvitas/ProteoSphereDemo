@@ -942,17 +942,23 @@ def _train_run_inner(run: Run) -> None:
     elif is_pp_emb_run:
         # Two-tower PPI on cached ESM-2 embeddings.
         from .dataset_warehouse import make_ppi_esm_loaders
+        from .embeddings import set_progress_cb
         source = benchmark if benchmark in ("hippie", "huri") else "hippie"
         run.emit({"type": "log", "level": "info",
                   "text": (f"Loading {source} PPI via two-tower ESM-2 loader "
                            f"(split={split_policy if split_policy != 'random' else 'cold-protein'}, "
                            f"batch={batch_size}). Resolving ESM-2 cache for both proteins…")})
-        train_loader, val_loader, test_loader, meta = make_ppi_esm_loaders(
-            source=source,
-            split_policy=split_policy if split_policy in ("random", "cold-protein") else "cold-protein",
-            batch_size=batch_size,
-            seed=seed,
-        )
+        # Install GUI heartbeat for the duration of the loader call.
+        set_progress_cb(run.emit)
+        try:
+            train_loader, val_loader, test_loader, meta = make_ppi_esm_loaders(
+                source=source,
+                split_policy=split_policy if split_policy in ("random", "cold-protein") else "cold-protein",
+                batch_size=batch_size,
+                seed=seed,
+            )
+        finally:
+            set_progress_cb(None)
         cm = meta.get("esm2_cache_meta") or {}
         run.emit({"type": "log", "level": "ok",
                   "text": (f"PP-ESM cache resolved: {cm.get('cache_hits', 0)} hits, "
@@ -1027,9 +1033,17 @@ def _train_run_inner(run: Run) -> None:
         if is_esm_fp_run:
             _esm_kwargs["fp_radius"] = _flow_fp_radius
             _esm_kwargs["fp_bits"]   = _flow_fp_bits
-        train_loader, val_loader, test_loader, meta = _make_esm(
-            benchmark, **_esm_kwargs,
-        )
+        # Install GUI heartbeat so the Training tab shows live progress
+        # while batch_get_or_compute resolves the ESM-2 cache (or computes
+        # missing entries via fair-esm — slow on CPU without a heartbeat).
+        from .embeddings import set_progress_cb
+        set_progress_cb(run.emit)
+        try:
+            train_loader, val_loader, test_loader, meta = _make_esm(
+                benchmark, **_esm_kwargs,
+            )
+        finally:
+            set_progress_cb(None)
         cm = meta.get("esm2_cache_meta") or {}
         run.emit({"type": "log", "level": "ok",
                   "text": (f"ESM-2 cache resolved: {cm.get('cache_hits', 0)} hits, "

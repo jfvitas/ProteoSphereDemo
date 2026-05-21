@@ -39,8 +39,15 @@ splitter / analyzer / training pipeline interactively.
 ## Quickstart (Windows) — 4 steps
 
 > **You need Python 3.10+ installed** (check with `python --version`).
-> If not, get it from https://python.org/downloads — make sure to tick
-> "Add Python to PATH" during install.
+> If not, grab the installer from https://python.org/downloads — make
+> sure to tick **"Add Python to PATH"** during install. The launcher
+> looks for `%LOCALAPPDATA%\Programs\Python\Python312\python.exe`
+> first, then falls back to whatever `python` resolves to on `PATH`.
+>
+> The first `pip install -r requirements.txt` pulls down CPU-only
+> torch (~700 MB), torch-geometric, RDKit, DuckDB, and pyarrow —
+> ~3–4 minutes on a normal connection. Subsequent launches use the
+> already-installed packages.
 
 ```cmd
 REM 1. Clone (or unzip from "Code -> Download ZIP")
@@ -102,6 +109,24 @@ The demo lets you do real end-to-end runs:
    curves from a real PyTorch run on real Davis data
 5. After ~3 minutes (CPU) / ~30 seconds (GPU): Results tab shows the
    actual Pearson, RMSE, R², AUC at pKi=6 for the trained checkpoint
+
+### Running on a low-end machine (laptop, no GPU)
+
+On a 4-core CPU laptop with 8 GB RAM and no GPU, the defaults (5
+epochs × ~470 batches × 64 batch-size) take ~10–15 minutes wall-clock.
+For a quicker first-look demo:
+
+- In **Pipeline → Advanced**, drop **epochs** from 5 to **2** and
+  **batch_size** from 64 to **32** — finishes in ~2–3 minutes.
+- Watch the Training tab logs: you should see
+  `[embeddings] N/700 resolved (cache_hits=N, ...)` heartbeats every
+  few seconds during the embedding-prefetch step (~5 s total when the
+  bundled cache resolves; a few minutes if it has to call fair-esm on
+  CPU). If you see `computed=N` climbing instead of `cache_hits`, your
+  `PROTEOSPHERE_V2_EMBEDDINGS` env var didn't pick up the bundled
+  cache — see the troubleshooting note below.
+- Then the per-epoch `batch` events fire ~20 times per epoch so the
+  loss curve paints smoothly instead of jumping.
 
 ## What's not in the demo
 

@@ -48,9 +48,39 @@ _ESM2_DIMS = {
 
 
 def cache_root(checkpoint: str = "esm2_t33_650M") -> Path:
-    """Return the on-disk cache directory for a given checkpoint."""
+    """Return the on-disk cache directory for a given checkpoint.
+
+    Resolution order (first match wins):
+      1. ``$PROTEOSPHERE_V2_EMBEDDINGS/<checkpoint>/`` — the launcher wires
+         this to ``<repo>/demo_warehouse/embeddings`` so the 487 bundled
+         .npy files Just Work without the user moving anything.
+      2. ``$PROTEOSPHERE_CACHE_HOME/embeddings/<checkpoint>/`` — opt-in
+         override for power users with a custom cache home.
+      3. ``~/.proteosphere_v2/embeddings/<checkpoint>/`` — default.
+
+    Previously only (2) + (3) were honoured, which silently broke the
+    demo warehouse on every machine that wasn't the developer's: the
+    bundled embeddings sat unread on disk while every training run did
+    cache-miss → fair-esm fallback (or zeros), wasting minutes per epoch.
+    """
+    embeddings_dir = os.environ.get("PROTEOSPHERE_V2_EMBEDDINGS")
+    if embeddings_dir:
+        return Path(embeddings_dir) / checkpoint
     home = os.environ.get("PROTEOSPHERE_CACHE_HOME") or os.path.expanduser("~/.proteosphere_v2")
     return Path(home) / "embeddings" / checkpoint
+
+
+# Optional progress hook — training.py can install ``run.emit`` here so
+# every N records resolved produces a heartbeat in the Training tab's SSE
+# stream. Keeps the user from staring at a frozen screen when fair-esm is
+# computing 700 sequences on CPU.
+_PROGRESS_CB = None
+
+
+def set_progress_cb(cb) -> None:
+    """Install or clear a ``cb({...event_dict})`` for embedding progress."""
+    global _PROGRESS_CB
+    _PROGRESS_CB = cb
 
 
 def _safe_uniprot(s: str) -> str:
@@ -202,6 +232,30 @@ def batch_get_or_compute(records: Iterable,
     # Dedupe by uniprot so we don't compute the same one multiple times
     # per epoch (a single record list usually has many duplicates).
     seen: dict[str, np.ndarray] = {}
+    total = len(records)
+    # Heartbeat cadence: every 5% of the dataset, capped so we don't spam
+    # short runs (min 10 records between beats) or starve long ones (at
+    # least one beat every 200 records when on the fair-esm slow path).
+    if total > 0:
+        beat_every = max(10, min(200, total // 20 or 1))
+    else:
+        beat_every = 50
+
+    def _emit_progress(i: int, *, final: bool = False) -> None:
+        """Heartbeat — stdout always, GUI sink if one is installed."""
+        msg = (f"[embeddings] {i}/{total} resolved "
+               f"(cache_hits={meta['cache_hits']}, "
+               f"computed={meta['computed']}, zeros={meta['zeros']})")
+        print(msg, flush=True)
+        if _PROGRESS_CB is not None:
+            try:
+                _PROGRESS_CB({"type": "log",
+                              "level": "ok" if final else "info",
+                              "text": msg})
+            except Exception:
+                # Never let a flaky progress sink kill a training run.
+                pass
+
     for i, rec in enumerate(records):
         uniprot = getattr(rec, "uniprot", None) or (rec.get("uniprot") if isinstance(rec, dict) else None)
         sequence = getattr(rec, "sequence", None) or (rec.get("sequence") if isinstance(rec, dict) else None)
@@ -210,24 +264,28 @@ def batch_get_or_compute(records: Iterable,
             continue
         if uniprot in seen:
             out[i] = seen[uniprot]
-            continue
-        cached = load_cached(uniprot, checkpoint)
-        if cached is not None:
-            meta["cache_hits"] += 1
-            seen[uniprot] = cached
-            out[i] = cached
-            continue
-        meta["cache_misses"] += 1
-        if auto_compute and sequence:
-            emb = compute_one(uniprot, sequence, checkpoint=checkpoint)
-            if emb is not None:
-                meta["computed"] += 1
-                save_cached(uniprot, emb, checkpoint=checkpoint)
-                seen[uniprot] = emb
-                out[i] = emb
-                continue
-        meta["zeros"] += 1
-        seen[uniprot] = np.zeros(dim, dtype=np.float32)
+        else:
+            cached = load_cached(uniprot, checkpoint)
+            if cached is not None:
+                meta["cache_hits"] += 1
+                seen[uniprot] = cached
+                out[i] = cached
+            else:
+                meta["cache_misses"] += 1
+                emb = compute_one(uniprot, sequence, checkpoint=checkpoint) if (auto_compute and sequence) else None
+                if emb is not None:
+                    meta["computed"] += 1
+                    save_cached(uniprot, emb, checkpoint=checkpoint)
+                    seen[uniprot] = emb
+                    out[i] = emb
+                else:
+                    meta["zeros"] += 1
+                    seen[uniprot] = np.zeros(dim, dtype=np.float32)
+        # Periodic heartbeat — covers all branches, only one location to
+        # maintain. Always fire on the final record so the user sees a
+        # definitive "done" line.
+        if total >= 50 and ((i + 1) % beat_every == 0 or i + 1 == total):
+            _emit_progress(i + 1, final=(i + 1 == total))
     return out, meta
 
 
