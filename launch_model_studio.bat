@@ -1,10 +1,10 @@
 @echo off
 REM ============================================================
-REM  ProteoSphere Model Studio v2 — launcher (project root)
+REM  ProteoSphere Model Studio v2 -- launcher (project root)
 REM ------------------------------------------------------------
 REM  Lives at the repo root for easy double-click access.
 REM  The v2 code currently lives in a Claude Code worktree under
-REM  .claude\worktrees\wonderful-gates — this script cds in
+REM  .claude\worktrees\wonderful-gates -- this script cds in
 REM  there and starts the slim v2 server (no torch at boot).
 REM
 REM  Usage:
@@ -108,7 +108,7 @@ REM silently after the banner with ModuleNotFoundError.
 REM
 REM Uses GOTO labels instead of nested-paren if-blocks because
 REM cmd.exe evaluates `if errorlevel` at PARSE time inside
-REM parenthesised blocks, not at runtime — which silently swallows
+REM parenthesised blocks, not at runtime -- which silently swallows
 REM the pip-install failure case. Goto-based flow control sidesteps
 REM the whole class of bugs.
 echo  Checking Python dependencies...
@@ -176,7 +176,7 @@ REM ---- launch the slim v2 server from inside the worktree ----
 REM This entry point is deliberately minimal:
 REM    * static GUI assets at /v2/*
 REM    * API routes at /api/v2/*
-REM No torch / sklearn at boot — those load lazily on the first
+REM No torch / sklearn at boot -- those load lazily on the first
 REM training launch from the Pipeline screen.
 pushd "%WORKTREE%"
 "%PY%" -X utf8 -m api.model_studio.server_v2 --port %PORT%
