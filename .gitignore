@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Runtime artifacts (re-created on each launch)
+*.log
+.ingest_state.sqlite
+.proteosphere_v2/
+
+# User-specific output (runs, checkpoints, predictions)
+runs/
+checkpoints/
+~/.proteosphere_v2/
+
+# Don't commit personal env files
+.env
+.env.local
+
+# Internal session notes (defense in depth — the stager already strips these)
+.claude/
+CLAUDE.md
+AGENTS.md
+MEMORY.md
+HANDOFF*.md
+AGENT_HANDOFF*.md
+CLAUDE_DESIGN*.md
+
+# Anyone re-running build_demo_warehouse.py
+demo_warehouse_rebuild_*/

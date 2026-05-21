@@ -1,0 +1,42 @@
+{
+  "manifest_id": "protein-ligand-overlap-example",
+  "title": "Protein Ligand Identity Overlap Example",
+  "task_type": "protein-ligand affinity",
+  "label_type": "affinity",
+  "entity_kind": "protein_ligand",
+  "split_membership_mode": "explicit_manifest",
+  "records": [
+    {
+      "record_id": "train-1",
+      "split": "train",
+      "protein_accessions": ["P00387"],
+      "ligand_id": "0FA",
+      "ligand_chemical_series": "inchikey_connectivity:LHNDGZQCKJAVRF",
+      "label_value": 7.1,
+      "source_family": "example_public_manifest",
+      "assay_family": "Kd",
+      "provenance_note": "Synthetic public example for deterministic overlap testing."
+    },
+    {
+      "record_id": "test-1",
+      "split": "test",
+      "protein_accessions": ["Q9NZD4"],
+      "ligand_id": "0FA",
+      "ligand_chemical_series": "inchikey_connectivity:LHNDGZQCKJAVRF",
+      "label_value": 6.4,
+      "source_family": "example_public_manifest",
+      "assay_family": "Kd",
+      "provenance_note": "Synthetic public example for deterministic overlap testing."
+    },
+    {
+      "record_id": "val-1",
+      "split": "val",
+      "protein_accessions": ["P01112"],
+      "ligand_id": "CPM",
+      "label_value": 5.9,
+      "source_family": "example_public_manifest",
+      "assay_family": "IC50",
+      "provenance_note": "Synthetic public example for deterministic overlap testing."
+    }
+  ]
+}

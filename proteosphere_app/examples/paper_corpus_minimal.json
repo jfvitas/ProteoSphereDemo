@@ -1,0 +1,32 @@
+{
+  "artifact_id": "minimal-paper-corpus-example",
+  "schema_id": "proteosphere-paper-dataset-corpus-v1",
+  "default_view": "best_evidence",
+  "papers": [
+    {
+      "paper_id": "example_explicit_overlap",
+      "title": "Example paper with explicit duplicate PDB roster",
+      "doi": "https://doi.org/10.0000/example-overlap",
+      "task_group": "ppi_prediction",
+      "modality": "structure",
+      "claimed_dataset": "Synthetic public example",
+      "source_families": ["rcsb_pdb"],
+      "claimed_split_description": "The same PDB identifier appears in train and test.",
+      "split_style": "external_holdout",
+      "member_type": "pdb_id",
+      "train_members": ["4EQ6", "1Y01"],
+      "test_members": ["4EQ6"]
+    },
+    {
+      "paper_id": "example_unresolved",
+      "title": "Example paper lacking split roster",
+      "doi": "https://doi.org/10.0000/example-unresolved",
+      "task_group": "binding_site_prediction",
+      "modality": "structure",
+      "claimed_dataset": "Synthetic public example",
+      "source_families": ["rcsb_pdb"],
+      "claimed_split_description": "No official train/test roster is supplied.",
+      "split_style": "uniref_or_homology_guard"
+    }
+  ]
+}

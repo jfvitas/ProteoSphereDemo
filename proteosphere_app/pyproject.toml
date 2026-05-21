@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "proteosphere-dataset-reviewer"
+version = "0.1.0"
+description = "Freestanding ProteoSphere dataset split reviewer and splitter"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+  "duckdb==1.5.2",
+]
+
+[project.scripts]
+proteosphere-review = "proteosphere.cli:review_main"
+proteosphere-split = "proteosphere.cli:split_main"
+proteosphere-paper-review = "proteosphere.cli:paper_review_main"
+proteosphere-validate-library = "proteosphere.cli:validate_library_main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

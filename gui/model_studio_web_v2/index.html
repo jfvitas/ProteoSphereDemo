@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en" data-theme="dark" data-density="comfortable">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+  <title>ProteoSphere · DTA training suite</title>
+  <!-- Self-hosted Geist + Geist Mono — no third-party font request, no IP/UA leak. -->
+  <link href="vendor/fonts/geist.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-theme="dark" data-density="comfortable">
+  <div id="root"></div>
+
+  <!-- React + Babel — self-hosted from vendor/ so a downed unpkg or restrictive
+       network policy can't blank the surface, and so no traffic leaks to
+       Cloudflare. Versions pinned: react@18.3.1, react-dom@18.3.1,
+       @babel/standalone@7.29.0. -->
+  <script src="vendor/react.development.js"></script>
+  <script src="vendor/react-dom.development.js"></script>
+  <script src="vendor/babel.min.js"></script>
+
+  <!-- Fixture data -->
+  <script src="data.js"></script>
+
+  <!-- Tweaks panel scaffolding -->
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+
+  <!-- Components — order matters: icons → chrome → charts → shared → screens → app -->
+  <script type="text/babel" src="components/icons.jsx"></script>
+  <script type="text/babel" src="components/chrome.jsx"></script>
+  <script type="text/babel" src="components/charts.jsx"></script>
+  <script type="text/babel" src="components/shared-v2.jsx"></script>
+  <script type="text/babel" src="components/screen-home.jsx"></script>
+  <script type="text/babel" src="components/screen-library.jsx"></script>
+  <script type="text/babel" src="components/screen-goal.jsx"></script>
+  <script type="text/babel" src="components/screen-dataset.jsx"></script>
+  <script type="text/babel" src="components/screen-split.jsx"></script>
+  <script type="text/babel" src="components/screen-features.jsx"></script>
+  <script type="text/babel" src="components/screen-pipeline.jsx"></script>
+  <!-- Flow builder (v4 stage 3) — palette + canvas + inspector + orchestrator -->
+  <script type="text/babel" src="components/flow-palette.jsx"></script>
+  <script type="text/babel" src="components/flow-canvas.jsx"></script>
+  <script type="text/babel" src="components/flow-inspector.jsx"></script>
+  <script type="text/babel" src="components/screen-flow.jsx"></script>
+  <script type="text/babel" src="components/screen-training.jsx"></script>
+  <script type="text/babel" src="components/screen-results.jsx"></script>
+  <script type="text/babel" src="components/screen-compare.jsx"></script>
+  <script type="text/babel" src="components/screen-promote.jsx"></script>
+  <script type="text/babel" src="components/screen-inference.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>

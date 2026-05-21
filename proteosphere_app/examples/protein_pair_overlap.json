@@ -1,0 +1,37 @@
+{
+  "manifest_id": "protein-pair-overlap-example",
+  "title": "Protein Pair Direct Overlap Example",
+  "task_type": "protein-protein interaction",
+  "label_type": "binary",
+  "entity_kind": "protein_pair",
+  "split_membership_mode": "explicit_manifest",
+  "records": [
+    {
+      "record_id": "train-1",
+      "split": "train",
+      "protein_a": "P00698",
+      "protein_b": "P00766",
+      "label_value": 1,
+      "source_family": "example_public_manifest",
+      "provenance_note": "Synthetic public example for deterministic overlap testing."
+    },
+    {
+      "record_id": "train-2",
+      "split": "train",
+      "protein_a": "P01112",
+      "protein_b": "P01051",
+      "label_value": 1,
+      "source_family": "example_public_manifest",
+      "provenance_note": "Synthetic public example for deterministic overlap testing."
+    },
+    {
+      "record_id": "test-1",
+      "split": "test",
+      "protein_a": "P00698",
+      "protein_b": "Q9NZD4",
+      "label_value": 1,
+      "source_family": "example_public_manifest",
+      "provenance_note": "Synthetic public example for deterministic overlap testing."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proteosphere.local/schemas/split_assessment.schema.json",
+  "title": "ProteoSphere Split Assessment",
+  "type": "object",
+  "required": ["artifact_id", "manifest_id", "verdict", "reason_codes", "overlap_metrics"],
+  "properties": {
+    "artifact_id": {"type": "string"},
+    "schema_id": {"type": "string"},
+    "generated_at": {"type": "string"},
+    "manifest_id": {"type": "string"},
+    "title": {"type": "string"},
+    "entity_kind": {"type": "string"},
+    "verdict": {
+      "type": "string",
+      "enum": ["usable", "usable_with_caveats", "unsafe_for_training", "blocked_pending_mapping"]
+    },
+    "reason_codes": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "overlap_metrics": {"type": "object"},
+    "overlap_findings": {"type": "object"},
+    "unresolved_entities": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "recommended_action": {"type": "string"}
+  },
+  "additionalProperties": true
+}

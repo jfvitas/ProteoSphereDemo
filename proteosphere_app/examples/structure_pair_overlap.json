@@ -1,0 +1,43 @@
+{
+  "manifest_id": "structure-pair-overlap-example",
+  "title": "Structure Pair PDB/Chain Overlap Example",
+  "task_type": "structure-based protein-protein interaction",
+  "label_type": "binary",
+  "entity_kind": "structure_pair",
+  "split_membership_mode": "explicit_manifest",
+  "records": [
+    {
+      "record_id": "train-1",
+      "split": "train",
+      "pdb_id": "4EQ6",
+      "protein_a": "A",
+      "protein_b": "B",
+      "label_value": 1,
+      "source_family": "example_public_manifest",
+      "motif_domain_signatures": ["pdb:4eq6"],
+      "provenance_note": "Synthetic public example using a public PDB identifier."
+    },
+    {
+      "record_id": "test-1",
+      "split": "test",
+      "pdb_id": "4EQ6",
+      "protein_a": "A",
+      "protein_b": "B",
+      "label_value": 1,
+      "source_family": "example_public_manifest",
+      "motif_domain_signatures": ["pdb:4eq6"],
+      "provenance_note": "Synthetic public example using a public PDB identifier."
+    },
+    {
+      "record_id": "val-1",
+      "split": "val",
+      "pdb_id": "1Y01",
+      "protein_a": "A",
+      "protein_b": "B",
+      "label_value": 0,
+      "source_family": "example_public_manifest",
+      "motif_domain_signatures": ["pdb:1y01"],
+      "provenance_note": "Synthetic public example using a public PDB identifier."
+    }
+  ]
+}

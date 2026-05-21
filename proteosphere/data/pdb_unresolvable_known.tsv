@@ -1,0 +1,72 @@
+pdb_id	category	description
+# PDBs known to be biologically unresolvable to UniProt -- the proteins
+# themselves don't have UniProt records anywhere.
+#
+# Categories:
+#   antibody_fab    -- antibody Fab/Fv fragment (variable region; UniProt
+#                      doesn't curate individual antibodies)
+#   designed        -- computationally designed / de novo protein
+#                      (no natural sequence to point at)
+#   chimera         -- engineered chimera / fusion not present as a
+#                      single entry in UniProt
+#   peptide         -- synthetic peptide too short to merit UniProt entry
+#
+# Compiled from a 3,033-PDB audit of splittest.xlsx + PPB-Affinity.csv
+# against PDBe SIFTS + RCSB polymer_entities. Add new entries as you
+# encounter them. Empty descriptions are OK; the category is what the
+# resolver displays.
+#
+# IMPORTANT: these entries are listed here so the CLI can show users
+# *why* a particular PDB doesn't resolve, rather than silently dropping
+# it. Adding a PDB here means "this is known to be unresolvable -- not
+# a snapshot-staleness bug we should chase."
+1F90	antibody_fab	Fab fragment of monoclonal antibody
+1MHH	antibody_fab	Fab light + heavy chains
+1U0I	designed	IAAL-E3 + IAAL-K3 coiled-coil peptides
+2A6I	antibody_fab	Germline antibody 36-65 Fab
+2RU4	designed	Engineered armadillo-repeat fragments YIIM2 / MAII
+2XZQ	antibody_fab	Anti-NP murine germline mAb BBE6.12H3
+2Y06	antibody_fab	Anti-NP murine germline mAb BBE6.12H3
+2Y07	antibody_fab	Anti-NP murine germline mAb BBE6.12H3
+2Y36	antibody_fab	Anti-NP murine germline mAb BBE6.12H3
+3E8U	antibody_fab	Fab 106.3
+3FN0	antibody_fab	Fab Z13e1
+3GGW	antibody_fab	FAB F22-4
+3H3P	antibody_fab	Fv 4E10
+3LH2	chimera	4E10_1VI7A_S0_002_N + Fv 4E10 chimera
+3LHP	antibody_fab	Fv 4E10
+3O40	chimera	gp41-5 + alpha/beta-peptide chimera
+3O43	chimera	gp41-5 + alpha/beta-peptide chimera
+3Q9N	designed	CoA-binding protein + consensus ankyrin repeat
+3Q9U	designed	CoA-binding protein + consensus ankyrin repeat
+3QWO	antibody_fab	Motavizumab Fab
+3V1C	designed	MID1-zinc computational design
+4DZU	chimera	gp41-5 + 3-alpha helical bundle
+4DZV	chimera	gp41-5 + 4-alpha/beta bundle
+4G6F	antibody_fab	Antibody 10E8 Fab
+4JFZ	antibody_fab	Fab light + heavy chains
+4JFX	antibody_fab	Fab light + heavy chains
+4JG0	antibody_fab	Fab light + heavy chains
+4JG1	antibody_fab	Fab light + heavy chains
+4JLR	antibody_fab	Motavizumab Fab
+4JW2	designed	A3 artificial protein + binder
+4N8C	antibody_fab	Monoclonal antibody Fab
+4N9G	antibody_fab	Antibody 17HD9 Fab
+4X7S	antibody_fab	Omalizumab Fab variable region
+5CJQ	antibody_fab	CR9114 antibody
+5CJS	antibody_fab	CR9114 antibody
+5IES	antibody_fab	VRC01cHuGL2 Fab
+5SY8	antibody_fab	Antibody 10E8 Fab
+5T29	antibody_fab	Antibody 10E8 Fab
+5T5B	antibody_fab	Antibody 10E8 Fab (mutant)
+5T6L	antibody_fab	Antibody 10E8 Fab
+5TFW	antibody_fab	Antibody 10E8 Fab (mutant)
+5WTT	antibody_fab	Fab 093G9
+6AZZ	antibody_fab	Antibody 1190
+6CXG	antibody_fab	Anti-HIV-1 Fab 2G12
+6DF2	antibody_fab	Anti-phosphotyrosine antibody c310-4D5
+6DSL	designed	Consensus engineered intein CatN + CatC
+6ER6	designed	Computationally designed colicin + immunity
+6ERE	designed	Computationally designed colicin + immunity
+6FG1	antibody_fab	Fab NAA32
+6FG2	antibody_fab	Fab NAA84

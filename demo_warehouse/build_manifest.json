@@ -1,0 +1,24 @@
+{
+  "generated_from": "E:\\ProteoSphere\\reference_library_v2\\catalog\\v2.duckdb",
+  "view_row_counts": {
+    "davis_proteins": 442,
+    "davis_ligands": 68,
+    "davis_interactions": 30056,
+    "davis_bridge_uniprot": 1588,
+    "kiba_proteins": 229,
+    "kiba_ligands": 2111,
+    "kiba_interactions": 118253,
+    "kiba_bridge_uniprot": 229,
+    "gtopdb_targets": 3369,
+    "gtopdb_ligands": 13727,
+    "gtopdb_interactions": 23904,
+    "gtopdb_bridge_uniprot": 2581,
+    "huri_bridge_uniprot": 34691,
+    "hippie_bridge_uniprot": 34055,
+    "s_3did_bridge_uniprot": 10723,
+    "v2_sequence_cluster_membership": 71056,
+    "v2_ortholog_cluster_membership": 68987,
+    "v2_ec_class_membership": 9505,
+    "pdbbind_interactions": 24804
+  }
+}

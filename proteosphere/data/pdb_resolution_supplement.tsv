@@ -1,0 +1,17 @@
+pdb_id	uniprot_accessions	source	note
+# Supplementary PDB -> UniProt mappings the local SIFTS snapshot misses.
+# These were recovered from RCSB Data API's polymer_entities endpoint
+# (which exposes some TrEMBL mappings PDBe SIFTS hasn't indexed yet).
+#
+# Format: PDB ID, semicolon-separated UniProt accessions, source tag, note.
+# Lines starting with '#' are comments. Add new entries at the bottom.
+# The cluster + scan CLIs consult this file and merge its rows with the
+# main `structure_units` table whenever they resolve a PDB.
+2MLX	U6N325;U6N3P1	rcsb_polymer_entities	Trigger factor + alkaline phosphatase (TrEMBL)
+2MLY	U6N325;U6N3P1	rcsb_polymer_entities	Trigger factor + alkaline phosphatase (TrEMBL)
+2N01	Q8PJB3;Q8PJB5	rcsb_polymer_entities	VirB7 + VirB9 type-IV secretion (TrEMBL)
+4RDQ	E1C3A0	rcsb_polymer_entities	Bestrophin-1 + Fab fragment (Fab not in UniProt)
+4W4L	H8ETC7;H8ETC6;H8F3E2	rcsb_polymer_entities	PE25 + PPE41 + auxiliary chain (TrEMBL)
+5E3E	C4TSS4;C4TSS5	rcsb_polymer_entities	CdiI immunity + heme-utilisation exoprotein (TrEMBL)
+5IVN	G9GAG7	rcsb_polymer_entities	BC2-nanobody + cadherin peptide (TrEMBL)
+6M7L	A0A2P9IBG7;A0A2P9IBF7	rcsb_polymer_entities	OxyA + GPA biosynthesis (TrEMBL)

@@ -1,0 +1,16 @@
+{
+  "manifest_id": "clean-protein-pair-example",
+  "title": "Clean Protein Pair Example For Splitting",
+  "task_type": "protein-protein interaction",
+  "label_type": "binary",
+  "entity_kind": "protein_pair",
+  "split_membership_mode": "unsplit_manifest",
+  "records": [
+    {"record_id": "row-1", "protein_a": "P00698", "protein_b": "P00766", "label_value": 1, "provenance_note": "Synthetic public example."},
+    {"record_id": "row-2", "protein_a": "P01112", "protein_b": "P01051", "label_value": 1, "provenance_note": "Synthetic public example."},
+    {"record_id": "row-3", "protein_a": "Q9NZD4", "protein_b": "P00387", "label_value": 0, "provenance_note": "Synthetic public example."},
+    {"record_id": "row-4", "protein_a": "P69905", "protein_b": "P68871", "label_value": 1, "provenance_note": "Synthetic public example."},
+    {"record_id": "row-5", "protein_a": "P40465", "protein_b": "Q12318", "label_value": 1, "provenance_note": "Synthetic public example."},
+    {"record_id": "row-6", "protein_a": "P61769", "protein_b": "P68135", "label_value": 0, "provenance_note": "Synthetic public example."}
+  ]
+}

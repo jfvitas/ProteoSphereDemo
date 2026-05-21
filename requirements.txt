@@ -1,0 +1,45 @@
+# ProteoSphere Model Studio — Python dependencies
+#
+# The slim server boots in <2 seconds with NO torch loaded. Torch is
+# pulled lazily on the first training launch from the Pipeline screen.
+# Keep the install order: stdlib + duckdb + numpy first, torch last.
+
+# --- Server + warehouse access (lightweight) ---
+duckdb>=0.10
+pyarrow>=14
+numpy>=1.26
+pandas>=2.1
+
+# --- Web server (stdlib only, no flask/fastapi) ---
+# uses http.server.ThreadingHTTPServer from the standard library
+
+# --- ML stack (lazy-loaded on first training run) ---
+# CPU-only torch — installs in ~80MB instead of ~2.5GB for the CUDA build.
+# Adcom reviewers running on a laptop without an NVIDIA GPU will use this.
+# If you have a GPU, replace with:
+#   torch>=2.2 --index-url https://download.pytorch.org/whl/cu121
+torch>=2.2
+
+# Graph neural network stack — needed by GIN / GCN / GAT encoders
+# (DrugBAN, GraphDTA, struct_gnn_dta templates)
+torch-geometric>=2.5
+
+# --- Optional: chemistry feature computation ---
+# RDKit is needed for Murcko scaffold computation in the scaffold
+# split policy. Without it the splitter falls back to ligand-identity
+# grouping with a warning.
+rdkit>=2024.3.1
+
+# --- Optional: hyperparameter sweeps ---
+# Optuna powers the Pipeline "sweep" mode with Hyperband pruning.
+# Disable by skipping the sweep launch; everything else still works.
+optuna>=3.5
+
+# --- Optional: XGBoost / CatBoost hybrid heads ---
+# Only needed if you select fuse/tabular_xgb or head.regressor/xgboost.
+# The default DeepDTA / GraphDTA / DrugBAN templates do not require these.
+xgboost>=2.0
+catboost>=1.2
+
+# --- Tests (optional, not needed to run the server) ---
+# pytest>=7.4

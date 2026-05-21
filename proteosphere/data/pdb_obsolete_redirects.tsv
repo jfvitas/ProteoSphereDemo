@@ -1,0 +1,13 @@
+old_pdb_id	new_pdb_id	source	note
+# Obsolete PDB IDs that were superseded by a newer entry. The resolver
+# substitutes old -> new on lookup so old SKEMPI / PPB-Affinity / other
+# legacy IDs continue to resolve.
+#
+# Sourced from RCSB's holdings-removed endpoint
+# (https://data.rcsb.org/rest/v1/holdings/removed/{pdb_id}).
+# Add new entries at the bottom; lines starting with '#' are comments.
+1A2K	5BXQ	rcsb_holdings_removed	Ran-RanGAP1 GTPase complex (SKEMPI v2)
+3L5Y	4PS4	rcsb_holdings_removed	Anti-V1V2 HIV antibody complex
+3OHM	7SQ2	rcsb_holdings_removed	Trastuzumab Fab / HER2 complex
+3RVV	5VPL	rcsb_holdings_removed	Engineered antibody-protein complex
+3RVW	5VPG	rcsb_holdings_removed	Engineered antibody-protein complex

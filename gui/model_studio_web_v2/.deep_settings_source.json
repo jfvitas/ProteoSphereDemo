@@ -1,0 +1,184 @@
+{
+  "_comment": "Source-of-truth catalog of deep settings exposed in the v2 prototype. Generated 2026-05-13 from a domain-research agent. Consumed by data.js (PS_DEEP_SETTINGS) and the various advanced-options panels. Edit here, then re-derive into data.js.",
+  "structure_preparation": {
+    "score_functions": [
+      {"key": "scorefxn", "label": "Score function", "type": "select", "default": "ref2015", "options": ["ref2015", "ref2015_cart", "beta_nov16", "beta_nov16_cart", "talaris2014", "franklin2019", "scorefxn_membrane", "ref2015_soft", "ligand", "ligandprime"], "tooltip": "Energy function used to score conformations; ref2015 is the modern default, franklin2019 for membrane proteins, beta_nov16 for cartesian work.", "tier": "release"},
+      {"key": "scorefxn_weights_override", "label": "Weight overrides", "type": "chips", "default": [], "tooltip": "Override individual score terms, e.g. fa_rep:0.55 or coordinate_constraint:1.0.", "tier": "beta"},
+      {"key": "ligand_scorefxn", "label": "Ligand score function", "type": "select", "default": "ligand", "options": ["ligand", "ligandprime", "ref2015", "beta_nov16"], "tooltip": "Separate scorefxn for the ligand-receptor interface; ligand.wts has tuned hbond and electrostatic terms.", "tier": "release"}
+    ],
+    "relax_protocols": [
+      {"key": "relax_protocol", "label": "Relax protocol", "type": "select", "default": "FastRelax", "options": ["FastRelax", "ClassicRelax", "MinPack", "Idealize", "CartesianRelax", "DualspaceRelax", "MinMover"], "tooltip": "How the structure is energy-minimized; FastRelax is the standard production choice.", "tier": "release"},
+      {"key": "relax_cycles", "label": "Relax cycles", "type": "int", "default": 5, "min": 1, "max": 25, "tooltip": "Number of ramp cycles in FastRelax; 5 is standard, 1 is fast preview, 15+ for publication-quality.", "tier": "release"},
+      {"key": "relax_script", "label": "Relax ramp script", "type": "select", "default": "MonomerRelax2019", "options": ["MonomerRelax2019", "default", "no_ref", "rosettacon2018", "legacy"], "tooltip": "Built-in repulsive-ramping schedule; MonomerRelax2019 is the current recommended.", "tier": "release"},
+      {"key": "cartesian_relax", "label": "Cartesian relax", "type": "bool", "default": false, "tooltip": "Relax in xyz space (better geometry, slower) vs torsion space.", "tier": "release"},
+      {"key": "constrain_to_start_coords", "label": "Constrain to start coords", "type": "bool", "default": true, "tooltip": "Adds harmonic restraints to Cα atoms so the structure doesn't drift during relax.", "tier": "release"},
+      {"key": "coord_constraint_stdev", "label": "Coord constraint stdev (Å)", "type": "float", "default": 0.5, "min": 0.1, "max": 3.0, "tooltip": "Width of harmonic well restraining atoms to start positions; smaller = stiffer.", "tier": "release"},
+      {"key": "min_tolerance", "label": "Min tolerance", "type": "float", "default": 0.0001, "min": 0.000001, "max": 0.01, "tooltip": "Convergence threshold for the minimizer; smaller = tighter min, longer runtime.", "tier": "beta"},
+      {"key": "min_type", "label": "Minimizer type", "type": "select", "default": "lbfgs_armijo_nonmonotone", "options": ["lbfgs_armijo_nonmonotone", "lbfgs_armijo", "dfpmin_armijo", "dfpmin", "linmin"], "tooltip": "Numerical minimizer; lbfgs_armijo_nonmonotone is the modern default.", "tier": "release"}
+    ],
+    "packer": [
+      {"key": "use_linmem_ig", "label": "Linear memory interaction graph", "type": "bool", "default": true, "tooltip": "Lower-memory packer for large systems; turn off for highest accuracy on small targets.", "tier": "release"},
+      {"key": "soft_rep", "label": "Soft repulsive packing", "type": "bool", "default": false, "tooltip": "Use softened Lennard-Jones during packing to let rotamers escape clashes.", "tier": "release"},
+      {"key": "ex1_ex2", "label": "Rotamer sampling (ex1/ex2)", "type": "select", "default": "ex1_ex2", "options": ["none", "ex1", "ex1_ex2", "ex1_ex2_ex3", "ex1_ex2aro"], "tooltip": "Extra subrotamers around χ1/χ2; more = better packing but quadratic cost.", "tier": "release"},
+      {"key": "dunbrack_prob", "label": "Dunbrack prob cutoff", "type": "float", "default": 0.95, "min": 0.5, "max": 0.99, "tooltip": "Cumulative probability cutoff for including rotamers from the Dunbrack library.", "tier": "beta"}
+    ],
+    "constraints": [
+      {"key": "constraint_types", "label": "Constraint types", "type": "multi-select", "default": ["CoordinateConstraint"], "options": ["AtomPair", "CoordinateConstraint", "AngleConstraint", "DihedralConstraint", "AmbiguousConstraint", "SiteConstraint", "LocalCoordinateConstraint"], "tooltip": "Geometric restraints during relax/dock; CoordinateConstraint anchors atoms, AtomPair restrains distances.", "tier": "release"},
+      {"key": "constraint_weight", "label": "Constraint weight", "type": "float", "default": 1.0, "min": 0.0, "max": 10.0, "tooltip": "Global multiplier on constraint score terms.", "tier": "release"}
+    ],
+    "pose_prep": [
+      {"key": "idealize_pose", "label": "Idealize bond geometry", "type": "bool", "default": false, "tooltip": "Snap bond lengths/angles to ideal values before relax; useful for crystal structures with strain.", "tier": "release"},
+      {"key": "renumber_chains", "label": "Renumber chains sequentially", "type": "bool", "default": true, "tooltip": "Renumber residues 1..N per chain so downstream tools agree.", "tier": "release"},
+      {"key": "extract_chains", "label": "Chains to keep", "type": "chips", "default": ["A"], "tooltip": "Chain IDs to retain; others are stripped before training.", "tier": "release"},
+      {"key": "mutations", "label": "Point mutations", "type": "chips", "default": [], "tooltip": "Mutations to apply, e.g. A123V; uses Rosetta MutateResidue mover.", "tier": "beta"},
+      {"key": "missing_residue_rebuild", "label": "Missing-residue rebuild", "type": "select", "default": "none", "options": ["none", "loophash", "remodel", "alphafold", "esmfold"], "tooltip": "Strategy to fill gaps; alphafold/esmfold give best loops, loophash is fastest.", "tier": "beta_soon"}
+    ],
+    "alternatives": [
+      {"key": "prep_engine", "label": "Preparation engine", "type": "select", "default": "pyrosetta", "options": ["pyrosetta", "openmm", "rdkit_only", "openbabel", "schrodinger_prepwizard"], "tooltip": "Backend that performs energy min and hydrogen addition; OpenMM is faster for big systems, Schrödinger requires a license.", "tier": "release"},
+      {"key": "openmm_forcefield", "label": "OpenMM force field", "type": "select", "default": "amber14-all", "options": ["amber14-all", "amber99sbildn", "charmm36", "amoeba2018", "openff-2.1.0"], "tooltip": "Force field for OpenMM minimization of the protein.", "tier": "release"},
+      {"key": "hydrogen_engine", "label": "Hydrogen placement", "type": "select", "default": "reduce", "options": ["reduce", "pdb2pqr", "openmm_modeller", "pymol"], "tooltip": "Tool to add and optimize hydrogens; Reduce is the community standard.", "tier": "release"},
+      {"key": "ligand_protonation", "label": "Ligand protonation", "type": "select", "default": "dimorphite_dl", "options": ["none", "dimorphite_dl", "openbabel", "epik"], "tooltip": "Generates physiologically relevant protonation states for the ligand.", "tier": "release"},
+      {"key": "ligand_ph", "label": "Target pH", "type": "float", "default": 7.4, "min": 1.0, "max": 14.0, "tooltip": "pH used for ligand protonation enumeration.", "tier": "release"},
+      {"key": "tautomer_enumeration", "label": "Tautomer enumeration", "type": "bool", "default": true, "tooltip": "Generate alternate tautomers with RDKit/MolVS before featurization.", "tier": "release"},
+      {"key": "stereo_enumeration", "label": "Stereoisomer enumeration", "type": "select", "default": "undefined_only", "options": ["none", "undefined_only", "all"], "tooltip": "Expand stereocenters; 'undefined_only' fills in unspecified centers without exploding defined ones.", "tier": "release"},
+      {"key": "conformer_generator", "label": "Conformer generator", "type": "select", "default": "rdkit_etkdgv3", "options": ["rdkit_etkdgv3", "rdkit_etkdg", "openeye_omega", "balloon", "confgen_xtb"], "tooltip": "Algorithm for generating 3D conformers; ETKDGv3 is the modern RDKit default.", "tier": "release"},
+      {"key": "n_conformers", "label": "Conformers per ligand", "type": "int", "default": 20, "min": 1, "max": 500, "tooltip": "Number of low-energy 3D conformers to retain.", "tier": "release"},
+      {"key": "ligand_ff_minimization", "label": "Ligand FF minimization", "type": "select", "default": "mmff94s", "options": ["none", "uff", "mmff94", "mmff94s", "gfn2_xtb"], "tooltip": "Force field for cleaning up ligand geometry; MMFF94s is the standard.", "tier": "release"},
+      {"key": "partial_charges", "label": "Partial charge model", "type": "select", "default": "am1_bcc", "options": ["gasteiger", "mmff94", "am1_bcc", "am1_bcc_eleentf", "resp", "espaloma"], "tooltip": "Charge assignment; AM1-BCC is the docking/MD standard, Gasteiger is fastest.", "tier": "release"},
+      {"key": "docking_pre_pose", "label": "Pre-docking engine", "type": "select", "default": "none", "options": ["none", "vina", "smina", "gnina", "glide_stub", "diffdock"], "tooltip": "Optional docking pass to generate a starting bound pose; DiffDock is ML-based.", "tier": "beta"}
+    ]
+  },
+  "featurizer_advanced": {
+    "esm2": [
+      {"key": "esm2_variant", "label": "ESM-2 variant", "type": "select", "default": "esm2_t33_650M_UR50D", "options": ["esm2_t6_8M_UR50D", "esm2_t12_35M_UR50D", "esm2_t30_150M_UR50D", "esm2_t33_650M_UR50D", "esm2_t36_3B_UR50D", "esm2_t48_15B_UR50D"], "tooltip": "Model size; 650M is the production default, 3B/15B for high-stakes runs.", "tier": "release"},
+      {"key": "esm2_layer_choice", "label": "Layer extraction", "type": "select", "default": "last", "options": ["last", "last_4_mean", "all_mean", "specific"], "tooltip": "Which transformer layer(s) to pool; last_4_mean often beats just-last on downstream tasks.", "tier": "release"},
+      {"key": "esm2_specific_layer", "label": "Specific layer index", "type": "int", "default": 33, "min": 1, "max": 48, "tooltip": "Used when layer extraction is 'specific'.", "tier": "beta"},
+      {"key": "esm2_pooling", "label": "Pooling", "type": "select", "default": "mean", "options": ["mean", "cls", "max", "attention", "per_residue"], "tooltip": "How to collapse the per-token tensor into a protein vector; per_residue keeps the full LxD matrix.", "tier": "release"},
+      {"key": "esm2_token_chunk", "label": "Max tokens per batch", "type": "int", "default": 8192, "min": 512, "max": 65536, "tooltip": "Token budget per microbatch to bound GPU memory.", "tier": "release"},
+      {"key": "esm2_grad_checkpoint", "label": "Gradient checkpointing", "type": "bool", "default": false, "tooltip": "Trades compute for memory when fine-tuning ESM-2.", "tier": "release"}
+    ],
+    "esm3_saprot": [
+      {"key": "use_structure_tokens", "label": "Use structure tokens", "type": "bool", "default": true, "tooltip": "Enable SaProt/ESM-3 structure-aware tokens (requires Foldseek 3Di tokens).", "tier": "beta"},
+      {"key": "saprot_variant", "label": "SaProt variant", "type": "select", "default": "SaProt_650M_AF2", "options": ["SaProt_35M_AF2", "SaProt_650M_AF2", "SaProt_650M_PDB"], "tooltip": "Pretrained checkpoint; AF2 variants generalize better, PDB is more crystal-structure faithful.", "tier": "beta"},
+      {"key": "esm3_layer", "label": "ESM-3 layer", "type": "int", "default": 47, "min": 1, "max": 48, "tooltip": "Transformer layer to extract.", "tier": "lab"}
+    ],
+    "molecule_lm": [
+      {"key": "mol_encoder", "label": "Molecule encoder", "type": "select", "default": "molformer_xl", "options": ["molformer_xl", "chemberta_77m_mtr", "chemberta_77m_mlm", "unimol_v2", "molclr", "grover_large"], "tooltip": "Pretrained SMILES/graph encoder; MolFormer-XL is the strong default.", "tier": "release"},
+      {"key": "mol_pooling", "label": "Pooling", "type": "select", "default": "mean", "options": ["mean", "cls", "max", "attention"], "tooltip": "Token-pooling strategy for the molecule encoder.", "tier": "release"},
+      {"key": "mol_max_len", "label": "Max SMILES tokens", "type": "int", "default": 256, "min": 64, "max": 1024, "tooltip": "Truncation limit for SMILES tokenization.", "tier": "release"}
+    ],
+    "gnn": [
+      {"key": "gnn_node_granularity", "label": "Node granularity", "type": "select", "default": "atom", "options": ["atom", "residue", "fragment"], "tooltip": "Whether graph nodes represent atoms, residues, or BRICS fragments.", "tier": "release"},
+      {"key": "gnn_edge_cutoff_a", "label": "Edge cutoff (Å)", "type": "float", "default": 5.0, "min": 2.0, "max": 12.0, "tooltip": "Distance threshold for spatial edges in the protein/ligand graph.", "tier": "release"},
+      {"key": "gnn_knn", "label": "k-NN edges", "type": "int", "default": 16, "min": 4, "max": 64, "tooltip": "Number of nearest neighbors per node (alternative to radius cutoff).", "tier": "release"},
+      {"key": "gnn_rbf_bins", "label": "Gaussian RBF bins", "type": "int", "default": 16, "min": 4, "max": 64, "tooltip": "Number of radial basis functions used to encode interatomic distances.", "tier": "release"},
+      {"key": "gnn_line_graph", "label": "Line graph (edge features)", "type": "bool", "default": false, "tooltip": "Adds an edge-graph layer that messages over bond pairs; better for angles, slower.", "tier": "beta"}
+    ],
+    "handcrafted": [
+      {"key": "ecfp_radius", "label": "ECFP radius", "type": "int", "default": 2, "min": 1, "max": 4, "tooltip": "Morgan fingerprint radius; 2 is ECFP4, 3 is ECFP6.", "tier": "release"},
+      {"key": "ecfp_nbits", "label": "ECFP bits", "type": "select", "default": 2048, "options": [512, 1024, 2048, 4096, 8192], "tooltip": "Folded fingerprint length.", "tier": "release"},
+      {"key": "use_maccs", "label": "MACCS keys", "type": "bool", "default": false, "tooltip": "Concatenate 167-bit MACCS structural keys.", "tier": "release"},
+      {"key": "use_mordred", "label": "Mordred descriptors", "type": "bool", "default": false, "tooltip": "Include ~1800 Mordred 2D/3D descriptors; high-dim, useful for tabular baselines.", "tier": "beta"}
+    ],
+    "three_d": [
+      {"key": "voxel_grid_a", "label": "Voxel grid (Å)", "type": "float", "default": 1.0, "min": 0.5, "max": 2.5, "tooltip": "Voxel edge length for 3D-CNN pocket featurizers.", "tier": "beta"},
+      {"key": "voxel_box_a", "label": "Voxel box size (Å)", "type": "int", "default": 24, "min": 12, "max": 48, "tooltip": "Cubic side length of the voxel grid centered on the pocket.", "tier": "beta"},
+      {"key": "contact_map_threshold_a", "label": "Contact map cutoff (Å)", "type": "float", "default": 8.0, "min": 4.0, "max": 15.0, "tooltip": "Distance below which a residue pair counts as a contact.", "tier": "release"},
+      {"key": "se3_invariant_features", "label": "SE(3)-invariant features", "type": "bool", "default": true, "tooltip": "Use rotation/translation-invariant geometric features (distances, angles, dihedrals).", "tier": "beta"}
+    ],
+    "cross_modal": [
+      {"key": "pairwise_distance_bins", "label": "Pairwise distance bins", "type": "int", "default": 32, "min": 8, "max": 64, "tooltip": "Number of bins for discretizing residue-atom distances in the interaction tensor.", "tier": "beta"},
+      {"key": "contact_pair_features", "label": "Contact-pair features", "type": "bool", "default": true, "tooltip": "Include per-residue per-atom contact features in the cross-attention input.", "tier": "beta"}
+    ]
+  },
+  "pipeline_architecture": {
+    "head": [
+      {"key": "head_type", "label": "Head architecture", "type": "select", "default": "cross_attention", "options": ["mlp", "bilinear", "siamese_cosine", "cross_attention", "perceiver", "gated_fusion"], "tooltip": "Top-of-stack module that fuses protein and ligand embeddings.", "tier": "release"},
+      {"key": "cross_attn_heads", "label": "Cross-attn heads", "type": "int", "default": 8, "min": 1, "max": 32, "tooltip": "Number of attention heads in the fusion module.", "tier": "release"},
+      {"key": "cross_attn_hidden", "label": "Cross-attn hidden dim", "type": "select", "default": 512, "options": [128, 256, 512, 768, 1024, 1536], "tooltip": "Hidden dimensionality of the fusion module.", "tier": "release"},
+      {"key": "cross_attn_depth", "label": "Cross-attn depth", "type": "int", "default": 4, "min": 1, "max": 12, "tooltip": "Number of stacked cross-attention layers.", "tier": "release"},
+      {"key": "bilinear_rank", "label": "Bilinear rank", "type": "int", "default": 64, "min": 8, "max": 512, "tooltip": "Low-rank factorization rank for bilinear pooling.", "tier": "beta"}
+    ],
+    "loss": [
+      {"key": "regression_loss", "label": "Regression loss", "type": "select", "default": "huber", "options": ["mse", "mae", "huber", "smooth_l1", "log_cosh"], "tooltip": "Loss for pKd/pKi/IC50 regression; Huber is robust to assay outliers.", "tier": "release"},
+      {"key": "huber_delta", "label": "Huber delta", "type": "float", "default": 1.0, "min": 0.1, "max": 5.0, "tooltip": "Transition point between L2 and L1 in Huber loss (in log-affinity units).", "tier": "release"},
+      {"key": "use_classification_head", "label": "Active/inactive head", "type": "bool", "default": true, "tooltip": "Adds a BCE head for binary activity (cutoff configurable).", "tier": "release"},
+      {"key": "pairwise_ranking_loss", "label": "Pairwise ranking loss", "type": "bool", "default": false, "tooltip": "Adds a margin-ranking term so within-target ordering is preserved.", "tier": "beta"},
+      {"key": "focal_gamma", "label": "Focal loss gamma", "type": "float", "default": 0.0, "min": 0.0, "max": 5.0, "tooltip": "Focal-loss focusing parameter for the classification head; 0 disables.", "tier": "beta"},
+      {"key": "multitask_weights", "label": "Multi-task weights", "type": "chips", "default": ["reg:1.0", "cls:0.3"], "tooltip": "Per-task loss weights; supports learned uncertainty weighting if set to 'auto'.", "tier": "beta"}
+    ],
+    "regularization": [
+      {"key": "dropout", "label": "Dropout", "type": "float", "default": 0.1, "min": 0.0, "max": 0.5, "tooltip": "Dropout probability in fusion and head layers.", "tier": "release"},
+      {"key": "weight_decay", "label": "Weight decay", "type": "float", "default": 0.01, "min": 0.0, "max": 0.5, "tooltip": "AdamW L2 regularization strength.", "tier": "release"},
+      {"key": "stochastic_depth", "label": "Stochastic depth", "type": "float", "default": 0.0, "min": 0.0, "max": 0.5, "tooltip": "Per-layer drop probability for deep transformer heads.", "tier": "beta"},
+      {"key": "label_smoothing", "label": "Label smoothing", "type": "float", "default": 0.0, "min": 0.0, "max": 0.2, "tooltip": "Smoothing for the classification head.", "tier": "beta"},
+      {"key": "mixup_alpha", "label": "Mixup alpha", "type": "float", "default": 0.0, "min": 0.0, "max": 1.0, "tooltip": "Beta-distribution alpha for input mixup; 0 disables.", "tier": "beta"},
+      {"key": "manifold_mixup", "label": "Manifold mixup", "type": "bool", "default": false, "tooltip": "Mix embeddings at a random intermediate layer instead of inputs.", "tier": "lab"}
+    ],
+    "stability": [
+      {"key": "grad_clip_norm", "label": "Gradient clip (norm)", "type": "float", "default": 1.0, "min": 0.0, "max": 10.0, "tooltip": "Max global gradient L2 norm; 0 disables.", "tier": "release"},
+      {"key": "grad_accum_steps", "label": "Gradient accumulation", "type": "int", "default": 1, "min": 1, "max": 64, "tooltip": "Microbatches accumulated before each optimizer step.", "tier": "release"},
+      {"key": "amp_precision", "label": "Mixed precision", "type": "select", "default": "bf16", "options": ["fp32", "fp16", "bf16", "tf32"], "tooltip": "Training precision; bf16 is the default on Ampere+ (RTX 30/40/50, A100, H100).", "tier": "release"},
+      {"key": "ema_decay", "label": "EMA decay", "type": "float", "default": 0.0, "min": 0.0, "max": 0.9999, "tooltip": "Exponential moving average of weights; 0 disables.", "tier": "beta"},
+      {"key": "swa", "label": "Stochastic weight averaging", "type": "bool", "default": false, "tooltip": "Average weights over the last fraction of training for better generalization.", "tier": "beta"},
+      {"key": "lookahead", "label": "Lookahead optimizer wrapper", "type": "bool", "default": false, "tooltip": "Wraps the inner optimizer with k-step lookahead.", "tier": "lab"}
+    ],
+    "scheduler_optimizer": [
+      {"key": "optimizer", "label": "Optimizer", "type": "select", "default": "adamw", "options": ["adamw", "adafactor", "lion", "sophia", "shampoo"], "tooltip": "Optimizer family; AdamW is the safe default, Lion is more memory-efficient.", "tier": "release"},
+      {"key": "adam_betas", "label": "Adam betas", "type": "chips", "default": ["0.9", "0.999"], "tooltip": "Momentum coefficients (beta1, beta2).", "tier": "release"},
+      {"key": "adam_eps", "label": "Adam epsilon", "type": "float", "default": 1e-8, "min": 1e-12, "max": 1e-4, "tooltip": "Numerical stability constant in the optimizer.", "tier": "beta"},
+      {"key": "scheduler", "label": "LR scheduler", "type": "select", "default": "cosine_warmup", "options": ["constant", "linear_warmup", "cosine_warmup", "onecycle", "cosine_restarts", "polynomial"], "tooltip": "Learning rate schedule over training.", "tier": "release"},
+      {"key": "warmup_steps", "label": "Warmup steps", "type": "int", "default": 1000, "min": 0, "max": 50000, "tooltip": "Linear warmup length before the main schedule.", "tier": "release"},
+      {"key": "min_lr_ratio", "label": "Min LR ratio", "type": "float", "default": 0.01, "min": 0.0, "max": 0.5, "tooltip": "Floor for the LR schedule, as a fraction of peak LR.", "tier": "release"}
+    ],
+    "distributed": [
+      {"key": "dist_strategy", "label": "Distributed strategy", "type": "select", "default": "ddp", "options": ["single", "ddp", "fsdp_full_shard", "fsdp_shard_grad_op", "fsdp_no_shard", "deepspeed_zero1", "deepspeed_zero2", "deepspeed_zero3"], "tooltip": "Multi-GPU parallelism strategy; FSDP/ZeRO-3 are needed for very large encoders.", "tier": "release"},
+      {"key": "activation_offload", "label": "Activation offload", "type": "bool", "default": false, "tooltip": "Offload activations to CPU to fit larger models.", "tier": "beta"},
+      {"key": "cpu_offload", "label": "CPU parameter offload", "type": "bool", "default": false, "tooltip": "ZeRO-3/FSDP CPU offload; slower but enables much larger models.", "tier": "beta"}
+    ],
+    "reproducibility_compile": [
+      {"key": "seed_list", "label": "Seeds", "type": "chips", "default": ["42"], "tooltip": "Random seeds; multiple seeds spawn an ensemble.", "tier": "release"},
+      {"key": "deterministic_ops", "label": "Deterministic ops", "type": "bool", "default": false, "tooltip": "Force deterministic CUDA kernels; slower but bit-reproducible.", "tier": "release"},
+      {"key": "cudnn_benchmark", "label": "cuDNN benchmark", "type": "bool", "default": true, "tooltip": "Let cuDNN pick fastest kernels per input shape; off for reproducibility.", "tier": "release"},
+      {"key": "torch_compile_mode", "label": "torch.compile mode", "type": "select", "default": "default", "options": ["off", "default", "reduce-overhead", "max-autotune"], "tooltip": "PyTorch 2 graph compilation level; max-autotune is fastest but compiles slowly.", "tier": "beta"}
+    ]
+  },
+  "training_monitoring": [
+    {"key": "eval_cadence_unit", "label": "Eval cadence unit", "type": "select", "default": "epoch", "options": ["step", "epoch", "minutes"], "tooltip": "Whether evaluation is triggered by steps, epochs, or wall-clock minutes.", "tier": "release"},
+    {"key": "eval_every", "label": "Eval every N", "type": "int", "default": 1, "min": 1, "max": 10000, "tooltip": "Frequency of validation runs (in the chosen unit).", "tier": "release"},
+    {"key": "early_stop_metric", "label": "Early stop metric", "type": "select", "default": "val_pearson", "options": ["val_loss", "val_rmse", "val_mae", "val_pearson", "val_spearman", "val_r2"], "tooltip": "Which validation metric drives early stopping.", "tier": "release"},
+    {"key": "early_stop_patience", "label": "Early stop patience", "type": "int", "default": 10, "min": 1, "max": 100, "tooltip": "Eval cycles without improvement before stopping.", "tier": "release"},
+    {"key": "early_stop_min_delta", "label": "Min delta", "type": "float", "default": 0.001, "min": 0.0, "max": 0.1, "tooltip": "Minimum improvement to count as progress.", "tier": "release"},
+    {"key": "checkpoint_policy", "label": "Checkpoint policy", "type": "select", "default": "best_and_last", "options": ["every_n", "on_improvement", "best_and_last", "last_k", "all"], "tooltip": "When to save weights; best_and_last is the standard.", "tier": "release"},
+    {"key": "checkpoint_last_k", "label": "Keep last k checkpoints", "type": "int", "default": 3, "min": 1, "max": 20, "tooltip": "Rolling window of recent checkpoints to retain.", "tier": "release"},
+    {"key": "experiment_tracker", "label": "Experiment tracker", "type": "multi-select", "default": ["tensorboard"], "options": ["tensorboard", "wandb", "mlflow", "neptune", "aim"], "tooltip": "Where to stream metrics, configs, and artifacts.", "tier": "release"},
+    {"key": "gpu_memory_profiling", "label": "GPU memory profiling", "type": "bool", "default": false, "tooltip": "Enable torch.cuda memory snapshots for OOM debugging.", "tier": "beta"},
+    {"key": "nvtx_ranges", "label": "NVTX ranges", "type": "bool", "default": false, "tooltip": "Emit NVTX markers for Nsight Systems profiling.", "tier": "lab"}
+  ],
+  "inference": [
+    {"key": "ensemble_strategy", "label": "Ensemble strategy", "type": "select", "default": "seed_ensemble", "options": ["none", "seed_ensemble", "snapshot_ensemble", "deep_ensemble", "swag"], "tooltip": "How to combine multiple checkpoints/seeds at inference.", "tier": "release"},
+    {"key": "ensemble_n", "label": "Ensemble members", "type": "int", "default": 5, "min": 1, "max": 20, "tooltip": "Number of ensemble members.", "tier": "release"},
+    {"key": "tta_enabled", "label": "Test-time augmentation", "type": "bool", "default": false, "tooltip": "Average predictions over conformer/tautomer augmentations at inference.", "tier": "beta"},
+    {"key": "mc_dropout_passes", "label": "MC dropout passes", "type": "int", "default": 0, "min": 0, "max": 100, "tooltip": "Stochastic forward passes with dropout enabled for uncertainty; 0 disables.", "tier": "beta"},
+    {"key": "temperature_scaling", "label": "Temperature scaling", "type": "bool", "default": true, "tooltip": "Calibrate the classification head with a single-parameter temperature on val set.", "tier": "release"},
+    {"key": "conformal_alpha", "label": "Conformal alpha", "type": "float", "default": 0.1, "min": 0.01, "max": 0.5, "tooltip": "Miscoverage rate; alpha=0.1 yields 90% prediction intervals.", "tier": "release"},
+    {"key": "conformal_calibration_source", "label": "Conformal calibration set", "type": "select", "default": "held_out_val", "options": ["held_out_val", "cv_oof", "external_set"], "tooltip": "Where the calibration residuals come from.", "tier": "release"},
+    {"key": "conformal_group_conditional", "label": "Group-conditional conformal", "type": "select", "default": "per_target", "options": ["marginal", "per_target", "per_scaffold_cluster", "per_protein_family"], "tooltip": "Stratify conformal intervals so coverage holds within each group.", "tier": "beta"},
+    {"key": "attribution_method", "label": "Attribution method", "type": "select", "default": "integrated_gradients", "options": ["none", "integrated_gradients", "saliency", "shap_kernel", "shap_deep", "captum_attention", "gnnexplainer"], "tooltip": "How to attribute predictions back to atoms/residues.", "tier": "beta"},
+    {"key": "ig_steps", "label": "IG steps", "type": "int", "default": 50, "min": 8, "max": 256, "tooltip": "Number of Riemann steps for Integrated Gradients.", "tier": "beta"},
+    {"key": "shap_background_size", "label": "SHAP background size", "type": "int", "default": 100, "min": 10, "max": 1000, "tooltip": "Background sample size for KernelSHAP.", "tier": "beta"}
+  ],
+  "eval_analytics": [
+    {"key": "split_strategy", "label": "Split strategy", "type": "select", "default": "cold_target", "options": ["random", "scaffold", "cold_drug", "cold_target", "cold_pair", "orphan_drug", "time_split"], "tooltip": "Cold-target is the realistic setting for a new protein; cold-pair is the hardest.", "tier": "release"},
+    {"key": "primary_metrics", "label": "Primary metrics", "type": "multi-select", "default": ["rmse", "pearson", "spearman"], "options": ["mae", "rmse", "pearson", "spearman", "r2", "ci", "rm2", "auroc", "auprc"], "tooltip": "Metrics surfaced in the run summary; CI/rm2 are DTA-community standards.", "tier": "release"},
+    {"key": "per_stratum_metrics", "label": "Per-stratum metrics", "type": "bool", "default": true, "tooltip": "Compute metrics within each cluster/family/scaffold group separately.", "tier": "release"},
+    {"key": "stratification_keys", "label": "Stratification keys", "type": "multi-select", "default": ["protein_family", "scaffold"], "options": ["protein_family", "ec_class", "pfam_clan", "scaffold", "tanimoto_cluster", "kinase_subfamily"], "tooltip": "Grouping columns used for per-stratum analytics and heatmaps.", "tier": "release"},
+    {"key": "bootstrap_n", "label": "Paired bootstrap n", "type": "int", "default": 1000, "min": 100, "max": 10000, "tooltip": "Bootstrap resamples for confidence intervals on metrics.", "tier": "release"},
+    {"key": "ci_alpha", "label": "CI alpha", "type": "float", "default": 0.05, "min": 0.01, "max": 0.2, "tooltip": "Significance level for bootstrap CIs (0.05 = 95% CI).", "tier": "release"},
+    {"key": "selectivity_panel", "label": "Selectivity panel", "type": "select", "default": "kinome_318", "options": ["none", "kinome_318", "gpcrome_135", "nuclear_receptors_48", "custom"], "tooltip": "Built-in off-target panel for selectivity scoring.", "tier": "beta"},
+    {"key": "custom_offtarget_list", "label": "Custom off-target UniProts", "type": "chips", "default": [], "tooltip": "UniProt accessions used when selectivity panel is 'custom'.", "tier": "beta"},
+    {"key": "followup_assay", "label": "Follow-up assay", "type": "select", "default": "tr_fret", "options": ["tr_fret", "spr", "itc", "biolayer_interferometry", "thermal_shift", "alphascreen", "radioligand"], "tooltip": "Wet-lab assay planned for top picks; affects throughput estimates and dynamic range.", "tier": "beta"},
+    {"key": "followup_throughput", "label": "Expected throughput / week", "type": "int", "default": 96, "min": 8, "max": 1536, "tooltip": "How many compounds the wet lab can confirm per week; drives shortlist size.", "tier": "beta"},
+    {"key": "blind_id_scheme", "label": "Blind ID scheme", "type": "select", "default": "hashed", "options": ["none", "hashed", "sequential_blind", "double_blind"], "tooltip": "How shortlist compounds are labeled when handed to wet lab to avoid bias.", "tier": "planned_inactive"}
+  ]
+}

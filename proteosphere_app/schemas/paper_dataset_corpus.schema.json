@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://proteosphere.local/schemas/paper_dataset_corpus.schema.json",
+  "title": "ProteoSphere Paper Dataset Corpus",
+  "type": "object",
+  "required": ["papers"],
+  "properties": {
+    "artifact_id": {"type": "string"},
+    "schema_id": {"type": "string"},
+    "default_view": {"type": "string"},
+    "papers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["paper_id", "title"],
+        "properties": {
+          "paper_id": {"type": "string"},
+          "title": {"type": "string"},
+          "doi": {"type": "string"},
+          "task_group": {"type": "string"},
+          "modality": {"type": "string"},
+          "claimed_dataset": {"type": "string"},
+          "source_families": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "claimed_split_description": {"type": "string"},
+          "split_style": {"type": "string"},
+          "member_type": {"type": "string"},
+          "train_members": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "val_members": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "test_members": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": true
+}

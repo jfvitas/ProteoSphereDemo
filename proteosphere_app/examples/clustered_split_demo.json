@@ -1,0 +1,23 @@
+{
+  "manifest_id": "clustered-split-demo",
+  "title": "Demo: paralog-aware splitting with a leakage manifest",
+  "task_type": "protein-protein interaction",
+  "label_type": "binary",
+  "entity_kind": "protein_pair",
+  "split_membership_mode": "unsplit_manifest",
+  "records": [
+    {"record_id": "actin_alpha_rabbit",    "protein_a": "P68135", "protein_b": "Q9NPI1", "label_value": 1, "provenance_note": "Actin paralog (rabbit)."},
+    {"record_id": "actin_alpha_chicken",   "protein_a": "P68139", "protein_b": "Q9UH92", "label_value": 1, "provenance_note": "Actin paralog (chicken)."},
+    {"record_id": "actin_beta_human",      "protein_a": "P60709", "protein_b": "Q15119", "label_value": 1, "provenance_note": "Actin paralog (human beta)."},
+    {"record_id": "antibody_kappa",        "protein_a": "P01837", "protein_b": "Q9Y6Q9", "label_value": 0, "provenance_note": "Antibody paralog (kappa V)."},
+    {"record_id": "antibody_gamma2A",      "protein_a": "P01869", "protein_b": "Q9NP56", "label_value": 0, "provenance_note": "Antibody paralog (gamma2A V)."},
+    {"record_id": "antibody_gamma2A_full", "protein_a": "P01863", "protein_b": "Q9Y2J2", "label_value": 1, "provenance_note": "Antibody paralog (gamma2A full)."},
+    {"record_id": "bovine_pka",            "protein_a": "P05132", "protein_b": "Q9H4B7", "label_value": 1, "provenance_note": "Singleton kinase (PKA)."},
+    {"record_id": "vegfr2_kinase",         "protein_a": "P35968", "protein_b": "Q9H6X4", "label_value": 0, "provenance_note": "Singleton kinase (VEGFR2)."},
+    {"record_id": "yeast_hexokinase",      "protein_a": "P04807", "protein_b": "Q9H910", "label_value": 1, "provenance_note": "Singleton."},
+    {"record_id": "ubiquitin_e2",          "protein_a": "P35129", "protein_b": "Q9NS68", "label_value": 0, "provenance_note": "Singleton."},
+    {"record_id": "trypsin_bovine",        "protein_a": "P00760", "protein_b": "Q9H1A4", "label_value": 1, "provenance_note": "Convergent-function pair (trypsin)."},
+    {"record_id": "subtilisin_bacillus",   "protein_a": "P00782", "protein_b": "Q9H910", "label_value": 0, "provenance_note": "Convergent-function pair (subtilisin)."},
+    {"record_id": "actin_variant",         "protein_a": "P00639", "protein_b": "Q9Y6A4", "label_value": 1, "provenance_note": "Actin variant (different ortholog group)."}
+  ]
+}

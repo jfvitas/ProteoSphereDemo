@@ -1,0 +1,210 @@
+{
+  "pipeline_id": "pipeline:protein-binding-default-v1",
+  "schema_version": "model-studio:v2-study-builder",
+  "study_title": "Protein Binding Studio Draft",
+  "data_strategy": {
+    "strategy_id": "strategy:protein-binding-default-v1",
+    "task_type": "protein-protein",
+    "label_type": "delta_G",
+    "label_transform": "identity",
+    "split_strategy": "leakage_resistant_benchmark",
+    "structure_source_policy": "experimental_only",
+    "graph_recipe_ids": [
+      "graph:ppi-interface-shell-v1"
+    ],
+    "feature_recipe_ids": [
+      "feature:ppi-interface-v1"
+    ],
+    "dataset_refs": [
+      "release_pp_alpha_benchmark_v1",
+      "robust_pp_benchmark_v1",
+      "expanded_pp_benchmark_v1"
+    ],
+    "audit_requirements": [
+      "sequence_leakage",
+      "partner_overlap",
+      "state_reuse"
+    ],
+    "notes": [
+      "Broadened beta structure-backed protein-binding strategy."
+    ]
+  },
+  "feature_recipes": [
+    {
+      "recipe_id": "feature:ppi-interface-v1",
+      "node_feature_policy": "normalized_continuous",
+      "edge_feature_policy": "normalized_continuous",
+      "global_feature_sets": [
+        "assay_globals",
+        "structure_quality",
+        "interface_chemistry"
+      ],
+      "distributed_feature_sets": [
+        "residue_contacts",
+        "interface_geometry",
+        "water_context",
+        "interface_chemistry_maps"
+      ],
+      "notes": [
+        "Broadened beta protein-binding feature recipe."
+      ]
+    }
+  ],
+  "graph_recipes": [
+    {
+      "recipe_id": "graph:ppi-interface-shell-v1",
+      "graph_kind": "hybrid_graph",
+      "region_policy": "interface_plus_shell",
+      "node_granularity": "residue",
+      "encoding_policy": "normalized_continuous",
+      "feature_recipe_id": "feature:ppi-interface-v1",
+      "partner_awareness": "asymmetric",
+      "include_waters": true,
+      "include_salt_bridges": true,
+      "include_contact_shell": true,
+      "notes": [
+        "Released interface-plus-shell graph recipe."
+      ]
+    }
+  ],
+  "training_set_request": {
+    "request_id": "training-set-request:protein-binding-default-v1",
+    "task_type": "protein-protein",
+    "label_type": "delta_G",
+    "structure_source_policy": "experimental_only",
+    "source_families": [
+      "balanced_ppi_beta_pool",
+      "release_frozen",
+      "robust_structure_backed"
+    ],
+    "dataset_refs": [
+      "release_pp_alpha_benchmark_v1",
+      "robust_pp_benchmark_v1",
+      "expanded_pp_benchmark_v1"
+    ],
+    "target_size": 192,
+    "acceptable_fidelity": "pilot_ready",
+    "inclusion_filters": {
+      "max_resolution": 3.5,
+      "min_release_year": 1990
+    },
+    "exclusion_filters": {
+      "exclude_pdb_ids": []
+    },
+    "notes": [
+      "Default broadened beta request for the internal expert pilot."
+    ]
+  },
+  "preprocess_plan": {
+    "plan_id": "preprocess:protein-binding-default-v1",
+    "modules": [
+      "PDB acquisition",
+      "chain extraction and canonical mapping",
+      "waters",
+      "salt bridges",
+      "hydrogen-bond/contact summaries"
+    ],
+    "cache_policy": "prefer_cached_materializations",
+    "source_policy": "experimental_only",
+    "shell_distance_angstroms": 6.0,
+    "shell_strategy": "interface_shell",
+    "options": {
+      "contact_cutoff_angstroms": 5.0,
+      "neighbor_context_depth": 2
+    },
+    "notes": []
+  },
+  "split_plan": {
+    "plan_id": "split:protein-binding-default-v1",
+    "objective": "leakage_aware_component_balanced",
+    "grouping_policy": "protein_accession_components",
+    "holdout_policy": "explicit_test_holdout",
+    "train_fraction": 0.7,
+    "val_fraction": 0.1,
+    "test_fraction": 0.2,
+    "hard_constraints": [
+      "no_direct_accession_overlap",
+      "prefer_label_balance"
+    ],
+    "notes": [
+      "Released split compiler defaults for the internal expert pilot."
+    ]
+  },
+  "example_materialization": {
+    "spec_id": "materialization:protein-binding-default-v1",
+    "graph_recipe_ids": [
+      "graph:ppi-interface-shell-v1"
+    ],
+    "feature_recipe_ids": [
+      "feature:ppi-interface-v1"
+    ],
+    "preprocess_modules": [
+      "PDB acquisition",
+      "chain extraction and canonical mapping",
+      "waters",
+      "salt bridges",
+      "hydrogen-bond/contact summaries"
+    ],
+    "region_policy": "interface_plus_shell",
+    "cache_policy": "prefer_cached_materializations",
+    "include_global_features": true,
+    "include_distributed_features": true,
+    "include_graph_payloads": true,
+    "notes": [
+      "Default example materialization bundle for the internal expert pilot."
+    ]
+  },
+  "training_plan": {
+    "plan_id": "training:protein-binding-default-v1",
+    "model_family": "multimodal_fusion",
+    "architecture": "graph_global_fusion",
+    "optimizer": "adamw",
+    "scheduler": "cosine_decay",
+    "loss_function": "mse",
+    "epoch_budget": 60,
+    "batch_policy": "dynamic_by_graph_size",
+    "mixed_precision": "bf16",
+    "uncertainty_head": "heteroscedastic_regression",
+    "hyperparameters": {
+      "lr": 0.0002,
+      "weight_decay": 0.01,
+      "dropout": 0.15
+    },
+    "ablations": [
+      "graph_only",
+      "global_only",
+      "graph_plus_global"
+    ],
+    "notes": []
+  },
+  "evaluation_plan": {
+    "plan_id": "evaluation:protein-binding-default-v1",
+    "metric_families": [
+      "regression",
+      "ranking",
+      "calibration"
+    ],
+    "robustness_slices": [
+      "uniref_family_holdout",
+      "interface_size_bucket",
+      "partner_novelty"
+    ],
+    "outlier_policy": "top_residuals_and_influence",
+    "attribution_policy": "attention_and_feature_saliency",
+    "leakage_checks": [
+      "exact_sequence",
+      "partner_overlap",
+      "structure_state_reuse"
+    ],
+    "notes": []
+  },
+  "templates": [
+    "protein_binding_flagship"
+  ],
+  "tags": [
+    "web-first",
+    "protein-first",
+    "model-studio"
+  ],
+  "notes": []
+}
