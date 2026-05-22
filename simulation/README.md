@@ -14,7 +14,7 @@ without going through the install + launch process.
 
 ## Open the demo
 
-Just double-click `ProteoSphereDemo_Simulation.html` (in this
+Just download and open `ProteoSphereDemo_Simulation.html` (in this
 `simulation/` folder). Works in Chrome, Firefox, Edge, and Safari
 from `file://`.
 
