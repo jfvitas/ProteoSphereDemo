@@ -3,7 +3,7 @@
 ## What is this?
 
 A fully interactive, self-contained demo of the Model Studio. The user
-double-clicks **`ProteoSphereDemo_Simulation.html`** and the entire
+downloads **`ProteoSphereDemo_Simulation.html`** and opens it (loads in a web-browser), and the entire
 studio opens in their browser. No Python, no install, no server, no
 network requests — every backend API call is intercepted client-side
 and answered with realistic canned data.
