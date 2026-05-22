@@ -135,11 +135,30 @@ def main() -> int:
         dst_path.unlink()
     dst_con = duckdb.connect(str(dst_path))
     # Copy each demo-relevant view as a materialised table.
+    # Baseline tables (always present): Davis, KIBA, GtoPdb, HIPPIE, HuRI,
+    # 3did bridges + PDBbind + EC/ortholog/sequence-cluster memberships +
+    # ingest_runs. The richer relationship axes (motif, scaffold, paper
+    # rows, PINDER/PLINDER audit, PDB↔UniProt xref, globin reference
+    # roster) are materialised in a second pass by
+    # ``materialize_full_demo_warehouse.py``.
     keep_views = [
+        # DTI benchmarks
         "davis_proteins", "davis_ligands", "davis_interactions",
         "davis_bridge_uniprot",
         "kiba_proteins", "kiba_ligands", "kiba_interactions",
         "kiba_bridge_uniprot",
+        "gtopdb_targets", "gtopdb_ligands", "gtopdb_interactions",
+        "gtopdb_bridge_uniprot",
+        # PPI benchmarks
+        "hippie_bridge_uniprot", "huri_bridge_uniprot", "s_3did_bridge_uniprot",
+        # PDBbind
+        "pdbbind_interactions",
+        # Functional / sequence / orthology memberships
+        "v2_ec_class_membership",
+        "v2_ortholog_cluster_membership",
+        "v2_sequence_cluster_membership",
+        # Ingest provenance
+        "ingest_runs",
     ]
     for v in keep_views:
         try:
@@ -150,6 +169,28 @@ def main() -> int:
             print(f"  ! {v}: skipped ({exc})")
     src_con.close()
     dst_con.close()
+
+    # 2b. Run the second-pass materializer to add the rich relationship
+    # axes (motif, scaffold, papers, PINDER/PLINDER audit, PDB↔UniProt).
+    # This is a separate script so it can be re-run incrementally without
+    # re-copying the base partitions / ESM cache.
+    print()
+    print("Step 2b: materialising rich relationship axes...")
+    try:
+        import subprocess
+        import sys as _sys
+        materialize_script = Path(__file__).parent / "materialize_full_demo_warehouse.py"
+        if materialize_script.exists():
+            rc = subprocess.call(
+                [_sys.executable, str(materialize_script)],
+                cwd=str(Path(__file__).parent),
+            )
+            if rc != 0:
+                print(f"  ! materialize_full_demo_warehouse.py exited {rc}")
+        else:
+            print(f"  ! {materialize_script} not found; skipping")
+    except Exception as exc:
+        print(f"  ! could not run materialize_full_demo_warehouse: {exc}")
 
     # 3. Copy ESM-2 cache for the 671 demo proteins.
     print()
