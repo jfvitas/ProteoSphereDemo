@@ -690,11 +690,45 @@ def _train_run_inner(run: Run) -> None:
     from .gpu_runtime import select_device
     device = select_device("auto" if hp.get("use_cuda", True) else "cpu")
     amp = bool(hp.get("amp", True)) and device.type == "cuda"
+    # CPU-only training is the demo's slow path. PyTorch's default intra-op
+    # thread count on Windows is often 1 (single core), which leaves 3-7
+    # cores idle on a typical laptop. Pin to physical core count for a
+    # 2-4× speedup on the no-GPU path. (No-op when CUDA owns the math.)
+    if device.type == "cpu":
+        try:
+            import os as _os
+            _n = int(hp.get("torch_threads") or _os.cpu_count() or 4)
+            torch.set_num_threads(max(1, _n))
+            # Inter-op parallelism (one thread per top-level op) is usually
+            # already saturated by intra-op; cap at 2 to avoid contention.
+            torch.set_num_interop_threads(max(1, min(2, _n // 2 or 1)))
+            run.emit({"type": "log", "level": "info",
+                      "text": (f"CPU-only training: pinned torch to "
+                               f"{torch.get_num_threads()} intra-op threads + "
+                               f"{torch.get_num_interop_threads()} inter-op "
+                               f"threads (was default).")})
+        except Exception as _thread_exc:
+            # set_num_*_threads can only be called once per process; if a
+            # prior run already set them we just keep the existing values.
+            pass
     epochs = int(hp.get("epochs", 25))
     batch_size = int(hp.get("batch_size", 256))
     lr = float(hp.get("lr", 3e-4))
     weight_decay = float(hp.get("weight_decay", 0.0))
     seed = int(hp.get("seed", 4192))
+    # Optional fast-demo subsample: when the user sets subsample_train_frac
+    # in [0, 1], we slice the training records (NOT val/test — those stay
+    # full so the reported metrics still mean something) down to that
+    # fraction post-split. Speeds up wall-clock proportionally on every
+    # epoch. Default None = use the full split.
+    subsample_train_frac = hp.get("subsample_train_frac")
+    if subsample_train_frac is not None:
+        try:
+            subsample_train_frac = float(subsample_train_frac)
+            if not (0.0 < subsample_train_frac < 1.0):
+                subsample_train_frac = None
+        except (TypeError, ValueError):
+            subsample_train_frac = None
 
     # Dataset selection. Default to the Davis CSV loader for backward
     # compat with existing run payloads, but a v2 launch can specify
@@ -1194,6 +1228,49 @@ def _train_run_inner(run: Run) -> None:
               "text": (f"Dataset ready ({benchmark}): {meta['n_train']:,} train / "
                        f"{meta['n_val']:,} val / {meta['n_test']:,} test "
                        f"({label_unit} range {label_range[0]:.2f}…{label_range[1]:.2f})")})
+
+    # ── Optional train-set subsample (fast demo mode) ───────────────
+    # Applied after the split + loader build so the val/test sets keep
+    # their full size (and the reported metrics stay comparable). We
+    # only shrink the *train* loader by wrapping it in a torch Subset
+    # over the first ``subsample_train_frac × n_train`` indices of the
+    # underlying dataset. Pre-shuffled at split time, so taking a prefix
+    # is statistically equivalent to a uniform random subsample.
+    if subsample_train_frac and 0.0 < subsample_train_frac < 1.0:
+        try:
+            import torch as _torch
+            base_ds = getattr(train_loader, "dataset", None)
+            if base_ds is not None and len(base_ds) > 32:
+                n_keep = max(32, int(len(base_ds) * subsample_train_frac))
+                # Stable RNG for reproducibility — same seed = same subsample.
+                _rng = np.random.default_rng(seed)
+                keep_idx = _rng.permutation(len(base_ds))[:n_keep].tolist()
+                if isinstance(base_ds, _torch.utils.data.Subset):
+                    # Already a Subset (warehouse loaders use this) — compose
+                    # the indices through the parent so we don't double-wrap.
+                    parent_indices = [base_ds.indices[i] for i in keep_idx]
+                    new_ds = _torch.utils.data.Subset(base_ds.dataset, parent_indices)
+                else:
+                    new_ds = _torch.utils.data.Subset(base_ds, keep_idx)
+                train_loader = DataLoader(
+                    new_ds,
+                    batch_size=train_loader.batch_size,
+                    shuffle=True,
+                    num_workers=getattr(train_loader, "num_workers", 0),
+                    pin_memory=getattr(train_loader, "pin_memory", False),
+                    drop_last=getattr(train_loader, "drop_last", False),
+                    collate_fn=getattr(train_loader, "collate_fn", None),
+                )
+                run.emit({"type": "log", "level": "info",
+                          "text": (f"Fast-demo subsample: train shrunk from "
+                                   f"{len(base_ds):,} → {n_keep:,} records "
+                                   f"({subsample_train_frac:.0%}). val/test "
+                                   f"unchanged, metrics still on full splits.")})
+                run.summary["subsample_train_frac"] = subsample_train_frac
+                run.summary["n_train_subsampled"] = n_keep
+        except Exception as _sub_exc:
+            run.emit({"type": "log", "level": "warn",
+                      "text": f"subsample_train_frac ignored: {_sub_exc}"})
 
     # ── k-fold CV split rotation ─────────────────────────────────────
     # When ``cv_fold`` + ``cv_folds`` are set (typically by train_run_kfold),

@@ -39,10 +39,14 @@ splitter / analyzer / training pipeline interactively.
 ## Quickstart (Windows) — 4 steps
 
 > **You need Python 3.10+ installed** (check with `python --version`).
-> If not, grab the installer from https://python.org/downloads — make
-> sure to tick **"Add Python to PATH"** during install. The launcher
-> looks for `%LOCALAPPDATA%\Programs\Python\Python312\python.exe`
-> first, then falls back to whatever `python` resolves to on `PATH`.
+> If the launcher can't find Python on `PATH` or at
+> `%LOCALAPPDATA%\Programs\Python\Python312\python.exe`, it will:
+>   1. Offer to `winget install Python.Python.3.12` for you (one-key
+>      consent prompt — no silent install), or
+>   2. If `winget` isn't available, open
+>      https://python.org/downloads/windows/ in your browser — pick the
+>      latest Python 3.x installer and tick **"Add Python to PATH"** at
+>      the top of the installer dialog before clicking Install.
 >
 > The first `pip install -r requirements.txt` pulls down CPU-only
 > torch (~700 MB), torch-geometric, RDKit, DuckDB, and pyarrow —
@@ -114,10 +118,19 @@ The demo lets you do real end-to-end runs:
 
 On a 4-core CPU laptop with 8 GB RAM and no GPU, the defaults (5
 epochs × ~470 batches × 64 batch-size) take ~10–15 minutes wall-clock.
-For a quicker first-look demo:
+For a quicker first-look demo, three knobs help (combine them):
 
-- In **Pipeline → Advanced**, drop **epochs** from 5 to **2** and
-  **batch_size** from 64 to **32** — finishes in ~2–3 minutes.
+- **`subsample_train_frac`** in Pipeline → Advanced. Set to `0.2` and
+  the trainer randomly keeps 20% of the training records (val + test
+  stay full so the reported metrics are still meaningful). Linear
+  wall-clock speedup per epoch.
+- Drop **epochs** from 5 to **2** and **batch_size** from 64 to
+  **32** — combined with the 20% subsample this finishes in
+  **under a minute on a 4-core CPU laptop**.
+- The trainer now auto-pins `torch.set_num_threads(os.cpu_count())`
+  on CPU-only runs (PyTorch defaults to 1 thread on Windows, leaving
+  most cores idle). You'll see a `CPU-only training: pinned torch
+  to N intra-op threads…` log line at the start of every run.
 - Watch the Training tab logs: you should see
   `[embeddings] N/700 resolved (cache_hits=N, ...)` heartbeats every
   few seconds during the embedding-prefetch step (~5 s total when the

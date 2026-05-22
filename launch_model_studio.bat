@@ -88,6 +88,75 @@ REM Fall back to PATH if the explicit path isn't there.
 set "PY=%LOCALAPPDATA%\Programs\Python\Python312\python.exe"
 if not exist "%PY%" set "PY=python"
 
+REM ---- handle the "no Python at all" case --------------------
+REM If %PY% is the literal string "python" (i.e. the system Python
+REM at the canonical install path didn't exist), check whether PATH
+REM resolution can find one. `where python` returns 0 if yes,
+REM non-zero if no. When there's none, offer a one-key install via
+REM winget (if available) or open the python.org download page.
+REM We do NOT install silently -- modifying the user's machine
+REM without consent is bad, even for a "helpful" runtime.
+REM
+REM Implementation note: labels and `if errorlevel` blocks must live
+REM at top scope (NOT inside parenthesized blocks), because cmd.exe
+REM evaluates errorlevel at parse time inside nested parens, which
+REM gave us the "instant-close" bug in an earlier iteration. Stick
+REM to a flat GOTO chain.
+if not "%PY%"=="python" goto python_resolved
+where python >nul 2>&1
+if not errorlevel 1 goto python_resolved
+echo.
+echo  -----------------------------------------------------------
+echo   PYTHON NOT FOUND
+echo  -----------------------------------------------------------
+echo.
+echo   The launcher could not find a Python interpreter on this
+echo   machine. Model Studio needs Python 3.10 or newer.
+echo.
+where winget >nul 2>&1
+if errorlevel 1 goto python_open_browser
+echo   Good news: this machine has 'winget' available, so I can
+echo   install Python 3.12 for you with one command:
+echo.
+echo       winget install --id Python.Python.3.12 --source winget
+echo.
+set "WG_REPLY=Y"
+set /p "WG_REPLY=Install Python 3.12 via winget now? [Y/n] "
+if /I "!WG_REPLY!"=="n"  goto python_open_browser
+if /I "!WG_REPLY!"=="no" goto python_open_browser
+echo.
+echo   Running winget...
+winget install --id Python.Python.3.12 --source winget --accept-package-agreements --accept-source-agreements
+if errorlevel 1 goto python_winget_failed
+echo.
+echo   Python 3.12 installed. Please CLOSE this window and
+echo   re-launch launch_model_studio.bat so the new PATH is
+echo   picked up.
+echo.
+pause
+exit /b 0
+
+:python_winget_failed
+echo.
+echo   winget install failed. Falling back to opening the
+echo   download page in your browser.
+goto python_open_browser
+
+:python_open_browser
+echo   Opening the Python download page in your browser...
+echo   Choose the latest Python 3.x Windows installer, and make
+echo   sure to tick "Add Python to PATH" at the top of the
+echo   installer dialog before clicking Install.
+echo.
+start "" "https://www.python.org/downloads/windows/"
+echo   After Python is installed, close this window and re-run
+echo   launch_model_studio.bat.
+echo.
+pause
+exit /b 5
+
+:python_resolved
+
 echo.
 echo  ============================================================
 echo   ProteoSphere Model Studio v2
