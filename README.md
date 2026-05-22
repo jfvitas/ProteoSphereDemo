@@ -36,6 +36,15 @@ splitter / analyzer / training pipeline interactively.
   fallbacks — see `LIMITATIONS.md` if you remember the "results always
   identical" issue).
 
+## Try the simulator (no install required)
+
+Want to see what the Model Studio looks like without installing
+anything? Download **`ProteoSphereDemo_Simulation.html`** from this
+repo, double-click it. Full studio opens in your browser — all
+data faked client-side, but every screen is interactive and the
+training run plays back realistic curves seeded by the seed you
+pick on the Pipeline tab.
+
 ## Quickstart (Windows) — 4 steps
 
 > **You need Python 3.10+ installed** (check with `python --version`).

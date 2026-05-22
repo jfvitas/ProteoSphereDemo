@@ -369,6 +369,7 @@
     const valMAE   = 0.20 + 0.45 * decay + 0.005 * gauss(rnd);
     const lr       = (run.hparams.lr || 1e-3) * (0.5 + 0.5 * Math.cos((epoch / total) * Math.PI));
     return {
+      type: 'epoch',
       epoch,
       total_epochs: total,
       train_loss: +trainLoss.toFixed(5),
@@ -400,6 +401,10 @@
       test_mae:      +(0.188).toFixed(4),
       wall_time_s:   wall,
       n_params: 1_240_000,
+      benchmark:    run.hparams.benchmark || 'davis',
+      split_policy: run.hparams.split_policy || 'cold-target',
+      n_train:      24045,
+      device:       'cuda',
     };
   }
 
@@ -856,16 +861,43 @@
         for (let i = 0; i < 10; i++) {
           outliers.push([rnd(), rnd()]);
         }
+        // ROC: GUI expects [{thr, fpr, tpr}, ...] objects (NOT [fpr,tpr] arrays).
         const roc = [];
         for (let i = 0; i <= 50; i++) {
           const fpr = i / 50;
           const tpr = Math.min(1, fpr + 0.7 * (1 - Math.exp(-3 * fpr)));
-          roc.push([fpr, tpr]);
+          const thr = 4 + (1 - i / 50) * 6; // pKi threshold sweep 10→4
+          roc.push({ thr: +thr.toFixed(2), fpr: +fpr.toFixed(4), tpr: +tpr.toFixed(4) });
         }
+        // pKd output range — Davis-style 4..10.5 (matches finalSummary RMSE units).
+        const yLo = 4.0, yHi = 10.5;
+        // Calibration: GUI expects [{pred_mean, actual_mean, n, abs_err, bin}, ...]
+        // — both in real pKd units. The GUI projects them to [0,1] using y_pkd_range.
         const calib = [];
         for (let i = 0; i < 10; i++) {
           const p = (i + 0.5) / 10;
-          calib.push([p, p + (gauss(rnd) * 0.04)]);
+          const predPki   = yLo + p * (yHi - yLo);
+          const actualPki = predPki + gauss(rnd) * 0.20;
+          const n = 280 + Math.floor(rnd() * 60);
+          calib.push({
+            bin: i + 1,
+            pred_mean:   +predPki.toFixed(4),
+            actual_mean: +actualPki.toFixed(4),
+            n,
+            abs_err: +Math.abs(predPki - actualPki).toFixed(4),
+          });
+        }
+        // Residual histogram — 21 bins centered on zero, ~RMSE width.
+        const histRmse = s.test_rmse || 0.5;
+        const edges = [];
+        const counts = [];
+        const nBins = 21;
+        const halfRange = 3.0; // ± pKi units
+        for (let i = 0; i <= nBins; i++) edges.push(-halfRange + (2 * halfRange) * i / nBins);
+        for (let i = 0; i < nBins; i++) {
+          const center = (edges[i] + edges[i + 1]) / 2;
+          const v = 280 * Math.exp(-Math.pow(center / histRmse, 2)) + 5 * Math.abs(gauss(rnd));
+          counts.push(Math.round(v));
         }
         return jsonResponse({
           run_id: runId,
@@ -879,8 +911,20 @@
             },
             scatter_inliers: inliers,
             scatter_outliers: outliers,
-            roc: { auc: s.test_auc_pki6, points: roc },
+            y_pkd_range: [yLo, yHi],
+            roc: {
+              auc: s.test_auc_pki6,
+              points: roc,
+              pos: 1124,
+              neg: 1882,
+              threshold: 6.0,
+            },
             calibration: calib,
+            residual_hist: {
+              edges,
+              counts,
+              rmse: histRmse,
+            },
           },
           template_id: run.template_id, template_label: run.template_label,
           hparams: run.hparams,
