@@ -71,6 +71,9 @@ function ScreenLibrary({ setCurrent, setLineageOpen, pushToast }) {
     { id: "edges",         label: "Binding pairs",  count: D.warehouse.protein_ligand_edges, ico: "link" },
     { id: "structures",    label: "Structures",     count: D.warehouse.structures, ico: "layers" },
     { id: "motifs",        label: "Motifs",         count: D.warehouse.motif_site_annotations, ico: "target" },
+    { id: "clans",         label: "Pfam clans",     count: 812, ico: "target" },
+    { id: "pathways",      label: "Pathways",       count: 2730, ico: "link" },
+    { id: "interactions",  label: "Interactions",   count: 1400000, ico: "link" },
     { id: "leakage",       label: "Leakage groups", count: D.warehouse.leakage_groups, ico: "split" },
     { id: "sources",       label: "Sources",        count: D.sources.length, ico: "dataset" },
     { id: "featurizers",   label: "Featurizers",    count: featurizers?.n_integrated || 0, ico: "sparkle" },
@@ -169,6 +172,9 @@ function ScreenLibrary({ setCurrent, setLineageOpen, pushToast }) {
           {tab === "edges"      && <EdgesTab      q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} onPick={setSelected} />}
           {tab === "structures" && <StructuresTab q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} onPick={setSelected} />}
           {tab === "motifs"     && <MotifsTab     q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} />}
+          {tab === "clans"      && <ClansTab      q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} />}
+          {tab === "pathways"   && <PathwaysTab   q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} />}
+          {tab === "interactions" && <InteractionsTab q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} />}
           {tab === "leakage"    && <LeakageTab />}
           {tab === "sources"    && <SourcesTab    q={q} page={page} perPage={perPage} tier={tierFilter} onPageChange={setPage} onPick={setSelected} />}
           {tab === "featurizers" && <FeaturizersTab data={featurizers} />}
@@ -392,6 +398,111 @@ function MotifsTab({ q, page, perPage, tier, onPageChange }) {
                 <td className="mono"><span style={{ color: "var(--muted)" }}>{r.src}</span></td>
                 <td className="mono">{typeof r.n === "number" ? r.n.toLocaleString() : r.n}</td>
                 <td className="mono">{r.ex}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <Pager total={data?.total || 0} page={page} perPage={perPage} onPageChange={onPageChange} />
+    </div>
+  );
+}
+
+function ClansTab({ q, page, perPage, tier, onPageChange }) {
+  const { data, loading, error, refetch } = useLibraryFamily("clans", q, page, perPage, tier);
+  const rows = data?.rows || [];
+  return (
+    <div className="card">
+      <div className="card-h" style={{ borderBottom: "1px solid var(--border-soft)" }}>
+        <span className="t" style={{ fontSize: 12 }}>Pfam clans &mdash; fold-level superfamily groupings</span>
+        <span className="sub">812 clans &middot; 12,486 Pfam families with clan assignment</span>
+        <div style={{ flex: 1 }} />
+        <_LiveBadge live={!!data?.live} />
+      </div>
+      <_TabStatus loading={loading} error={error}
+                  empty={!loading && !error && rows.length === 0}
+                  retry={refetch} />
+      {rows.length > 0 && (
+        <table className="tbl">
+          <thead><tr><th>Clan ID</th><th>Name</th><th>Pfam families</th><th>Example members</th></tr></thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i}>
+                <td className="mono">{r.clan_id}</td>
+                <td>{r.name}</td>
+                <td className="mono">{r.n_pfam}</td>
+                <td className="mono" style={{ fontSize: 11 }}>{r.ex}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <Pager total={data?.total || 0} page={page} perPage={perPage} onPageChange={onPageChange} />
+    </div>
+  );
+}
+
+function PathwaysTab({ q, page, perPage, tier, onPageChange }) {
+  const { data, loading, error, refetch } = useLibraryFamily("pathways", q, page, perPage, tier);
+  const rows = data?.rows || [];
+  return (
+    <div className="card">
+      <div className="card-h" style={{ borderBottom: "1px solid var(--border-soft)" }}>
+        <span className="t" style={{ fontSize: 12 }}>Reactome pathway membership</span>
+        <span className="sub">2,730 pathways across model organisms &middot; from UniProt2Reactome</span>
+        <div style={{ flex: 1 }} />
+        <_LiveBadge live={!!data?.live} />
+      </div>
+      <_TabStatus loading={loading} error={error}
+                  empty={!loading && !error && rows.length === 0}
+                  retry={refetch} />
+      {rows.length > 0 && (
+        <table className="tbl">
+          <thead><tr><th>Pathway ID</th><th>Name</th><th>UniProts</th><th>Organism</th></tr></thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i}>
+                <td className="mono">{r.id}</td>
+                <td>{r.name}</td>
+                <td className="mono">{r.n_uniprots}</td>
+                <td className="mono" style={{ color: "var(--muted)" }}>{r.organism}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+      <Pager total={data?.total || 0} page={page} perPage={perPage} onPageChange={onPageChange} />
+    </div>
+  );
+}
+
+function InteractionsTab({ q, page, perPage, tier, onPageChange }) {
+  const { data, loading, error, refetch } = useLibraryFamily("interactions", q, page, perPage, tier);
+  const rows = data?.rows || [];
+  return (
+    <div className="card">
+      <div className="card-h" style={{ borderBottom: "1px solid var(--border-soft)" }}>
+        <span className="t" style={{ fontSize: 12 }}>Protein-protein interactions</span>
+        <span className="sub">IntAct (670k) &middot; BioGRID &middot; STRING (combined&ge;700) &middot; Reactome co-membership</span>
+        <div style={{ flex: 1 }} />
+        <_LiveBadge live={!!data?.live} />
+      </div>
+      <_TabStatus loading={loading} error={error}
+                  empty={!loading && !error && rows.length === 0}
+                  retry={refetch} />
+      {rows.length > 0 && (
+        <table className="tbl">
+          <thead><tr><th>Source</th><th>A</th><th>B</th><th>Type</th><th>Detection</th><th>Score</th><th>PMID</th></tr></thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i}>
+                <td className="mono">{r.source}</td>
+                <td className="mono">{r.uniprot_a}</td>
+                <td className="mono">{r.uniprot_b}</td>
+                <td style={{ fontSize: 11 }}>{r.type}</td>
+                <td style={{ fontSize: 11, color: "var(--muted)" }}>{r.detection}</td>
+                <td className="mono">{r.score !== null && r.score !== undefined ? r.score : "&mdash;"}</td>
+                <td className="mono" style={{ fontSize: 11 }}>{r.pmid || "&mdash;"}</td>
               </tr>
             ))}
           </tbody>

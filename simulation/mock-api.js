@@ -112,6 +112,31 @@
     ['YES1',   'P07947', 543,  'Tyrosine-protein kinase Yes',                 'TK · Src',   16],
     ['ABL2',   'P42684', 1182, 'Tyrosine-protein kinase ABL2 (ARG)',          'TK · Abl',   18],
     ['HER2',   'P04626', 1255, 'Erbb2 / Her2',                                'TK · ErbB',  84],
+    // Cross-kingdom additions (Swiss-Prot integration, 2026.05 expansion).
+    ['ACT1',   'P60010', 375,  'Actin, S. cerevisiae',                        'Actin · ACT', 39],
+    ['act',    'P60709', 375,  'Beta-actin, Homo sapiens',                    'Actin · ACTB', 62],
+    ['ACTA1',  'P68133', 377,  'Skeletal muscle actin, Homo sapiens',         'Actin · ACTA1', 11],
+    ['Hsp70',  'P0DMV8', 641,  'Heat shock 70 kDa protein 1A, Homo sapiens',  'Hsp70 · HSPA1', 28],
+    ['MB',     'P02185', 154,  'Myoglobin, sperm whale (Physeter macrocephalus)', 'Globin · MB', 142],
+    ['HBA',    'P69905', 142,  'Hemoglobin α chain, Homo sapiens',            'Globin · HBA',  88],
+    ['HBB',    'P68871', 147,  'Hemoglobin β chain, Homo sapiens',            'Globin · HBB',  76],
+    ['actin',  'P10989', 376,  'Actin, Drosophila melanogaster',              'Actin · Act5C', 4],
+    ['actin',  'P53502', 376,  'Actin-1, Plasmodium falciparum',              'Actin · ACT1', 1],
+    ['ACT',    'P02185', 154,  'Sperm whale myoglobin (legacy alias)',         'Globin · MB', 0],
+    ['CCRZ',   'P0A6Y8', 638,  'GroEL, E. coli K-12',                         'Chaperonin · GroEL', 8],
+    ['LACZ',   'P00722', 1024, 'β-Galactosidase, E. coli K-12',               'Glycosidase · LacZ', 16],
+    ['atpA',   'P0ABB0', 514,  'ATP synthase α-subunit, E. coli',             'ATPase · F1', 9],
+    ['ureA',   'P14406', 102,  'Urease γ-subunit, Helicobacter pylori',       'Urease', 5],
+    ['CTSL',   'P07711', 333,  'Cathepsin L, Homo sapiens',                   'Protease · Papain', 28],
+    ['trypsin','P00766', 247,  'Chymotrypsinogen A, Bos taurus',              'Protease · S1', 41],
+    ['ELANE',  'P12838', 267,  'Elastase 1, Sus scrofa',                       'Protease · S1', 8],
+    ['SUBT',   'P00782', 380,  'Subtilisin BPN, Bacillus amyloliquefaciens',  'Protease · S8', 6],
+    ['CDC42',  'P60953', 191,  'Cell division control protein 42, Homo sapiens', 'Rho GTPase', 31],
+    ['SOD1',   'P00441', 154,  'Superoxide dismutase Cu/Zn, Homo sapiens',    'SOD · Cu-Zn',   62],
+    ['ARABID', 'O22637', 295,  'Glutathione peroxidase, Arabidopsis thaliana',  'GPX · plant', 6],
+    ['CDK1',   'P06493', 297,  'Cyclin-dependent kinase 1, Homo sapiens',     'STK · CMGC',   54],
+    ['CDC28',  'P00546', 298,  'Cell division control protein 2 (yeast CDK1)','STK · CMGC',   17],
+    ['Cdk1',   'P11440', 297,  'Cyclin-dependent kinase 1, Mus musculus',     'STK · CMGC',   18],
   ];
   const LIGAND_SEED = [
     ['Imatinib',     'CC1=C(C=C(C=C1)NC(=O)C2=CC=C(C=C2)CN3CCN(CC3)C)NC4=NC=CC(=N4)C5=CN=CC=C5', 493.6, 0.54, 312, 'ChEMBL'],
@@ -202,16 +227,55 @@
   // ───────── Family generators (paginated) ─────────
   function _allProteins() {
     const out = [];
+    // Heuristic organism inference: parse trailing "Homo sapiens" / "Mus musculus" /
+    // "Bos taurus" / etc. from the seed's description, or default to "Homo sapiens".
+    function _organism(desc) {
+      const matches = [
+        ['Homo sapiens',         'Homo sapiens'],
+        ['Mus musculus',         'Mus musculus'],
+        ['Rattus norvegicus',    'Rattus norvegicus'],
+        ['Saccharomyces',        'S. cerevisiae'],
+        ['S. cerevisiae',        'S. cerevisiae'],
+        ['Drosophila',           'D. melanogaster'],
+        ['D. melanogaster',      'D. melanogaster'],
+        ['Bos taurus',           'Bos taurus'],
+        ['Sus scrofa',           'Sus scrofa'],
+        ['Bacillus',             'B. amyloliquefaciens'],
+        ['Helicobacter',         'H. pylori'],
+        ['Plasmodium',           'P. falciparum'],
+        ['Arabidopsis',          'A. thaliana'],
+        ['E. coli',              'E. coli K-12'],
+        ['sperm whale',          'Physeter macrocephalus'],
+        ['yeast CDK1',           'S. cerevisiae'],
+      ];
+      for (const [needle, label] of matches) {
+        if (desc.indexOf(needle) >= 0) return label;
+      }
+      return 'Homo sapiens';
+    }
     for (let i = 0; i < PROTEIN_SEED.length; i++) {
       const p = PROTEIN_SEED[i];
-      out.push({ uniprot: p[1], name: p[0], organism: 'Homo sapiens', len: p[2], pdbs: p[5], family: p[4], tier: i < 50 ? 'release' : 'preview', short_desc: p[3] });
+      out.push({ uniprot: p[1], name: p[0], organism: _organism(p[3]), len: p[2], pdbs: p[5], family: p[4], tier: i < 80 ? 'release' : 'preview', short_desc: p[3] });
     }
-    // Pad to ~600 rows with synthetic but plausible orphans, so pagination feels real.
-    for (let i = PROTEIN_SEED.length; i < 240; i++) {
-      const fam = ['STK · CMGC','TK · Src','TK · ErbB','STK · AGC','TK · JAK','STK · MAPK'][i % 6];
-      out.push({ uniprot: 'P' + String(10000 + i * 37).slice(-5), name: 'KIN_' + String(i).padStart(4, '0'),
-                 organism: 'Homo sapiens', len: 250 + (i * 7) % 800, pdbs: (i * 3) % 30, family: fam,
-                 tier: i < 200 ? 'release' : 'preview', short_desc: 'Kinome reference orphan #' + i });
+    // Pad with orphans spanning multiple kingdoms — pagination demos feel
+    // bigger now that the warehouse covers ~570K Swiss-Prot proteins.
+    const KINGDOM_FAMS = [
+      ['STK · CMGC',  'Homo sapiens'],
+      ['TK · Src',    'Mus musculus'],
+      ['Protease · S1', 'Rattus norvegicus'],
+      ['ATPase · F1', 'E. coli K-12'],
+      ['Globin · α/β', 'Bos taurus'],
+      ['GPCR · class A', 'D. melanogaster'],
+      ['Actin · ACT', 'S. cerevisiae'],
+      ['Ribosomal · large', 'A. thaliana'],
+      ['Photosystem · PSI', 'A. thaliana'],
+      ['Glycosyltransferase', 'P. falciparum'],
+    ];
+    for (let i = PROTEIN_SEED.length; i < 360; i++) {
+      const [fam, org] = KINGDOM_FAMS[i % KINGDOM_FAMS.length];
+      out.push({ uniprot: 'P' + String(10000 + i * 37).slice(-5), name: 'ORPH_' + String(i).padStart(4, '0'),
+                 organism: org, len: 100 + (i * 7) % 1100, pdbs: (i * 3) % 30, family: fam,
+                 tier: i < 300 ? 'release' : 'preview', short_desc: 'Swiss-Prot reference orphan #' + i });
     }
     return out;
   }
@@ -264,18 +328,74 @@
   }
   function _allMotifs() {
     return [
-      { name: 'Pkinase domain (PF00069)',   src: 'Pfam', n: 5142, ex: 'ABL1' },
-      { name: 'PKinase_Tyr (PF07714)',      src: 'Pfam', n: 2814, ex: 'EGFR' },
-      { name: 'SH2 domain (PF00017)',       src: 'Pfam', n: 1108, ex: 'SRC' },
-      { name: 'SH3 domain (PF00018)',       src: 'Pfam', n: 893,  ex: 'SRC' },
-      { name: 'IPR000719 — kinase domain',  src: 'InterPro', n: 5318, ex: 'BRAF' },
-      { name: 'IPR020635 — TyrKc',          src: 'InterPro', n: 2918, ex: 'JAK2' },
-      { name: 'GO:0004672 (kinase activity)',src: 'GO',  n: 5402, ex: 'MAPK1' },
-      { name: 'PROSITE PS00107 ATP-binding',src: 'PROSITE', n: 4910, ex: 'CDK2' },
-      { name: 'IPR011009 — Kinase-like',    src: 'InterPro', n: 5901, ex: 'AKT1' },
-      { name: 'IPR017441 — ATP-binding site',src: 'InterPro', n: 4731, ex: 'CDK2' },
+      { name: 'Pkinase domain (PF00069)',   src: 'Pfam', n: 145_180, ex: 'ABL1' },
+      { name: 'PKinase_Tyr (PF07714)',      src: 'Pfam', n: 56_280, ex: 'EGFR' },
+      { name: 'SH2 domain (PF00017)',       src: 'Pfam', n: 4_802, ex: 'SRC' },
+      { name: 'SH3 domain (PF00018)',       src: 'Pfam', n: 4_120, ex: 'SRC' },
+      { name: 'Actin (PF00022)',            src: 'Pfam', n: 11_580, ex: 'P60709 ACTB / P60010 yeast actin' },
+      { name: 'Globin (PF00042)',           src: 'Pfam', n: 6_240, ex: 'P02185 myoglobin / P69905 HBA' },
+      { name: 'Trypsin (PF00089)',          src: 'Pfam', n: 18_640, ex: 'trypsin / chymotrypsin / cathepsin G' },
+      { name: 'Subtilisin S8 (PF00082)',    src: 'Pfam', n: 4_780, ex: 'BPN subtilisin' },
+      { name: 'GPCR class A (PF00001)',     src: 'Pfam', n: 24_510, ex: 'β2-AR / D2R / H1R' },
+      { name: 'Hsp70 (PF00012)',            src: 'Pfam', n: 8_950, ex: 'HSPA1A / DnaK' },
+      { name: 'IPR000719 — kinase domain',  src: 'InterPro', n: 153_400, ex: 'BRAF' },
+      { name: 'IPR020635 — TyrKc',          src: 'InterPro', n: 58_120, ex: 'JAK2' },
+      { name: 'IPR043129 — Actin-like ATPase fold', src: 'InterPro', n: 22_140, ex: 'actin + Hsp70 superfamily' },
+      { name: 'IPR004000 — Actin family',   src: 'InterPro', n: 11_580, ex: 'all actins' },
+      { name: 'GO:0004672 (kinase activity)',src: 'GO',  n: 51_240, ex: 'MAPK1' },
+      { name: 'GO:0005524 (ATP binding)',   src: 'GO',  n: 132_810, ex: 'most ATPases' },
+      { name: 'GO:0005509 (calcium binding)',src: 'GO', n: 18_290, ex: 'calmodulin' },
+      { name: 'PROSITE PS00107 ATP-binding',src: 'PROSITE', n: 4_910, ex: 'CDK2' },
+      { name: 'IPR011009 — Kinase-like',    src: 'InterPro', n: 145_180, ex: 'AKT1' },
+      { name: 'IPR017441 — ATP-binding site',src: 'InterPro', n: 4_731, ex: 'CDK2' },
       { name: 'Pkinase_C (PF00433)',        src: 'Pfam', n: 731, ex: 'PRKCA' },
-      { name: 'Activation loop motif',      src: 'KinBase', n: 4188, ex: 'BRAF' },
+      { name: 'M-CSA catalytic site',       src: 'M-CSA', n: 5_248, ex: 'P56868 D7 catalytic residue' },
+    ];
+  }
+  function _allClans() {
+    return [
+      { clan_id: 'CL0108', name: 'Actin-like ATPase superfamily', n_pfam: 38, ex: 'PF00022 (Actin), PF00012 (Hsp70), PF02358 (Sugar_kinase)' },
+      { clan_id: 'CL0023', name: 'P-loop NTPase',                  n_pfam: 412, ex: 'PF00005 (ABC), PF00006 (ATP-synt_ab), PF00009 (GTP_EFTU)' },
+      { clan_id: 'CL0036', name: 'PIN-domain',                     n_pfam: 19, ex: 'PF01850 (PIN)' },
+      { clan_id: 'CL0091', name: 'Globin-like fold',               n_pfam: 12, ex: 'PF00042 (Globin), PF03379 (CXC)' },
+      { clan_id: 'CL0007', name: 'Cupin',                          n_pfam: 88, ex: 'PF00190 (Cupin_1), PF07883 (Cupin_2)' },
+      { clan_id: 'CL0028', name: 'TIM barrel (alpha/beta)',         n_pfam: 132, ex: 'PF00121 (TIM)' },
+      { clan_id: 'CL0192', name: 'GPCR (rhodopsin family)',         n_pfam: 19, ex: 'PF00001 (7tm_1)' },
+      { clan_id: 'CL0027', name: 'Trypsin-like serine protease',    n_pfam: 39, ex: 'PF00089 (Trypsin), PF00082 (Peptidase_S8)' },
+      { clan_id: 'CL0040', name: 'Subtilase family',                n_pfam: 32, ex: 'PF00082 (Peptidase_S8)' },
+      { clan_id: 'CL0016', name: 'Protein kinase superfamily',      n_pfam: 121, ex: 'PF00069 (Pkinase), PF07714 (PK_Tyr), PF00433 (Pkinase_C)' },
+      { clan_id: 'CL0125', name: 'Ig-like beta-sandwich',           n_pfam: 71, ex: 'PF07679 (I-set), PF00047 (ig)' },
+      { clan_id: 'CL0046', name: 'Helix-turn-helix',                n_pfam: 88, ex: 'PF01381 (HTH)' },
+    ];
+  }
+  function _allPathways() {
+    return [
+      { id: 'R-HSA-9612973', name: 'Autophagy', n_uniprots: 491, organism: 'Homo sapiens' },
+      { id: 'R-HSA-1640170', name: 'Cell cycle', n_uniprots: 671, organism: 'Homo sapiens' },
+      { id: 'R-HSA-162582',  name: 'Signal Transduction', n_uniprots: 2410, organism: 'Homo sapiens' },
+      { id: 'R-HSA-69620',   name: 'Cell cycle checkpoints', n_uniprots: 273, organism: 'Homo sapiens' },
+      { id: 'R-HSA-5663202', name: 'Diseases of signal transduction by growth factor receptors', n_uniprots: 442, organism: 'Homo sapiens' },
+      { id: 'R-HSA-1280215', name: 'Cytokine signaling in immune system', n_uniprots: 671, organism: 'Homo sapiens' },
+      { id: 'R-HSA-5683057', name: 'MAPK family signaling cascades', n_uniprots: 312, organism: 'Homo sapiens' },
+      { id: 'R-HSA-194840',  name: 'Rho GTPase cycle', n_uniprots: 138, organism: 'Homo sapiens' },
+      { id: 'R-HSA-422475',  name: 'Axon guidance', n_uniprots: 522, organism: 'Homo sapiens' },
+      { id: 'R-HSA-9006936', name: 'Signaling by TGF-β receptor complex', n_uniprots: 168, organism: 'Homo sapiens' },
+      { id: 'R-MMU-69620',   name: 'Cell cycle checkpoints', n_uniprots: 269, organism: 'Mus musculus' },
+      { id: 'R-SCE-69620',   name: 'Cell cycle checkpoints', n_uniprots: 41, organism: 'S. cerevisiae' },
+      { id: 'R-DME-194840',  name: 'Rho GTPase cycle', n_uniprots: 79, organism: 'D. melanogaster' },
+      { id: 'R-ATH-1640170', name: 'Cell cycle', n_uniprots: 88, organism: 'A. thaliana' },
+    ];
+  }
+  function _allInteractions() {
+    return [
+      { source: 'IntAct',  uniprot_a: 'P00519', uniprot_b: 'P12931', type: 'physical association', detection: 'pull down', pmid: '17721511', score: 0.94, taxon: 9606 },
+      { source: 'IntAct',  uniprot_a: 'P60709', uniprot_b: 'P63261', type: 'physical association', detection: 'anti tag coip', pmid: '24658140', score: 0.78, taxon: 9606 },
+      { source: 'BioGRID', uniprot_a: 'P15056', uniprot_b: 'Q02750', type: 'direct interaction', detection: 'affinity capture-ms', pmid: '16273093', score: null, taxon: 9606 },
+      { source: 'STRING',  uniprot_a: 'P00533', uniprot_b: 'P04626', type: 'predicted', detection: 'combined_score', pmid: null, score: 999, taxon: 9606 },
+      { source: 'STRING',  uniprot_a: 'P60010', uniprot_b: 'P02185', type: 'predicted', detection: 'combined_score', pmid: null, score: 712, taxon: 9606 },
+      { source: 'IntAct',  uniprot_a: 'P0DMV8', uniprot_b: 'P60709', type: 'physical association', detection: 'tandem affinity', pmid: '21873635', score: 0.62, taxon: 9606 },
+      { source: 'BioGRID', uniprot_a: 'P00546', uniprot_b: 'P11440', type: 'physical association', detection: 'biochemical', pmid: '17353931', score: null, taxon: 4932 },
+      { source: 'Reactome',uniprot_a: 'P15056', uniprot_b: 'Q02750', type: 'pathway co-membership', detection: 'curated', pmid: null, score: null, taxon: 9606 },
     ];
   }
   function _allSources() {
@@ -791,7 +911,7 @@
     }
 
     // Library family (paginated)
-    let m = path.match(/^\/api\/v2\/library\/(proteins|ligands|edges|structures|motifs|sources|releases)$/);
+    let m = path.match(/^\/api\/v2\/library\/(proteins|ligands|edges|structures|motifs|sources|releases|clans|pathways|interactions)$/);
     if (m) {
       const family = m[1];
       const page = Math.max(1, parseInt(qp.get('page')) || 1);
@@ -807,6 +927,9 @@
         case 'motifs':     rows = _allMotifs();     break;
         case 'sources':    rows = _allSources();    break;
         case 'releases':   rows = _allReleases();   break;
+        case 'clans':       rows = _allClans();        break;
+        case 'pathways':    rows = _allPathways();     break;
+        case 'interactions':rows = _allInteractions(); break;
       }
       if (tier === 'release') rows = rows.filter(r => !r.tier || r.tier === 'release');
       const out = paginate(rows, q, page, perPage);

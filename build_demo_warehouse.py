@@ -160,6 +160,27 @@ def main() -> int:
         # Ingest provenance
         "ingest_runs",
     ]
+    # Tables added by the 2026-05 expanded materialization (Swiss-Prot full
+    # kingdoms + SIFTS + IntAct/BioGRID/STRING/Reactome + Pfam clans +
+    # M-CSA + AlphaFold). These are populated in-place by
+    # materialize_swissprot.py / materialize_interactions.py /
+    # materialize_aux_annotations.py / materialize_sifts_pdb_uniprot.py /
+    # materialize_pdbbind_ligands.py / materialize_davis_variants.py.
+    expanded_tables = [
+        "v2_protein_entry",
+        "v2_go_membership",
+        "v2_residue_annotations",
+        "v2_pdbbind_ligand_xref",
+        "v2_davis_variant_resolution",
+        "v2_pfam_clan_membership",
+        "v2_mcsa_catalytic_sites",
+        "v2_alphafold_models",
+        "v2_intact_interactions",
+        "v2_biogrid_interactions",
+        "v2_string_interactions",
+        "v2_reactome_pathway_membership",
+    ]
+    keep_views = keep_views + expanded_tables
     for v in keep_views:
         try:
             df = src_con.execute(f"SELECT * FROM {v}").fetch_df()

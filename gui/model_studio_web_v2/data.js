@@ -1654,17 +1654,24 @@ window.PS_PIPELINE_TEMPLATES = [
 
 window.PS_DATA = {
   warehouse: {
-    proteins: 262_440_545,
-    pdb_entries: 234_767,
+    // Updated after the 2026-05 expanded materialization (SIFTS + Swiss-Prot
+    // full kingdoms + IntAct + STRING + Reactome + Pfam clans + M-CSA + AF).
+    proteins: 574_627,                  // Swiss-Prot reviewed (574,627 entries)
+    pdb_entries: 236_510,                // SIFTS-derived distinct PDB IDs
     structures: 968_580,
-    ligands: 3_689,
+    ligands: 17_647,                     // Davis + KIBA + GtoPdb + PDBbind cleaned
     ligand_signatures: 5_794_554,
     protein_ligand_edges: 24_804,
-    protein_protein_edges: 5_595,
-    motif_site_annotations: 5_687_488,
+    protein_protein_edges: 1_400_000,    // IntAct + STRING (700+) + Reactome
+    motif_site_annotations: 3_549_332,   // Pfam + InterPro across all Swiss-Prot
+    go_annotations: 3_358_100,
+    residue_annotations: 1_946_075,
+    clans: 812,
+    pathways: 2_730,
+    catalytic_sites: 5_248,
     leakage_groups: 11,
-    sources: 12,
-    last_consolidation: "2026-04-12 07:39 UTC",
+    sources: 18,
+    last_consolidation: "2026-05-22 16:00 UTC",
   },
 
   sources: [
