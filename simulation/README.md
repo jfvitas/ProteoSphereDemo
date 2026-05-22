@@ -14,11 +14,9 @@ without going through the install + launch process.
 
 ## Open the demo
 
-Just double-click `ProteoSphereDemo_Simulation.html` at the **repo
-root** (not in this `simulation/` folder — the build writes the
-output one level up so anyone landing on the GitHub page sees it
-immediately). Works in Chrome, Firefox, Edge, and Safari from
-`file://`.
+Just double-click `ProteoSphereDemo_Simulation.html` (in this
+`simulation/` folder). Works in Chrome, Firefox, Edge, and Safari
+from `file://`.
 
 A small fixed banner at the top of the page reads
 **"SIMULATION MODE · All data is faked client-side."** — so viewers
@@ -60,9 +58,9 @@ know it's a demo, not a live session.
 
 | File | Purpose |
 |---|---|
-| `../ProteoSphereDemo_Simulation.html` (repo root) | The 5.9 MB single-file deliverable — open this. The build writes it to the repo root so it's the first file visitors see on GitHub. |
+| `ProteoSphereDemo_Simulation.html` | The 5.9 MB single-file deliverable — open this. |
 | `mock-api.js` | The client-side API interceptor. Monkey-patches `window.fetch` and `window.EventSource`, returns canned data for every `/api/v2/*` endpoint the GUI calls. |
-| `build_simulation.py` | The bundler. Reads the GUI source tree from `../gui/model_studio_web_v2/`, inlines CSS / fonts (as base64) / vendor JS / JSX components / mock layer, writes the single-file output to the repo root. |
+| `build_simulation.py` | The bundler. Reads the GUI source tree from `../gui/model_studio_web_v2/`, inlines CSS / fonts (as base64) / vendor JS / JSX components / mock layer, writes the single-file output beside this README. |
 
 ## Rebuilding
 
@@ -73,8 +71,8 @@ cd simulation
 python build_simulation.py
 ```
 
-Output is written to `../ProteoSphereDemo_Simulation.html` (the repo
-root), not to this `simulation/` directory.
+Output is written to `ProteoSphereDemo_Simulation.html` in this
+`simulation/` directory.
 
 ## What's mocked
 

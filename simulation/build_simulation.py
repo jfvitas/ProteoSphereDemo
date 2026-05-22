@@ -8,16 +8,16 @@ Reads:
     simulation/mock-api.js                        (this directory)
 
 Writes:
-    ProteoSphereDemo_Simulation.html              (repo root, ~5.9 MB, self-contained)
+    simulation/ProteoSphereDemo_Simulation.html   (~5.9 MB, self-contained)
 
 Usage:
     cd path/to/proteosphere-model-studio
     python simulation/build_simulation.py
 
-The output is a single .html file at the repo root. Double-click it;
-the entire Model Studio runs in the browser with no backend.  Every
-/api/v2/* call is intercepted by simulation/mock-api.js (inlined at
-build time).
+The output is a single .html file inside the simulation/ directory.
+Double-click it; the entire Model Studio runs in the browser with no
+backend.  Every /api/v2/* call is intercepted by simulation/mock-api.js
+(inlined at build time).
 """
 from __future__ import annotations
 
@@ -30,7 +30,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 GUI_DIR = ROOT / "gui" / "model_studio_web_v2"
 SIM_DIR = ROOT / "simulation"
-OUT_HTML = ROOT / "ProteoSphereDemo_Simulation.html"
+OUT_HTML = SIM_DIR / "ProteoSphereDemo_Simulation.html"
 
 INDEX_HTML = GUI_DIR / "index.html"
 GEIST_CSS  = GUI_DIR / "vendor" / "fonts" / "geist.css"
