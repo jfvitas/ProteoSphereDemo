@@ -40,3 +40,4 @@ CLAUDE_DESIGN*.md
 
 # Anyone re-running build_demo_warehouse.py
 demo_warehouse_rebuild_*/
+data/
