@@ -112,20 +112,21 @@ def main():
 
     # ────────── T5 — Cross-organism (yeast actin ↔ human) ──────────
     rows = fetch(con, """
-      SELECT uniprot, identifier
+      SELECT DISTINCT uniprot, identifier
       FROM v2_motif_membership
       WHERE identifier='PF00022'
         AND uniprot IN ('P60010','P60709')
       ORDER BY uniprot
     """)
-    # Also check UniRef50
+    # Also check UniRef50 (column is "uniref50" not "uniref50_id")
     ur = fetch(con, """
-      SELECT uniprot, uniref50_id
+      SELECT DISTINCT uniprot, uniref50
       FROM v2_sequence_cluster_membership
       WHERE uniprot IN ('P60010','P60709')
     """)
+    distinct_uniprots = len({r[0] for r in rows})
     same_ur50 = len({r[1] for r in ur if r[1]}) == 1 if ur else False
-    has_both_pfam = len(rows) == 2
+    has_both_pfam = distinct_uniprots >= 2
     verdict = "PASS" if has_both_pfam else ("PARTIAL" if rows else "FAIL")
     add("T5 Cross-organism orthology", verdict,
         "SELECT uniprot, identifier FROM v2_motif_membership WHERE identifier='PF00022' AND uniprot IN ('P60010','P60709')",
@@ -146,7 +147,7 @@ def main():
 
     # ────────── T7 — Protease convergence ──────────
     rows = fetch(con, """
-      SELECT m.uniprot, m.identifier AS pfam, e.ec_class
+      SELECT m.uniprot, m.identifier AS pfam, e.ec3
       FROM v2_motif_membership m
       LEFT JOIN v2_ec_class_membership e ON e.uniprot = m.uniprot
       WHERE m.uniprot IN ('P00766','P00760','P12838','P00782')
@@ -155,13 +156,13 @@ def main():
     pfam_distinct = len({r[1] for r in rows if r[1]})
     verdict = "PASS" if pfam_distinct >= 2 else "PARTIAL"
     add("T7 Protease convergence", verdict,
-        "SELECT m.uniprot, m.identifier, e.ec_class FROM v2_motif_membership m LEFT JOIN v2_ec_class_membership e ON e.uniprot=m.uniprot WHERE m.uniprot IN ('P00766','P00760','P12838','P00782')",
+        "SELECT m.uniprot, m.identifier, e.ec3 FROM v2_motif_membership m LEFT JOIN v2_ec_class_membership e ON e.uniprot=m.uniprot WHERE m.uniprot IN ('P00766','P00760','P12838','P00782')",
         rows[:20], f"{pfam_distinct} distinct Pfam families")
 
-    # ────────── T8 — PDBbind context ──────────
+    # ────────── T8 — PDBbind context (case-insensitive join) ──────────
     rows = fetch(con, """
-      SELECT COUNT(DISTINCT pdb_id) FROM pdbbind_interactions p
-      WHERE EXISTS (SELECT 1 FROM v2_pdb_uniprot x WHERE x.pdb_id = p.pdb_id)
+      SELECT COUNT(DISTINCT p.pdb_id) FROM pdbbind_interactions p
+      WHERE EXISTS (SELECT 1 FROM v2_pdb_uniprot x WHERE upper(x.pdb_id) = upper(p.pdb_id))
     """)
     n_mapped = rows[0][0] if rows else 0
     total = con.execute("SELECT COUNT(DISTINCT pdb_id) FROM pdbbind_interactions").fetchone()[0]
@@ -185,7 +186,7 @@ def main():
            JOIN train_pool tp2 ON tp2.uniprot = m2.uniprot
            WHERE m1.uniprot = tp.uniprot AND m1.namespace = 'pfam') AS pfam_shared,
         (SELECT COUNT(*) FROM v2_ec_class_membership e1
-           JOIN v2_ec_class_membership e2 ON e1.ec_class = e2.ec_class
+           JOIN v2_ec_class_membership e2 ON e1.ec3 = e2.ec3
            JOIN train_pool tp2 ON tp2.uniprot = e2.uniprot
            WHERE e1.uniprot = tp.uniprot) AS ec_shared
       FROM test_proteins tp
