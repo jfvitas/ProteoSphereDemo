@@ -89,7 +89,7 @@ Returned 4 rows.
 
 ### T5 Cross-organism orthology — PASS
 
-_Notes:_ Pfam shared: True; UniRef50 same: True; UniRef50 rows: [('P60709', 'UniRef50_P60709')]
+_Notes:_ Pfam shared: True; UniRef50 same: False; UniRef50 rows: [('P60010', 'UniRef50_P60010'), ('P60709', 'UniRef50_P60709')]
 
 ```sql
 SELECT uniprot, identifier FROM v2_motif_membership WHERE identifier='PF00022' AND uniprot IN ('P60010','P60709')
@@ -127,21 +127,21 @@ SELECT m.uniprot, m.identifier, e.ec3 FROM v2_motif_membership m LEFT JOIN v2_ec
 Returned 20 rows.
 
 ```
-('P00760', 'IPR033116', '3.4.21')
-('P00760', 'IPR018114', '3.4.21')
-('P00760', 'IPR009003', '3.4.21')
-('P00760', 'IPR001254', '3.4.21')
-('P00760', 'IPR043504', '3.4.21')
-('P00760', 'IPR001314', '3.4.21')
 ('P00760', 'IPR050127', '3.4.21')
+('P00760', 'IPR001314', '3.4.21')
+('P00760', 'IPR009003', '3.4.21')
+('P00760', 'IPR043504', '3.4.21')
+('P00760', 'IPR018114', '3.4.21')
+('P00760', 'IPR001254', '3.4.21')
+('P00760', 'IPR033116', '3.4.21')
 ('P00760', 'PF00089', '3.4.21')
-('P00766', 'IPR018114', '3.4.21')
-('P00766', 'IPR009003', '3.4.21')
-('P00766', 'IPR001254', '3.4.21')
-('P00766', 'PF00089', '3.4.21')
-('P00766', 'IPR043504', '3.4.21')
-('P00766', 'IPR033116', '3.4.21')
 ('P00766', 'IPR001314', '3.4.21')
+('P00766', 'PF00089', '3.4.21')
+('P00766', 'IPR009003', '3.4.21')
+('P00766', 'IPR033116', '3.4.21')
+('P00766', 'IPR018114', '3.4.21')
+('P00766', 'IPR043504', '3.4.21')
+('P00766', 'IPR001254', '3.4.21')
 ... (5 more)
 ```
 
@@ -183,11 +183,11 @@ WITH test_proteins AS (
 Returned 5 rows.
 
 ```
-('Q8N2Y1', 0, 0)
-('C9J2M4', 0, 0)
-('F8WBW4', 0, 0)
-('F8VRH6', 0, 0)
-('B3KRP1', 0, 0)
+('Q6P5Y5', 0, 0)
+('O14976', 0, 3176)
+('Q13177', 0, 4764)
+('P15056', 0, 3970)
+('H3BRK0', 0, 0)
 ```
 
 ### T10 Negative control (bogus UniProt) — PASS
@@ -215,7 +215,7 @@ Returned 5 rows.
 ('DNA Repair', 3)
 ('Gene expression (Transcription)', 3)
 ('Cellular responses to stimuli', 2)
-('Hemostasis', 1)
+('Immune System', 1)
 ```
 
 ### T12 Davis variant resolution — PASS

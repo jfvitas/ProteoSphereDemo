@@ -1,0 +1,13 @@
+{
+  "entrez_xref": {
+    "license": "CC-BY 4.0 (UniProt)",
+    "materializer": "split_xref_shard.py",
+    "purpose": "TrEMBL-only Entrez->UniProt cross-references (23.7M rows). Used to re-ingest BioGRID/STRING etc. with TrEMBL recovery. Built from UniProt's idmapping_selected.tab.gz",
+    "sha256": "4b8b4906e4f0dd45cc813e7ef267a243caabf65eb955fa331a4e293c60c91518",
+    "size_bytes": 395849728,
+    "source": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping_selected.tab.gz",
+    "tables": [
+      "trembl_entrez_uniprot_xref"
+    ]
+  }
+}

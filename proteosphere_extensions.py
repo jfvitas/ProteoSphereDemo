@@ -44,6 +44,17 @@ DEFAULT_MIRROR = os.environ.get(
 # Canonical shard registry. Updated by the materializer scripts as they
 # produce new shards. Sizes are estimates until built.
 SHARDS = {
+    "entrez_xref": {
+        "purpose": "TrEMBL-only Entrez->UniProt cross-references (23.7M rows). "
+                   "Used to re-ingest BioGRID/STRING etc. with TrEMBL recovery. "
+                   "Built from UniProt's idmapping_selected.tab.gz",
+        "tables": ["trembl_entrez_uniprot_xref"],
+        "estimated_size_gb": 0.4,
+        "license": "CC-BY 4.0 (UniProt)",
+        "source": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/"
+                  "knowledgebase/idmapping/idmapping_selected.tab.gz",
+        "materializer": "split_xref_shard.py",
+    },
     "trembl": {
         "purpose": "TrEMBL DR cross-refs (~250M unreviewed proteins): Pfam, "
                    "InterPro, OrthoDB, EC, PDB cross-references",

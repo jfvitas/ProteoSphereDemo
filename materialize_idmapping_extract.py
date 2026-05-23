@@ -144,49 +144,56 @@ def main():
     print(f"  universe coverage: {n_universe_hits:,}/{len(universe):,} "
           f"({100*n_universe_hits/len(universe):.1f}%)")
 
-    # ── Materialize v2_entrez_uniprot_xref (replace) ──────────────────
-    print("\n  writing v2_entrez_uniprot_xref…")
+    # ── Materialize via Arrow→DuckDB bulk load (~100x faster than executemany) ──
+    # The previous version used executemany which on Windows took 1 hour for
+    # ~1M rows. Arrow + register_arrow + CTAS does the whole 15M-row insert
+    # in seconds.
+    import pyarrow as pa
+    print("\n  building Arrow tables…")
+
+    ent_table = pa.table({
+        "entrez_id":     pa.array([r[0] for r in entrez_rows], type=pa.int64()),
+        "uniprot":       pa.array([r[1] for r in entrez_rows], type=pa.string()),
+        "is_swissprot":  pa.array([r[2] for r in entrez_rows], type=pa.bool_()),
+        "organism_taxid":pa.array([r[3] for r in entrez_rows], type=pa.int64()),
+    })
+    print(f"    entrez_rows: {ent_table.num_rows:,} rows")
+
+    seq_table = pa.table({
+        "uniprot":     pa.array([r[0] for r in seq_cluster_rows], type=pa.string()),
+        "source":      pa.array([r[1] for r in seq_cluster_rows], type=pa.string()),
+        "uniref100":   pa.array([r[2] for r in seq_cluster_rows], type=pa.string()),
+        "uniref90":    pa.array([r[3] for r in seq_cluster_rows], type=pa.string()),
+        "uniref50":    pa.array([r[4] for r in seq_cluster_rows], type=pa.string()),
+        "uniparc":     pa.array([r[5] for r in seq_cluster_rows], type=pa.string()),
+        "taxon":       pa.array([r[6] for r in seq_cluster_rows], type=pa.string()),
+        "snapshot_id": pa.array([r[7] for r in seq_cluster_rows], type=pa.string()),
+    })
+    print(f"    seq_cluster_rows: {seq_table.num_rows:,} rows")
+
+    # Register Arrow tables as DuckDB views
+    con.register("entrez_arrow", ent_table)
+    con.register("seq_arrow", seq_table)
+
+    print("\n  writing v2_entrez_uniprot_xref via CTAS…")
     con.execute("DROP TABLE IF EXISTS v2_entrez_uniprot_xref")
     con.execute("""
-      CREATE TABLE v2_entrez_uniprot_xref (
-        entrez_id      INT,
-        uniprot        VARCHAR,
-        is_swissprot   BOOLEAN,
-        organism_taxid INT
-      )
-    """)
-    BATCH = 100_000
-    for i in range(0, len(entrez_rows), BATCH):
-        con.executemany(
-            "INSERT INTO v2_entrez_uniprot_xref VALUES (?,?,?,?)",
-            entrez_rows[i:i+BATCH]
-        )
-        if i % (BATCH * 10) == 0 and i > 0:
-            print(f"    inserted {i:,}/{len(entrez_rows):,}")
-    # Dedupe via CTAS
-    con.execute("""
-      CREATE OR REPLACE TABLE v2_entrez_uniprot_xref AS
-      SELECT DISTINCT entrez_id, uniprot,
+      CREATE TABLE v2_entrez_uniprot_xref AS
+      SELECT entrez_id, uniprot,
              ANY_VALUE(is_swissprot) AS is_swissprot,
              ANY_VALUE(organism_taxid) AS organism_taxid
-      FROM v2_entrez_uniprot_xref
+      FROM entrez_arrow
       GROUP BY entrez_id, uniprot
     """)
     n_x = con.execute("SELECT COUNT(*) FROM v2_entrez_uniprot_xref").fetchone()[0]
     n_sp = con.execute("SELECT COUNT(*) FROM v2_entrez_uniprot_xref WHERE is_swissprot").fetchone()[0]
-    print(f"  v2_entrez_uniprot_xref: {n_x:,} rows ({n_sp:,} Swiss-Prot, "
-          f"{n_x-n_sp:,} TrEMBL-only)")
+    print(f"  v2_entrez_uniprot_xref: {n_x:,} rows ({n_sp:,} Swiss-Prot, {n_x-n_sp:,} TrEMBL-only)")
 
-    # ── Extend v2_sequence_cluster_membership ─────────────────────────
-    print("\n  extending v2_sequence_cluster_membership…")
+    print("\n  extending v2_sequence_cluster_membership via APPEND + dedupe…")
     n_before = con.execute("SELECT COUNT(*) FROM v2_sequence_cluster_membership").fetchone()[0]
     print(f"  before: {n_before:,} rows")
-    for i in range(0, len(seq_cluster_rows), BATCH):
-        con.executemany(
-            "INSERT INTO v2_sequence_cluster_membership VALUES (?,?,?,?,?,?,?,?)",
-            seq_cluster_rows[i:i+BATCH]
-        )
-    # Dedupe
+    con.execute("INSERT INTO v2_sequence_cluster_membership SELECT * FROM seq_arrow")
+    # Dedupe via CTAS
     con.execute("""
       CREATE OR REPLACE TABLE v2_sequence_cluster_membership AS
       SELECT uniprot, source,
@@ -201,6 +208,9 @@ def main():
     """)
     n_after = con.execute("SELECT COUNT(*) FROM v2_sequence_cluster_membership").fetchone()[0]
     print(f"  after:  {n_after:,} rows")
+
+    con.unregister("entrez_arrow")
+    con.unregister("seq_arrow")
 
     # ── Spot check ────────────────────────────────────────────────────
     print("\n  spot check — yeast actin P60010 vs human P60709 UniRef50:")
