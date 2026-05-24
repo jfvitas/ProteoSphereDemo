@@ -9,5 +9,20 @@
     "tables": [
       "trembl_entrez_uniprot_xref"
     ]
+  },
+  "trembl": {
+    "license": "CC-BY 4.0 (UniProt)",
+    "materializer": "materialize_trembl_idmapping_dat.py",
+    "purpose": "TrEMBL DR cross-refs (~250M UniProt entries, Swiss-Prot + unreviewed): Pfam, InterPro, OrthoDB, EC, PDB, taxon",
+    "sha256": "f622760a37d328ecdafee6b78feee82852b51581a64270fd5df96be8dba3e52b",
+    "size_bytes": 2299539456,
+    "source": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping.dat.gz",
+    "tables": [
+      "trembl_motif_membership",
+      "trembl_ortholog",
+      "trembl_ec",
+      "trembl_pdb",
+      "trembl_taxon"
+    ]
   }
 }

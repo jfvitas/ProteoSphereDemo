@@ -56,19 +56,39 @@ SHARDS = {
         "materializer": "split_xref_shard.py",
     },
     "trembl": {
-        "purpose": "TrEMBL DR cross-refs (~250M UniProt entries, Swiss-Prot + "
-                   "unreviewed): Pfam, InterPro, OrthoDB, EC, PDB, taxon",
+        "purpose": "TrEMBL/UniProt-wide cross-refs for 200M+ entries: OrthoDB "
+                   "(57M), PDB (446K), NCBI taxon (203M). NOTE: Pfam/InterPro/EC "
+                   "are NOT in idmapping.dat.gz and require a separate "
+                   "protein2ipr.dat.gz ingest (see 'trembl_pfam_interpro' shard).",
         "tables": ["trembl_motif_membership", "trembl_ortholog",
                    "trembl_ec", "trembl_pdb", "trembl_taxon"],
-        "estimated_size_gb": 3,
+        "estimated_size_gb": 2.1,
         "license": "CC-BY 4.0 (UniProt)",
         "source": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/"
                   "knowledgebase/idmapping/idmapping.dat.gz",
         "materializer": "materialize_trembl_idmapping_dat.py",
-        "notes": "Built from idmapping.dat.gz (line-streaming, 10 GB compressed) "
-                 "rather than uniprot_trembl.xml.gz (199 GB) since the latter "
-                 "exceeded the build host's RAM. Same cross-ref coverage; "
-                 "no organism scientific name or sequence_length.",
+        "notes": "Built from idmapping.dat.gz (line-streaming, 19.75 GB "
+                 "compressed) rather than uniprot_trembl.xml.gz (199 GB) "
+                 "which exceeded build host RAM. The XML version would "
+                 "have included Pfam/InterPro/EC but the .dat version does "
+                 "not -- those need protein2ipr.dat.gz from InterPro FTP "
+                 "(separate ~25 GB compressed download, queued as a "
+                 "future extension shard).",
+    },
+    "trembl_pfam_interpro": {
+        "purpose": "Pfam + InterPro domain memberships for all UniProt entries "
+                   "(both Swiss-Prot and TrEMBL), with start/end residue "
+                   "coordinates. Critical for motif-aware splitting across "
+                   "TrEMBL universe.",
+        "tables": ["protein2ipr"],
+        "estimated_size_gb": 5,
+        "license": "CC0 (InterPro)",
+        "source": "https://ftp.ebi.ac.uk/pub/databases/interpro/current/"
+                  "protein2ipr.dat.gz",
+        "materializer": "materialize_protein2ipr.py",
+        "notes": "NOT YET BUILT. Format: TSV with UniProt -> InterPro entry "
+                 "-> signature (Pfam, SMART, etc.) -> start -> end. "
+                 "~25 GB compressed. Line-parseable, no XML risk.",
     },
     "uniref_full": {
         "purpose": "Full UniRef50/90/100 cluster memberships across all UniProt",
