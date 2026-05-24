@@ -76,19 +76,21 @@ SHARDS = {
                  "future extension shard).",
     },
     "trembl_pfam_interpro": {
-        "purpose": "Pfam + InterPro domain memberships for all UniProt entries "
-                   "(both Swiss-Prot and TrEMBL), with start/end residue "
+        "purpose": "Pfam + InterPro + 10 other signature DBs (SUPERFAMILY, "
+                   "PROSITE, Gene3D, PRINTS, SMART, PANTHER, TIGRFAMs, HAMAP, "
+                   "PIRSF, NCBIfam, CDD) for all UniProt with start/end "
                    "coordinates. Critical for motif-aware splitting across "
-                   "TrEMBL universe.",
-        "tables": ["protein2ipr"],
-        "estimated_size_gb": 5,
+                   "the full TrEMBL universe.",
+        "tables": ["trembl_interpro", "trembl_pfam"],
+        "estimated_size_gb": 21,
         "license": "CC0 (InterPro)",
-        "source": "https://ftp.ebi.ac.uk/pub/databases/interpro/current/"
+        "source": "https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/"
                   "protein2ipr.dat.gz",
         "materializer": "materialize_protein2ipr.py",
-        "notes": "NOT YET BUILT. Format: TSV with UniProt -> InterPro entry "
-                 "-> signature (Pfam, SMART, etc.) -> start -> end. "
-                 "~25 GB compressed. Line-parseable, no XML risk.",
+        "notes": "1.18B InterPro signature hits + 262M Pfam hits across "
+                 "154M unique UniProt entries / 26,620 distinct Pfam families. "
+                 "Built in 34 min via line-streaming with chunked-parquet "
+                 "flush; memory bounded ~1 GB.",
     },
     "uniref_full": {
         "purpose": "Full UniRef50/90/100 cluster memberships across all UniProt",

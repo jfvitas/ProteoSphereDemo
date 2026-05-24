@@ -13,7 +13,7 @@
   "trembl": {
     "license": "CC-BY 4.0 (UniProt)",
     "materializer": "materialize_trembl_idmapping_dat.py",
-    "purpose": "TrEMBL DR cross-refs (~250M UniProt entries, Swiss-Prot + unreviewed): Pfam, InterPro, OrthoDB, EC, PDB, taxon",
+    "purpose": "TrEMBL/UniProt-wide cross-refs for 200M+ entries: OrthoDB (57M), PDB (446K), NCBI taxon (203M). NOTE: Pfam/InterPro/EC are NOT in idmapping.dat.gz and require a separate protein2ipr.dat.gz ingest (see 'trembl_pfam_interpro' shard).",
     "sha256": "f622760a37d328ecdafee6b78feee82852b51581a64270fd5df96be8dba3e52b",
     "size_bytes": 2299539456,
     "source": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/idmapping/idmapping.dat.gz",
@@ -23,6 +23,18 @@
       "trembl_ec",
       "trembl_pdb",
       "trembl_taxon"
+    ]
+  },
+  "trembl_pfam_interpro": {
+    "license": "CC0 (InterPro)",
+    "materializer": "materialize_protein2ipr.py",
+    "purpose": "Pfam + InterPro + 10 other signature DBs (SUPERFAMILY, PROSITE, Gene3D, PRINTS, SMART, PANTHER, TIGRFAMs, HAMAP, PIRSF, NCBIfam, CDD) for all UniProt with start/end coordinates. Critical for motif-aware splitting across the full TrEMBL universe.",
+    "sha256": "bb18066164eca7bf4d258137c0c337b0c6cd591635d4b4c1d5e7214f6b6166be",
+    "size_bytes": 22516871168,
+    "source": "https://ftp.ebi.ac.uk/pub/databases/interpro/current_release/protein2ipr.dat.gz",
+    "tables": [
+      "trembl_interpro",
+      "trembl_pfam"
     ]
   }
 }
