@@ -56,15 +56,19 @@ SHARDS = {
         "materializer": "split_xref_shard.py",
     },
     "trembl": {
-        "purpose": "TrEMBL DR cross-refs (~250M unreviewed proteins): Pfam, "
-                   "InterPro, OrthoDB, EC, PDB cross-references",
-        "tables": ["trembl_protein_entry", "trembl_motif_membership",
-                   "trembl_ortholog", "trembl_ec", "trembl_pdb"],
-        "estimated_size_gb": 25,
+        "purpose": "TrEMBL DR cross-refs (~250M UniProt entries, Swiss-Prot + "
+                   "unreviewed): Pfam, InterPro, OrthoDB, EC, PDB, taxon",
+        "tables": ["trembl_motif_membership", "trembl_ortholog",
+                   "trembl_ec", "trembl_pdb", "trembl_taxon"],
+        "estimated_size_gb": 3,
         "license": "CC-BY 4.0 (UniProt)",
         "source": "https://ftp.uniprot.org/pub/databases/uniprot/current_release/"
-                  "knowledgebase/complete/uniprot_trembl.xml.gz",
-        "materializer": "materialize_trembl_dr.py",
+                  "knowledgebase/idmapping/idmapping.dat.gz",
+        "materializer": "materialize_trembl_idmapping_dat.py",
+        "notes": "Built from idmapping.dat.gz (line-streaming, 10 GB compressed) "
+                 "rather than uniprot_trembl.xml.gz (199 GB) since the latter "
+                 "exceeded the build host's RAM. Same cross-ref coverage; "
+                 "no organism scientific name or sequence_length.",
     },
     "uniref_full": {
         "purpose": "Full UniRef50/90/100 cluster memberships across all UniProt",
