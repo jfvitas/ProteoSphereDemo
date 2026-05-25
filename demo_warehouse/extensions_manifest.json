@@ -36,5 +36,17 @@
       "trembl_interpro",
       "trembl_pfam"
     ]
+  },
+  "uniref_full": {
+    "license": "CC-BY 4.0 (UniProt)",
+    "materializer": "materialize_uniref_full.py",
+    "purpose": "Full UniRef50/90/100 cluster memberships across all UniProt",
+    "sha256": "2e63a229cc529026f2723b6b8813ebb5021fba6dd8378c0e1e769fb091d26e50",
+    "size_bytes": 8539877376,
+    "source": "https://ftp.uniprot.org/pub/databases/uniprot/uniref/uniref50/uniref50.xml.gz",
+    "tables": [
+      "uniref_cluster_member",
+      "uniref_cluster_meta"
+    ]
   }
 }

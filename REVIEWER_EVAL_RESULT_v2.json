@@ -1,0 +1,4168 @@
+{
+  "artifact_id": "paper_dataset_evaluator_report",
+  "schema_id": "proteosphere-paper-dataset-evaluator-report-v1",
+  "status": "complete",
+  "generated_at": "2026-05-25T00:14:03.256011+00:00",
+  "warehouse_root": "D:\\tmp_eval_test\\reference_library",
+  "catalog_path": "D:\\tmp_eval_test\\reference_library\\catalog\\reference_library.duckdb",
+  "default_view": "best_evidence",
+  "corpus_artifact_id": "real_paper_corpus",
+  "cohorts": {
+    "calibration": [
+      "sun2017sequence",
+      "sledzieski2021dscript",
+      "szymborski2022rapppid",
+      "yugandhar2014affinity",
+      "rodrigues2019mcsm_ppi2",
+      "zhang2012preppi"
+    ],
+    "validation": [
+      "du2017deepppi",
+      "hashemifar2018dppi",
+      "chen2019siamese_rcnn",
+      "baranwal2022struct2graph",
+      "gainza2020masif",
+      "dai2021geometric_interface",
+      "xie2022interprotein_contacts",
+      "tubiana2022scannet",
+      "wang2020nettree",
+      "zhou2024ddmut_ppi"
+    ],
+    "challenge": [
+      "krapp2023pesto",
+      "zhang2020mutabind2",
+      "bryant2022af2_ppi",
+      "gao2022af2complex"
+    ]
+  },
+  "summary": {
+    "paper_count": 20,
+    "verdict_counts": {
+      "audit_only": 8,
+      "blocked_pending_mapping": 8,
+      "unsafe_for_training": 4
+    },
+    "evidence_resolution_counts": {
+      "blocked_needs_source_materialization_or_official_roster": 15,
+      "final_blocked_by_policy_or_overlap": 3,
+      "resolved_blocked_by_overlap": 1,
+      "resolved_by_identifier_bridge": 1
+    },
+    "reason_code_counts": {
+      "ACCESSION_ROOT_OVERLAP": 1,
+      "AUDIT_ONLY_EVIDENCE": 2,
+      "INSUFFICIENT_PROVENANCE": 18,
+      "POLICY_MISMATCH": 3,
+      "UNIREF_CLUSTER_OVERLAP": 1,
+      "UNRESOLVED_SPLIT_MEMBERSHIP": 18,
+      "WAREHOUSE_COVERAGE_GAP": 18
+    },
+    "needs_human_review_count": 0
+  },
+  "papers": [
+    {
+      "paper_id": "zhang2012preppi",
+      "title": "Structure-based prediction of protein-protein interactions on a genome-wide scale",
+      "doi": "https://doi.org/10.1038/nature11503",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "PrePPI genome-scale discovery workflow",
+      "claimed_split": {
+        "description": "Genome-scale discovery workflow in yeast and human; the supplied paper list does not provide an explicit train/test or external holdout roster.",
+        "style": "paper_specific_external",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "paper_specific_external",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_plus_functional",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`.",
+        "Source family `string` is not materialized in `warehouse_sources`.",
+        "Source family `intact` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "yeast",
+        "human",
+        "PrePPI"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "zhang2012preppi",
+        "title": "Structure-based prediction of protein-protein interactions on a genome-wide scale",
+        "doi": "https://doi.org/10.1038/nature11503",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [
+            "STRING is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `paper_faithful_external` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\zhang2012preppi.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "sun2017sequence",
+      "title": "Sequence-based prediction of protein protein interaction using a deep-learning algorithm",
+      "doi": "https://doi.org/10.1186/s12859-017-1700-2",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "10-fold CV benchmark plus external test sets",
+      "claimed_split": {
+        "description": "10-fold cross-validation benchmark plus external test sets from the supplied reading list.",
+        "style": "cross_validation",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "cross_validation",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_only",
+        "structure_required": false,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "unsafe_for_training",
+      "verdict": "unsafe_for_training",
+      "evidence_resolution_status": "final_blocked_by_policy_or_overlap",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "POLICY_MISMATCH",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `intact` is not materialized in `warehouse_sources`.",
+        "Source family `string` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The claimed split strategy does not satisfy ProteoSphere training policy as written.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "10-fold CV benchmark",
+        "external test sets"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "sun2017sequence",
+        "title": "Sequence-based prediction of protein protein interaction using a deep-learning algorithm",
+        "doi": "https://doi.org/10.1186/s12859-017-1700-2",
+        "project_status": "unsafe_for_training",
+        "narrative_verdict": "misleading / leakage-prone",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [
+            "STRING is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Do not accept the reported split as training-governing. Re-express the benchmark under `accession_grouped` before any comparison is treated as meaningful."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\sun2017sequence.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "du2017deepppi",
+      "title": "DeepPPI: Boosting Prediction of Protein-Protein Interactions with Deep Neural Networks",
+      "doi": "https://doi.org/10.1021/acs.jcim.7b00028",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "Held-out test benchmark",
+      "claimed_split": {
+        "description": "Held-out test set is claimed, but the supplied list does not identify the membership roster or grouping rule.",
+        "style": "held_out_test",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "held_out_test",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_only",
+        "structure_required": false,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `intact` is not materialized in `warehouse_sources`.",
+        "Source family `string` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "test set"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "du2017deepppi",
+        "title": "DeepPPI: Boosting Prediction of Protein-Protein Interactions with Deep Neural Networks",
+        "doi": "https://doi.org/10.1021/acs.jcim.7b00028",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [
+            "STRING is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `accession_grouped` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\du2017deepppi.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "hashemifar2018dppi",
+      "title": "Predicting protein-protein interactions through sequence-based deep learning",
+      "doi": "https://doi.org/10.1093/bioinformatics/bty573",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "S. cerevisiae core subset benchmarks",
+      "claimed_split": {
+        "description": "Several benchmarks are named, including the S. cerevisiae core subset, but the supplied list does not include explicit split membership evidence.",
+        "style": "held_out_test",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "held_out_test",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_profile",
+        "structure_required": false,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `intact` is not materialized in `warehouse_sources`.",
+        "Source family `string` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "S. cerevisiae core subset",
+        "homodimers"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "hashemifar2018dppi",
+        "title": "Predicting protein-protein interactions through sequence-based deep learning",
+        "doi": "https://doi.org/10.1093/bioinformatics/bty573",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [
+            "STRING is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `accession_grouped` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\hashemifar2018dppi.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "chen2019siamese_rcnn",
+      "title": "Multifaceted protein-protein interaction prediction based on Siamese residual RCNN",
+      "doi": "https://doi.org/10.1093/bioinformatics/btz328",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "SHS27k and SHS148k",
+      "claimed_split": {
+        "description": "Reported train/test evaluation on SHS27k and SHS148k, but the supplied list does not expose the actual roster or separation rule.",
+        "style": "held_out_test",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "held_out_test",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_only",
+        "structure_required": false,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `intact` is not materialized in `warehouse_sources`.",
+        "Source family `string` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "SHS27k",
+        "SHS148k"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "chen2019siamese_rcnn",
+        "title": "Multifaceted protein-protein interaction prediction based on Siamese residual RCNN",
+        "doi": "https://doi.org/10.1093/bioinformatics/btz328",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [
+            "STRING is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `accession_grouped` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\chen2019siamese_rcnn.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "sledzieski2021dscript",
+      "title": "D-SCRIPT translates genome to phenome with sequence-based, structure-aware, genome-scale predictions of protein-protein interactions",
+      "doi": "https://doi.org/10.1016/j.cels.2021.08.010",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "Human training set with fly transfer evaluation",
+      "claimed_split": {
+        "description": "Model trained on 38,345 human PPIs and evaluated for cross-species transfer to fly proteins.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "acceptable",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 15816,
+        "test_resolved_count": 19213,
+        "train_unresolved_count": 762,
+        "test_unresolved_count": 1736,
+        "exact_sequence_overlap_count": 2,
+        "candidate_accession_overlap_count": 12,
+        "candidate_uniref90_overlap_count": 8
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_plus_structure_aware",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "resolved_by_identifier_bridge",
+      "reason_codes": [
+        "AUDIT_ONLY_EVIDENCE"
+      ],
+      "warnings": [
+        "Some evidence remains audit-only or non-redistributable in the condensed warehouse.",
+        "Source family `intact` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "Previously recovered paper-specific audit artifacts were reused as supplemental evidence without reopening raw/archive roots.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root.",
+        "A warehouse-facing identifier bridge summary is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "bridge_resolved",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        },
+        "bridge_resolution": {
+          "status": "resolved_by_identifier_bridge",
+          "bridge_status": "materialized_with_sequence_rescue",
+          "bridge_method": "string_aliases_plus_exact_sequence_rescue_to_uniprot_and_uniref",
+          "claimed_overlap_summary": {
+            "left_split": "fly_test",
+            "right_split": "human_train",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 2,
+            "exact_accession_overlap_count": 0,
+            "exact_uniref90_overlap_count": 0,
+            "candidate_accession_overlap_count": 12,
+            "candidate_uniref90_overlap_count": 8,
+            "left_exact_mapped_identifier_count": 5964,
+            "right_exact_mapped_identifier_count": 4391,
+            "left_sequence_resolved_identifier_count": 19213,
+            "right_sequence_resolved_identifier_count": 15816,
+            "left_unresolved_identifier_count": 1736,
+            "right_unresolved_identifier_count": 762
+          },
+          "total_identifier_count": 35029,
+          "exact_mapped_identifier_count": 10355,
+          "ambiguous_identifier_count": 22176,
+          "unresolved_identifier_count": 2498,
+          "sequence_resolved_identifier_count": 35029,
+          "split_names": [
+            "fly_test",
+            "human_test",
+            "human_train"
+          ],
+          "truth_boundary": "Published split rosters are now materialized and exact sequence groups are resolved. Some historical identifiers may remain accession-ambiguous, so candidate UniRef overlap is reported separately from exact accession overlap."
+        }
+      },
+      "named_entities": [
+        "38,345 human PPIs",
+        "fly proteins"
+      ],
+      "notes": [],
+      "supplemental_evidence": {
+        "status": "published_split_located",
+        "summary": "Released D-SCRIPT pair files were recovered locally, including human train/test and a fly transfer cohort.",
+        "details": [
+          "`human_train.tsv` contains 421,792 labeled pairs spanning 15,816 unique Ensembl proteins.",
+          "`human_test.tsv` contains 52,725 labeled pairs spanning 15,525 unique Ensembl proteins.",
+          "`fly_test.tsv` contains 55,000 labeled pairs spanning 19,213 FlyBase proteins.",
+          "The released identifiers are Ensembl/FlyBase protein IDs rather than warehouse-native `protein_ref` or UniProt accessions."
+        ],
+        "artifact_paths": [
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\dscript\\human_train.tsv",
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\dscript\\human_test.tsv",
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\dscript\\fly_test.tsv"
+        ],
+        "source_links": [
+          "https://github.com/samsledje/D-SCRIPT/blob/main/docs/source/data.rst"
+        ]
+      },
+      "warehouse_audit_surface": {
+        "paper_id": "sledzieski2021dscript",
+        "title": "D-SCRIPT translates genome to phenome with sequence-based, structure-aware, genome-scale predictions of protein-protein interactions",
+        "doi": "https://doi.org/10.1016/j.cels.2021.08.010",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "supplemental_artifact_materialized",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [
+          {
+            "requirement_id": "ensembl_and_flybase_to_uniprot",
+            "source_namespace": "ensembl_protein|flybase_protein",
+            "target_namespace": "uniprot_accession",
+            "reason": "Recovered split files use Ensembl and FlyBase protein identifiers rather than warehouse-native accessions."
+          }
+        ],
+        "supplemental_evidence": {
+          "status": "published_split_located",
+          "summary": "Released D-SCRIPT pair files were recovered locally, including human train/test and a fly transfer cohort.",
+          "artifact_paths": [
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\dscript\\human_train.tsv",
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\dscript\\human_test.tsv",
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\dscript\\fly_test.tsv"
+          ],
+          "source_links": [
+            "https://github.com/samsledje/D-SCRIPT/blob/main/docs/source/data.rst"
+          ],
+          "reproduction": null
+        },
+        "evidence_notes": {
+          "direct_overlap_status": "mapping_blocked_after_roster_recovery",
+          "uniref_overlap_status": "mapping_blocked_after_roster_recovery",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "published D-SCRIPT split files are keyed by Ensembl/FlyBase protein identifiers that the condensed warehouse does not currently bridge to `protein_ref` or UniProt accessions"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper in a `paper_faithful_external` audit lane. Build an Ensembl/FlyBase-to-UniProt bridge before comparing it with ProteoSphere-native accession- or UniRef-grouped evaluations."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\sledzieski2021dscript.json"
+      },
+      "warehouse_identifier_bridge": {
+        "paper_id": "sledzieski2021dscript",
+        "bridge_method": "string_aliases_plus_exact_sequence_rescue_to_uniprot_and_uniref",
+        "bridge_status": "materialized_with_sequence_rescue",
+        "identifier_namespace": "string_protein_id",
+        "total_identifier_count": 35029,
+        "exact_mapped_identifier_count": 10355,
+        "ambiguous_identifier_count": 22176,
+        "unresolved_identifier_count": 2498,
+        "sequence_resolved_identifier_count": 35029,
+        "sequence_rescue_identifier_count": 32242,
+        "exact_accession_count": 8904,
+        "exact_uniref90_count": 8755,
+        "candidate_uniref90_count": 49890,
+        "split_summaries": {
+          "fly_test": {
+            "split_name": "fly_test",
+            "identifier_count": 19213,
+            "exact_mapped_identifier_count": 5964,
+            "ambiguous_identifier_count": 11513,
+            "unresolved_identifier_count": 1736,
+            "sequence_resolved_identifier_count": 19213,
+            "sequence_rescue_identifier_count": 17261,
+            "exact_accession_count": 4570,
+            "exact_uniref90_count": 4536,
+            "candidate_uniref90_group_count": 13062,
+            "sample_unresolved_identifiers": [
+              "7227.FBpp0070174",
+              "7227.FBpp0070201",
+              "7227.FBpp0070203",
+              "7227.FBpp0070234",
+              "7227.FBpp0070239",
+              "7227.FBpp0070248",
+              "7227.FBpp0070278",
+              "7227.FBpp0070279",
+              "7227.FBpp0070286",
+              "7227.FBpp0070287"
+            ]
+          },
+          "human_test": {
+            "split_name": "human_test",
+            "identifier_count": 15525,
+            "exact_mapped_identifier_count": 4342,
+            "ambiguous_identifier_count": 10445,
+            "unresolved_identifier_count": 738,
+            "sequence_resolved_identifier_count": 15525,
+            "sequence_rescue_identifier_count": 14716,
+            "exact_accession_count": 4287,
+            "exact_uniref90_count": 4177,
+            "candidate_uniref90_group_count": 36127,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000158166",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000195455",
+              "9606.ENSP00000217233",
+              "9606.ENSP00000225567",
+              "9606.ENSP00000233114",
+              "9606.ENSP00000239125",
+              "9606.ENSP00000239614",
+              "9606.ENSP00000242109",
+              "9606.ENSP00000244711"
+            ]
+          },
+          "human_train": {
+            "split_name": "human_train",
+            "identifier_count": 15816,
+            "exact_mapped_identifier_count": 4391,
+            "ambiguous_identifier_count": 10663,
+            "unresolved_identifier_count": 762,
+            "sequence_resolved_identifier_count": 15816,
+            "sequence_rescue_identifier_count": 14981,
+            "exact_accession_count": 4334,
+            "exact_uniref90_count": 4219,
+            "candidate_uniref90_group_count": 36836,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000158166",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000195455",
+              "9606.ENSP00000217233",
+              "9606.ENSP00000225567",
+              "9606.ENSP00000233114",
+              "9606.ENSP00000239125",
+              "9606.ENSP00000239614",
+              "9606.ENSP00000242109",
+              "9606.ENSP00000244711"
+            ]
+          }
+        },
+        "overlap_summaries": [
+          {
+            "left_split": "fly_test",
+            "right_split": "human_test",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 2,
+            "exact_accession_overlap_count": 0,
+            "exact_uniref90_overlap_count": 0,
+            "candidate_accession_overlap_count": 12,
+            "candidate_uniref90_overlap_count": 8,
+            "left_exact_mapped_identifier_count": 5964,
+            "right_exact_mapped_identifier_count": 4342,
+            "left_sequence_resolved_identifier_count": 19213,
+            "right_sequence_resolved_identifier_count": 15525,
+            "left_unresolved_identifier_count": 1736,
+            "right_unresolved_identifier_count": 738
+          },
+          {
+            "left_split": "fly_test",
+            "right_split": "human_train",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 2,
+            "exact_accession_overlap_count": 0,
+            "exact_uniref90_overlap_count": 0,
+            "candidate_accession_overlap_count": 12,
+            "candidate_uniref90_overlap_count": 8,
+            "left_exact_mapped_identifier_count": 5964,
+            "right_exact_mapped_identifier_count": 4391,
+            "left_sequence_resolved_identifier_count": 19213,
+            "right_sequence_resolved_identifier_count": 15816,
+            "left_unresolved_identifier_count": 1736,
+            "right_unresolved_identifier_count": 762
+          },
+          {
+            "left_split": "human_test",
+            "right_split": "human_train",
+            "direct_identifier_overlap_count": 15525,
+            "exact_sequence_overlap_count": 15351,
+            "exact_accession_overlap_count": 4287,
+            "exact_uniref90_overlap_count": 4177,
+            "candidate_accession_overlap_count": 50265,
+            "candidate_uniref90_overlap_count": 36127,
+            "left_exact_mapped_identifier_count": 4342,
+            "right_exact_mapped_identifier_count": 4391,
+            "left_sequence_resolved_identifier_count": 15525,
+            "right_sequence_resolved_identifier_count": 15816,
+            "left_unresolved_identifier_count": 738,
+            "right_unresolved_identifier_count": 762
+          }
+        ],
+        "sample_unresolved_identifiers": [
+          "7227.FBpp0070174",
+          "7227.FBpp0070201",
+          "7227.FBpp0070203",
+          "7227.FBpp0070234",
+          "7227.FBpp0070239",
+          "7227.FBpp0070248",
+          "7227.FBpp0070278",
+          "7227.FBpp0070279",
+          "7227.FBpp0070286",
+          "7227.FBpp0070287",
+          "7227.FBpp0070313",
+          "7227.FBpp0070378",
+          "7227.FBpp0070385",
+          "7227.FBpp0070399",
+          "7227.FBpp0070419",
+          "7227.FBpp0070500",
+          "7227.FBpp0070553",
+          "7227.FBpp0070554",
+          "7227.FBpp0070576",
+          "7227.FBpp0070577"
+        ],
+        "detail_artifact_path": "D:\\ProteoSphere\\reference_library\\control\\paper_identifier_bridge_details\\sledzieski2021dscript.json"
+      },
+      "bridge_resolution": {
+        "status": "resolved_by_identifier_bridge",
+        "bridge_status": "materialized_with_sequence_rescue",
+        "bridge_method": "string_aliases_plus_exact_sequence_rescue_to_uniprot_and_uniref",
+        "claimed_overlap_summary": {
+          "left_split": "fly_test",
+          "right_split": "human_train",
+          "direct_identifier_overlap_count": 0,
+          "exact_sequence_overlap_count": 2,
+          "exact_accession_overlap_count": 0,
+          "exact_uniref90_overlap_count": 0,
+          "candidate_accession_overlap_count": 12,
+          "candidate_uniref90_overlap_count": 8,
+          "left_exact_mapped_identifier_count": 5964,
+          "right_exact_mapped_identifier_count": 4391,
+          "left_sequence_resolved_identifier_count": 19213,
+          "right_sequence_resolved_identifier_count": 15816,
+          "left_unresolved_identifier_count": 1736,
+          "right_unresolved_identifier_count": 762
+        },
+        "total_identifier_count": 35029,
+        "exact_mapped_identifier_count": 10355,
+        "ambiguous_identifier_count": 22176,
+        "unresolved_identifier_count": 2498,
+        "sequence_resolved_identifier_count": 35029,
+        "split_names": [
+          "fly_test",
+          "human_test",
+          "human_train"
+        ],
+        "truth_boundary": "Published split rosters are now materialized and exact sequence groups are resolved. Some historical identifiers may remain accession-ambiguous, so candidate UniRef overlap is reported separately from exact accession overlap."
+      },
+      "identifier_bridge_requirements": [
+        {
+          "requirement_id": "ensembl_and_flybase_to_uniprot",
+          "source_namespace": "ensembl_protein|flybase_protein",
+          "target_namespace": "uniprot_accession",
+          "reason": "Recovered split files use Ensembl and FlyBase protein identifiers rather than warehouse-native accessions."
+        }
+      ]
+    },
+    {
+      "paper_id": "szymborski2022rapppid",
+      "title": "RAPPPID: towards generalizable protein interaction prediction with AWD-LSTM twin networks",
+      "doi": "https://doi.org/10.1093/bioinformatics/btac429",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "Unseen-protein generalization benchmark",
+      "claimed_split": {
+        "description": "Strict train/test separation with unseen proteins is claimed in the supplied list.",
+        "style": "strict_unseen_protein",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "strict_unseen_protein",
+      "resolved_split_policy": {
+        "policy": "uniref_grouped",
+        "reason": "Beta split compiler now groups on explicit UniRef keys where they exist and reports fallback coverage where they do not.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "acceptable",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 1,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 2,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 7472,
+        "test_resolved_count": 912,
+        "train_unresolved_count": 691,
+        "test_unresolved_count": 93,
+        "exact_sequence_overlap_count": 4,
+        "candidate_accession_overlap_count": 8,
+        "candidate_uniref90_overlap_count": 18
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_only",
+        "structure_required": false,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "candidate_only",
+      "verdict": "unsafe_for_training",
+      "evidence_resolution_status": "resolved_blocked_by_overlap",
+      "reason_codes": [
+        "ACCESSION_ROOT_OVERLAP",
+        "UNIREF_CLUSTER_OVERLAP",
+        "AUDIT_ONLY_EVIDENCE"
+      ],
+      "warnings": [
+        "Some evidence remains audit-only or non-redistributable in the condensed warehouse.",
+        "Source family `intact` is not materialized in `warehouse_sources`.",
+        "Source family `string` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "Train/test members reuse the same accession-root identifiers.",
+        "Train/test members overlap at the UniRef cluster level."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "Previously recovered paper-specific audit artifacts were reused as supplemental evidence without reopening raw/archive roots.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root.",
+        "A warehouse-facing identifier bridge summary is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "bridge_resolved",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        },
+        "bridge_resolution": {
+          "status": "resolved_by_identifier_bridge",
+          "bridge_status": "materialized",
+          "bridge_method": "string_aliases_to_uniprot_accession",
+          "claimed_overlap_summary": {
+            "left_split": "string_c3_test",
+            "right_split": "string_c3_train",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 4,
+            "exact_accession_overlap_count": 1,
+            "exact_uniref90_overlap_count": 2,
+            "candidate_accession_overlap_count": 8,
+            "candidate_uniref90_overlap_count": 18,
+            "left_exact_mapped_identifier_count": 178,
+            "right_exact_mapped_identifier_count": 1505,
+            "left_sequence_resolved_identifier_count": 912,
+            "right_sequence_resolved_identifier_count": 7472,
+            "left_unresolved_identifier_count": 93,
+            "right_unresolved_identifier_count": 691
+          },
+          "total_identifier_count": 9340,
+          "exact_mapped_identifier_count": 1875,
+          "ambiguous_identifier_count": 6588,
+          "unresolved_identifier_count": 877,
+          "sequence_resolved_identifier_count": 9340,
+          "split_names": [
+            "string_c1_test",
+            "string_c1_train",
+            "string_c1_val",
+            "string_c2_test",
+            "string_c2_train",
+            "string_c2_val",
+            "string_c3_test",
+            "string_c3_train",
+            "string_c3_val"
+          ],
+          "truth_boundary": "Published split rosters are now materialized and exact sequence groups are resolved. Some historical identifiers may remain accession-ambiguous, so candidate UniRef overlap is reported separately from exact accession overlap."
+        }
+      },
+      "named_entities": [
+        "unseen proteins"
+      ],
+      "notes": [],
+      "supplemental_evidence": {
+        "status": "published_split_located",
+        "summary": "A RAPPPID Zenodo release was recovered locally and contains explicit C1/C2/C3 split artifacts.",
+        "details": [
+          "The archive includes 4 `string_c1` pickle members, 4 `string_c2` members, and 4 `string_c3` members.",
+          "The release packages `train_pairs.pkl.gz`, `val_pairs.pkl.gz`, `test_pairs.pkl.gz`, and `seqs.pkl.gz` for the comparative splits.",
+          "The serialized keys are Ensembl protein IDs in STRING-style namespace (for example `9606.ENSP...`), not warehouse-native accessions."
+        ],
+        "artifact_paths": [
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\rapppid\\rapppid_data.zip"
+        ],
+        "source_links": [
+          "https://doi.org/10.5281/zenodo.6817258"
+        ]
+      },
+      "warehouse_audit_surface": {
+        "paper_id": "szymborski2022rapppid",
+        "title": "RAPPPID: towards generalizable protein interaction prediction with AWD-LSTM twin networks",
+        "doi": "https://doi.org/10.1093/bioinformatics/btac429",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "uniref_grouped",
+        "audit_surface_status": "supplemental_artifact_materialized",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [
+          {
+            "requirement_id": "ensembl_to_uniprot",
+            "source_namespace": "ensembl_protein",
+            "target_namespace": "uniprot_accession",
+            "reason": "Recovered split files use Ensembl protein identifiers rather than warehouse-native accessions."
+          },
+          {
+            "requirement_id": "string_ensembl_to_uniprot",
+            "source_namespace": "string_ensembl_protein",
+            "target_namespace": "uniprot_accession",
+            "reason": "Recovered split artifacts use STRING/Ensembl protein keys that are not yet bridged into warehouse proteins."
+          }
+        ],
+        "supplemental_evidence": {
+          "status": "published_split_located",
+          "summary": "A RAPPPID Zenodo release was recovered locally and contains explicit C1/C2/C3 split artifacts.",
+          "artifact_paths": [
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\rapppid\\rapppid_data.zip"
+          ],
+          "source_links": [
+            "https://doi.org/10.5281/zenodo.6817258"
+          ],
+          "reproduction": null
+        },
+        "evidence_notes": {
+          "direct_overlap_status": "mapping_blocked_after_roster_recovery",
+          "uniref_overlap_status": "mapping_blocked_after_roster_recovery",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "published RAPPPID split artifacts are keyed by STRING/Ensembl protein identifiers that the condensed warehouse does not currently bridge to canonical `protein_ref` rows"
+          ],
+          "warnings": [
+            "STRING is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Keep the released C1/C2/C3 splits as audit lanes and rebuild any governing comparison under `uniref_grouped` once STRING/Ensembl identifiers are bridged into warehouse proteins."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\szymborski2022rapppid.json"
+      },
+      "warehouse_identifier_bridge": {
+        "paper_id": "szymborski2022rapppid",
+        "bridge_method": "string_aliases_to_uniprot_accession",
+        "bridge_status": "materialized",
+        "identifier_namespace": "string_protein_id",
+        "total_identifier_count": 9340,
+        "exact_mapped_identifier_count": 1875,
+        "ambiguous_identifier_count": 6588,
+        "unresolved_identifier_count": 877,
+        "sequence_resolved_identifier_count": 9340,
+        "sequence_rescue_identifier_count": 0,
+        "exact_accession_count": 1859,
+        "exact_uniref90_count": 1840,
+        "candidate_uniref90_count": 24553,
+        "split_summaries": {
+          "string_c1_test": {
+            "split_name": "string_c1_test",
+            "identifier_count": 9141,
+            "exact_mapped_identifier_count": 1844,
+            "ambiguous_identifier_count": 6437,
+            "unresolved_identifier_count": 860,
+            "sequence_resolved_identifier_count": 9141,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 1828,
+            "exact_uniref90_count": 1809,
+            "candidate_uniref90_group_count": 24045,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000020673",
+              "9606.ENSP00000158166",
+              "9606.ENSP00000171111",
+              "9606.ENSP00000175506",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000204615",
+              "9606.ENSP00000205890"
+            ]
+          },
+          "string_c1_train": {
+            "split_name": "string_c1_train",
+            "identifier_count": 9340,
+            "exact_mapped_identifier_count": 1875,
+            "ambiguous_identifier_count": 6588,
+            "unresolved_identifier_count": 877,
+            "sequence_resolved_identifier_count": 9340,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 1859,
+            "exact_uniref90_count": 1840,
+            "candidate_uniref90_group_count": 24553,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000020673",
+              "9606.ENSP00000158166",
+              "9606.ENSP00000171111",
+              "9606.ENSP00000175506",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000204615",
+              "9606.ENSP00000205890"
+            ]
+          },
+          "string_c1_val": {
+            "split_name": "string_c1_val",
+            "identifier_count": 9179,
+            "exact_mapped_identifier_count": 1830,
+            "ambiguous_identifier_count": 6485,
+            "unresolved_identifier_count": 864,
+            "sequence_resolved_identifier_count": 9179,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 1814,
+            "exact_uniref90_count": 1797,
+            "candidate_uniref90_group_count": 24153,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000020673",
+              "9606.ENSP00000158166",
+              "9606.ENSP00000171111",
+              "9606.ENSP00000175506",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000204615",
+              "9606.ENSP00000205890"
+            ]
+          },
+          "string_c2_test": {
+            "split_name": "string_c2_test",
+            "identifier_count": 4819,
+            "exact_mapped_identifier_count": 897,
+            "ambiguous_identifier_count": 3481,
+            "unresolved_identifier_count": 441,
+            "sequence_resolved_identifier_count": 4819,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 888,
+            "exact_uniref90_count": 882,
+            "candidate_uniref90_group_count": 13164,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000171111",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000205890",
+              "9606.ENSP00000216267",
+              "9606.ENSP00000216465",
+              "9606.ENSP00000216605",
+              "9606.ENSP00000217964",
+              "9606.ENSP00000220531"
+            ]
+          },
+          "string_c2_train": {
+            "split_name": "string_c2_train",
+            "identifier_count": 7472,
+            "exact_mapped_identifier_count": 1505,
+            "ambiguous_identifier_count": 5276,
+            "unresolved_identifier_count": 691,
+            "sequence_resolved_identifier_count": 7472,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 1494,
+            "exact_uniref90_count": 1478,
+            "candidate_uniref90_group_count": 19564,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000020673",
+              "9606.ENSP00000158166",
+              "9606.ENSP00000175506",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000205890",
+              "9606.ENSP00000216267",
+              "9606.ENSP00000216605"
+            ]
+          },
+          "string_c2_val": {
+            "split_name": "string_c2_val",
+            "identifier_count": 5175,
+            "exact_mapped_identifier_count": 976,
+            "ambiguous_identifier_count": 3721,
+            "unresolved_identifier_count": 478,
+            "sequence_resolved_identifier_count": 5175,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 963,
+            "exact_uniref90_count": 955,
+            "candidate_uniref90_group_count": 14152,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000020673",
+              "9606.ENSP00000158166",
+              "9606.ENSP00000171111",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000204615",
+              "9606.ENSP00000216267",
+              "9606.ENSP00000216605",
+              "9606.ENSP00000217964"
+            ]
+          },
+          "string_c3_test": {
+            "split_name": "string_c3_test",
+            "identifier_count": 912,
+            "exact_mapped_identifier_count": 178,
+            "ambiguous_identifier_count": 641,
+            "unresolved_identifier_count": 93,
+            "sequence_resolved_identifier_count": 912,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 178,
+            "exact_uniref90_count": 178,
+            "candidate_uniref90_group_count": 2416,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000171111",
+              "9606.ENSP00000216465",
+              "9606.ENSP00000221421",
+              "9606.ENSP00000230771",
+              "9606.ENSP00000237889",
+              "9606.ENSP00000253401",
+              "9606.ENSP00000254663",
+              "9606.ENSP00000254801",
+              "9606.ENSP00000257555",
+              "9606.ENSP00000262585"
+            ]
+          },
+          "string_c3_train": {
+            "split_name": "string_c3_train",
+            "identifier_count": 7472,
+            "exact_mapped_identifier_count": 1505,
+            "ambiguous_identifier_count": 5276,
+            "unresolved_identifier_count": 691,
+            "sequence_resolved_identifier_count": 7472,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 1494,
+            "exact_uniref90_count": 1478,
+            "candidate_uniref90_group_count": 19564,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000007722",
+              "9606.ENSP00000019317",
+              "9606.ENSP00000020673",
+              "9606.ENSP00000158166",
+              "9606.ENSP00000175506",
+              "9606.ENSP00000183605",
+              "9606.ENSP00000199706",
+              "9606.ENSP00000205890",
+              "9606.ENSP00000216267",
+              "9606.ENSP00000216605"
+            ]
+          },
+          "string_c3_val": {
+            "split_name": "string_c3_val",
+            "identifier_count": 894,
+            "exact_mapped_identifier_count": 177,
+            "ambiguous_identifier_count": 629,
+            "unresolved_identifier_count": 88,
+            "sequence_resolved_identifier_count": 894,
+            "sequence_rescue_identifier_count": 0,
+            "exact_accession_count": 176,
+            "exact_uniref90_count": 175,
+            "candidate_uniref90_group_count": 2447,
+            "sample_unresolved_identifiers": [
+              "9606.ENSP00000204615",
+              "9606.ENSP00000218224",
+              "9606.ENSP00000224181",
+              "9606.ENSP00000225567",
+              "9606.ENSP00000225573",
+              "9606.ENSP00000229239",
+              "9606.ENSP00000236147",
+              "9606.ENSP00000256578",
+              "9606.ENSP00000256897",
+              "9606.ENSP00000260600"
+            ]
+          }
+        },
+        "overlap_summaries": [
+          {
+            "left_split": "string_c1_test",
+            "right_split": "string_c1_train",
+            "direct_identifier_overlap_count": 9141,
+            "exact_sequence_overlap_count": 9084,
+            "exact_accession_overlap_count": 1828,
+            "exact_uniref90_overlap_count": 1809,
+            "candidate_accession_overlap_count": 33077,
+            "candidate_uniref90_overlap_count": 24045,
+            "left_exact_mapped_identifier_count": 1844,
+            "right_exact_mapped_identifier_count": 1875,
+            "left_sequence_resolved_identifier_count": 9141,
+            "right_sequence_resolved_identifier_count": 9340,
+            "left_unresolved_identifier_count": 860,
+            "right_unresolved_identifier_count": 877
+          },
+          {
+            "left_split": "string_c1_test",
+            "right_split": "string_c1_val",
+            "direct_identifier_overlap_count": 8984,
+            "exact_sequence_overlap_count": 8927,
+            "exact_accession_overlap_count": 1784,
+            "exact_uniref90_overlap_count": 1767,
+            "candidate_accession_overlap_count": 32555,
+            "candidate_uniref90_overlap_count": 23648,
+            "left_exact_mapped_identifier_count": 1844,
+            "right_exact_mapped_identifier_count": 1830,
+            "left_sequence_resolved_identifier_count": 9141,
+            "right_sequence_resolved_identifier_count": 9179,
+            "left_unresolved_identifier_count": 860,
+            "right_unresolved_identifier_count": 864
+          },
+          {
+            "left_split": "string_c1_train",
+            "right_split": "string_c1_val",
+            "direct_identifier_overlap_count": 9179,
+            "exact_sequence_overlap_count": 9119,
+            "exact_accession_overlap_count": 1814,
+            "exact_uniref90_overlap_count": 1797,
+            "candidate_accession_overlap_count": 33264,
+            "candidate_uniref90_overlap_count": 24153,
+            "left_exact_mapped_identifier_count": 1875,
+            "right_exact_mapped_identifier_count": 1830,
+            "left_sequence_resolved_identifier_count": 9340,
+            "right_sequence_resolved_identifier_count": 9179,
+            "left_unresolved_identifier_count": 877,
+            "right_unresolved_identifier_count": 864
+          },
+          {
+            "left_split": "string_c2_test",
+            "right_split": "string_c2_train",
+            "direct_identifier_overlap_count": 3885,
+            "exact_sequence_overlap_count": 3858,
+            "exact_accession_overlap_count": 702,
+            "exact_uniref90_overlap_count": 697,
+            "candidate_accession_overlap_count": 14679,
+            "candidate_uniref90_overlap_count": 10707,
+            "left_exact_mapped_identifier_count": 897,
+            "right_exact_mapped_identifier_count": 1505,
+            "left_sequence_resolved_identifier_count": 4819,
+            "right_sequence_resolved_identifier_count": 7472,
+            "left_unresolved_identifier_count": 441,
+            "right_unresolved_identifier_count": 691
+          },
+          {
+            "left_split": "string_c2_test",
+            "right_split": "string_c2_val",
+            "direct_identifier_overlap_count": 3079,
+            "exact_sequence_overlap_count": 3049,
+            "exact_accession_overlap_count": 526,
+            "exact_uniref90_overlap_count": 522,
+            "candidate_accession_overlap_count": 11885,
+            "candidate_uniref90_overlap_count": 8686,
+            "left_exact_mapped_identifier_count": 897,
+            "right_exact_mapped_identifier_count": 976,
+            "left_sequence_resolved_identifier_count": 4819,
+            "right_sequence_resolved_identifier_count": 5175,
+            "left_unresolved_identifier_count": 441,
+            "right_unresolved_identifier_count": 478
+          },
+          {
+            "left_split": "string_c2_train",
+            "right_split": "string_c2_val",
+            "direct_identifier_overlap_count": 3778,
+            "exact_sequence_overlap_count": 3749,
+            "exact_accession_overlap_count": 706,
+            "exact_uniref90_overlap_count": 701,
+            "candidate_accession_overlap_count": 14082,
+            "candidate_uniref90_overlap_count": 10276,
+            "left_exact_mapped_identifier_count": 1505,
+            "right_exact_mapped_identifier_count": 976,
+            "left_sequence_resolved_identifier_count": 7472,
+            "right_sequence_resolved_identifier_count": 5175,
+            "left_unresolved_identifier_count": 691,
+            "right_unresolved_identifier_count": 478
+          },
+          {
+            "left_split": "string_c3_test",
+            "right_split": "string_c3_train",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 4,
+            "exact_accession_overlap_count": 1,
+            "exact_uniref90_overlap_count": 2,
+            "candidate_accession_overlap_count": 8,
+            "candidate_uniref90_overlap_count": 18,
+            "left_exact_mapped_identifier_count": 178,
+            "right_exact_mapped_identifier_count": 1505,
+            "left_sequence_resolved_identifier_count": 912,
+            "right_sequence_resolved_identifier_count": 7472,
+            "left_unresolved_identifier_count": 93,
+            "right_unresolved_identifier_count": 691
+          },
+          {
+            "left_split": "string_c3_test",
+            "right_split": "string_c3_val",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 2,
+            "exact_accession_overlap_count": 1,
+            "exact_uniref90_overlap_count": 2,
+            "candidate_accession_overlap_count": 3,
+            "candidate_uniref90_overlap_count": 5,
+            "left_exact_mapped_identifier_count": 178,
+            "right_exact_mapped_identifier_count": 177,
+            "left_sequence_resolved_identifier_count": 912,
+            "right_sequence_resolved_identifier_count": 894,
+            "left_unresolved_identifier_count": 93,
+            "right_unresolved_identifier_count": 88
+          },
+          {
+            "left_split": "string_c3_train",
+            "right_split": "string_c3_val",
+            "direct_identifier_overlap_count": 0,
+            "exact_sequence_overlap_count": 8,
+            "exact_accession_overlap_count": 3,
+            "exact_uniref90_overlap_count": 4,
+            "candidate_accession_overlap_count": 6,
+            "candidate_uniref90_overlap_count": 16,
+            "left_exact_mapped_identifier_count": 1505,
+            "right_exact_mapped_identifier_count": 177,
+            "left_sequence_resolved_identifier_count": 7472,
+            "right_sequence_resolved_identifier_count": 894,
+            "left_unresolved_identifier_count": 691,
+            "right_unresolved_identifier_count": 88
+          }
+        ],
+        "sample_unresolved_identifiers": [
+          "9606.ENSP00000007722",
+          "9606.ENSP00000019317",
+          "9606.ENSP00000020673",
+          "9606.ENSP00000158166",
+          "9606.ENSP00000171111",
+          "9606.ENSP00000175506",
+          "9606.ENSP00000183605",
+          "9606.ENSP00000199706",
+          "9606.ENSP00000204615",
+          "9606.ENSP00000205890",
+          "9606.ENSP00000216267",
+          "9606.ENSP00000216465",
+          "9606.ENSP00000216605",
+          "9606.ENSP00000216951",
+          "9606.ENSP00000217233",
+          "9606.ENSP00000217652",
+          "9606.ENSP00000217964",
+          "9606.ENSP00000218224",
+          "9606.ENSP00000220531",
+          "9606.ENSP00000221421"
+        ],
+        "detail_artifact_path": "D:\\ProteoSphere\\reference_library\\control\\paper_identifier_bridge_details\\szymborski2022rapppid.json"
+      },
+      "bridge_resolution": {
+        "status": "resolved_by_identifier_bridge",
+        "bridge_status": "materialized",
+        "bridge_method": "string_aliases_to_uniprot_accession",
+        "claimed_overlap_summary": {
+          "left_split": "string_c3_test",
+          "right_split": "string_c3_train",
+          "direct_identifier_overlap_count": 0,
+          "exact_sequence_overlap_count": 4,
+          "exact_accession_overlap_count": 1,
+          "exact_uniref90_overlap_count": 2,
+          "candidate_accession_overlap_count": 8,
+          "candidate_uniref90_overlap_count": 18,
+          "left_exact_mapped_identifier_count": 178,
+          "right_exact_mapped_identifier_count": 1505,
+          "left_sequence_resolved_identifier_count": 912,
+          "right_sequence_resolved_identifier_count": 7472,
+          "left_unresolved_identifier_count": 93,
+          "right_unresolved_identifier_count": 691
+        },
+        "total_identifier_count": 9340,
+        "exact_mapped_identifier_count": 1875,
+        "ambiguous_identifier_count": 6588,
+        "unresolved_identifier_count": 877,
+        "sequence_resolved_identifier_count": 9340,
+        "split_names": [
+          "string_c1_test",
+          "string_c1_train",
+          "string_c1_val",
+          "string_c2_test",
+          "string_c2_train",
+          "string_c2_val",
+          "string_c3_test",
+          "string_c3_train",
+          "string_c3_val"
+        ],
+        "truth_boundary": "Published split rosters are now materialized and exact sequence groups are resolved. Some historical identifiers may remain accession-ambiguous, so candidate UniRef overlap is reported separately from exact accession overlap."
+      },
+      "identifier_bridge_requirements": [
+        {
+          "requirement_id": "ensembl_to_uniprot",
+          "source_namespace": "ensembl_protein",
+          "target_namespace": "uniprot_accession",
+          "reason": "Recovered split files use Ensembl protein identifiers rather than warehouse-native accessions."
+        },
+        {
+          "requirement_id": "string_ensembl_to_uniprot",
+          "source_namespace": "string_ensembl_protein",
+          "target_namespace": "uniprot_accession",
+          "reason": "Recovered split artifacts use STRING/Ensembl protein keys that are not yet bridged into warehouse proteins."
+        }
+      ]
+    },
+    {
+      "paper_id": "baranwal2022struct2graph",
+      "title": "Struct2Graph: a graph attention network for structure based predictions of protein-protein interactions",
+      "doi": "https://doi.org/10.1186/s12859-022-04910-9",
+      "task_group": "ppi_prediction",
+      "claimed_dataset": "Balanced and unbalanced fivefold CV benchmarks",
+      "claimed_split": {
+        "description": "Balanced-set evaluation and fivefold cross-validation on an unbalanced set are claimed.",
+        "style": "cross_validation",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "cross_validation",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_only",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "unsafe_for_training",
+      "verdict": "unsafe_for_training",
+      "evidence_resolution_status": "final_blocked_by_policy_or_overlap",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "POLICY_MISMATCH",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`.",
+        "Source family `pdbbind` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The claimed split strategy does not satisfy ProteoSphere training policy as written.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "Previously recovered paper-specific audit artifacts were reused as supplemental evidence without reopening raw/archive roots.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "balanced set",
+        "1:10 unbalanced set",
+        "fivefold CV"
+      ],
+      "notes": [],
+      "supplemental_evidence": {
+        "status": "repo_split_logic_located",
+        "summary": "The Struct2Graph repository exposes the split-building code and it is example-level randomization rather than accession-grouped separation.",
+        "details": [
+          "`interactions_data.txt` contains 10,004 labeled PDB-pair examples and `list_of_prots.txt` contains 4,031 accession-to-PDB-chain rows.",
+          "The released `create_examples.py` shuffles merged examples three times and then slices them into 80% train, 10% test, and 10% dev.",
+          "That repo logic operates on pair examples, not on proteins, accession roots, UniRef groups, or source-separated components."
+        ],
+        "artifact_paths": [
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\struct2graph\\create_examples.py",
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\struct2graph\\interactions_data.txt",
+          "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\struct2graph\\list_of_prots.txt"
+        ],
+        "source_links": [
+          "https://github.com/baranwa2/Struct2Graph",
+          "https://raw.githubusercontent.com/baranwa2/Struct2Graph/master/create_examples.py",
+          "https://raw.githubusercontent.com/baranwa2/Struct2Graph/master/interactions_data.txt",
+          "https://raw.githubusercontent.com/baranwa2/Struct2Graph/master/list_of_prots.txt"
+        ],
+        "reproduction": {
+          "reproduction_seed": 1337,
+          "interaction_rows": 10004,
+          "train_rows": 8003,
+          "test_rows": 1000,
+          "dev_rows": 1001,
+          "train_unique_pdb_ids": 3241,
+          "test_unique_pdb_ids": 865,
+          "shared_pdb_count": 643,
+          "shared_pdb_sample": [
+            "1A4E",
+            "1A5E",
+            "1AOJ",
+            "1AY0",
+            "1B6U",
+            "1BI7",
+            "1BMP",
+            "1BOR",
+            "1BUO",
+            "1CI6",
+            "1D5R",
+            "1DZF",
+            "1EFX",
+            "1EG3",
+            "1EH2",
+            "1EJP",
+            "1EK0",
+            "1EKX",
+            "1EOT",
+            "1F4J",
+            "1F9Q",
+            "1FNT",
+            "1FOS",
+            "1FOT",
+            "1G5J"
+          ]
+        }
+      },
+      "warehouse_audit_surface": {
+        "paper_id": "baranwal2022struct2graph",
+        "title": "Struct2Graph: a graph attention network for structure based predictions of protein-protein interactions",
+        "doi": "https://doi.org/10.1186/s12859-022-04910-9",
+        "project_status": "unsafe_for_training",
+        "narrative_verdict": "misleading / leakage-prone",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "supplemental_artifact_materialized",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": {
+          "status": "repo_split_logic_located",
+          "summary": "The Struct2Graph repository exposes the split-building code and it is example-level randomization rather than accession-grouped separation.",
+          "artifact_paths": [
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\struct2graph\\create_examples.py",
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\struct2graph\\interactions_data.txt",
+            "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_external\\struct2graph\\list_of_prots.txt"
+          ],
+          "source_links": [
+            "https://github.com/baranwa2/Struct2Graph",
+            "https://raw.githubusercontent.com/baranwa2/Struct2Graph/master/create_examples.py",
+            "https://raw.githubusercontent.com/baranwa2/Struct2Graph/master/interactions_data.txt",
+            "https://raw.githubusercontent.com/baranwa2/Struct2Graph/master/list_of_prots.txt"
+          ],
+          "reproduction": {
+            "reproduction_seed": 1337,
+            "interaction_rows": 10004,
+            "train_rows": 8003,
+            "test_rows": 1000,
+            "dev_rows": 1001,
+            "train_unique_pdb_ids": 3241,
+            "test_unique_pdb_ids": 865,
+            "shared_pdb_count": 643,
+            "shared_pdb_sample": [
+              "1A4E",
+              "1A5E",
+              "1AOJ",
+              "1AY0",
+              "1B6U",
+              "1BI7",
+              "1BMP",
+              "1BOR",
+              "1BUO",
+              "1CI6",
+              "1D5R",
+              "1DZF",
+              "1EFX",
+              "1EG3",
+              "1EH2",
+              "1EJP",
+              "1EK0",
+              "1EKX",
+              "1EOT",
+              "1F4J",
+              "1F9Q",
+              "1FNT",
+              "1FOS",
+              "1FOT",
+              "1G5J"
+            ]
+          }
+        },
+        "evidence_notes": {
+          "direct_overlap_status": "reproduced_overlap_demonstrated",
+          "uniref_overlap_status": "not_needed_for_failure",
+          "leakage_status": "repo_code_and_reproduction_support_failure",
+          "blockers": [
+            "the repository exposes split-construction logic, but it does not provide a saved published split roster or seed-stable assignment artifact for the exact paper run"
+          ],
+          "warnings": [
+            "PDBBind is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Do not use the paper-faithful split for training claims. Rebuild the benchmark under an accession-grouped or stronger structure-aware grouping policy before treating any performance comparison as canonical."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\baranwal2022struct2graph.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "gainza2020masif",
+      "title": "Deciphering interaction fingerprints from protein molecular surfaces using geometric deep learning",
+      "doi": "https://doi.org/10.1038/s41592-019-0666-6",
+      "task_group": "interface_prediction",
+      "claimed_dataset": "MaSIF site/search benchmark set",
+      "claimed_split": {
+        "description": "Benchmarking is described through site/search tasks and a database scan example; the supplied list does not provide explicit train/test membership.",
+        "style": "paper_specific_external",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "paper_specific_external",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "surface_geometry",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "MaSIF-site",
+        "MaSIF-search",
+        "PD-L1:mouse PD1"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "gainza2020masif",
+        "title": "Deciphering interaction fingerprints from protein molecular surfaces using geometric deep learning",
+        "doi": "https://doi.org/10.1038/s41592-019-0666-6",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `paper_faithful_external` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\gainza2020masif.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "dai2021geometric_interface",
+      "title": "Protein interaction interface region prediction by geometric deep learning",
+      "doi": "https://doi.org/10.1093/bioinformatics/btab154",
+      "task_group": "interface_prediction",
+      "claimed_dataset": "Multiple interface benchmarks",
+      "claimed_split": {
+        "description": "Multiple benchmarks are referenced, but the supplied list does not include membership evidence or a concrete grouping rule.",
+        "style": "paper_specific_external",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "paper_specific_external",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "geometry_plus_complementarity",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "multiple benchmarks"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "dai2021geometric_interface",
+        "title": "Protein interaction interface region prediction by geometric deep learning",
+        "doi": "https://doi.org/10.1093/bioinformatics/btab154",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `paper_faithful_external` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\dai2021geometric_interface.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "xie2022interprotein_contacts",
+      "title": "Deep graph learning of inter-protein contacts",
+      "doi": "https://doi.org/10.1093/bioinformatics/btab761",
+      "task_group": "contact_prediction",
+      "claimed_dataset": "Homodimers and CASP-CAPRI",
+      "claimed_split": {
+        "description": "Evaluation is reported on homodimers and CASP-CAPRI data.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "graph_plus_msa_lm",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "homodimers",
+        "CASP-CAPRI data"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "xie2022interprotein_contacts",
+        "title": "Deep graph learning of inter-protein contacts",
+        "doi": "https://doi.org/10.1093/bioinformatics/btab761",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split in a `paper_faithful_external` audit lane only; do not treat it as the default canonical split for training or headline benchmarking."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\xie2022interprotein_contacts.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "tubiana2022scannet",
+      "title": "ScanNet: an interpretable geometric deep learning model for structure-based protein binding site prediction",
+      "doi": "https://doi.org/10.1038/s41592-022-01490-7",
+      "task_group": "binding_site_prediction",
+      "claimed_dataset": "Unseen-fold benchmark",
+      "claimed_split": {
+        "description": "Unseen-fold generalization is claimed, but no explicit split roster is included in the supplied list.",
+        "style": "uniref_or_homology_guard",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "uniref_or_homology_guard",
+      "resolved_split_policy": {
+        "policy": "uniref_grouped",
+        "reason": "Beta split compiler now groups on explicit UniRef keys where they exist and reports fallback coverage where they do not.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_only",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "unseen folds",
+        "SARS-CoV-2 spike epitopes"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "tubiana2022scannet",
+        "title": "ScanNet: an interpretable geometric deep learning model for structure-based protein binding site prediction",
+        "doi": "https://doi.org/10.1038/s41592-022-01490-7",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "uniref_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split as a `paper_faithful_external` audit lane and compare it against a ProteoSphere-native `uniref_grouped` rebuild when roster evidence becomes available."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\tubiana2022scannet.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "krapp2023pesto",
+      "title": "PeSTo: parameter-free geometric deep learning for accurate prediction of protein binding interfaces",
+      "doi": "https://doi.org/10.1038/s41467-023-37701-8",
+      "task_group": "binding_site_prediction",
+      "claimed_dataset": "ScanNet comparison and PPDB5 example",
+      "claimed_split": {
+        "description": "Comparison against prior interface predictors plus an unbound PPDB5 example; no explicit train/test membership evidence in the supplied list.",
+        "style": "paper_specific_external",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "paper_specific_external",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_only",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "ScanNet comparison",
+        "PPDB5 example"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "krapp2023pesto",
+        "title": "PeSTo: parameter-free geometric deep learning for accurate prediction of protein binding interfaces",
+        "doi": "https://doi.org/10.1038/s41467-023-37701-8",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `paper_faithful_external` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\krapp2023pesto.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "yugandhar2014affinity",
+      "title": "Protein-protein binding affinity prediction from amino acid sequence",
+      "doi": "https://doi.org/10.1093/bioinformatics/btu580",
+      "task_group": "affinity_prediction",
+      "claimed_dataset": "135 complex jackknife set",
+      "claimed_split": {
+        "description": "Class-specific regression over 135 complexes with jackknife evaluation.",
+        "style": "cross_validation",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "cross_validation",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "sequence_only",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "unsafe_for_training",
+      "verdict": "unsafe_for_training",
+      "evidence_resolution_status": "final_blocked_by_policy_or_overlap",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "POLICY_MISMATCH",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `pdbbind` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The claimed split strategy does not satisfy ProteoSphere training policy as written.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "135 complexes",
+        "jackknife"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "yugandhar2014affinity",
+        "title": "Protein-protein binding affinity prediction from amino acid sequence",
+        "doi": "https://doi.org/10.1093/bioinformatics/btu580",
+        "project_status": "unsafe_for_training",
+        "narrative_verdict": "misleading / leakage-prone",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [
+            "PDBBind is non-public or non-redistributable in the condensed library and should remain audit-facing rather than governing."
+          ],
+          "recommended_canonical_treatment": "Do not accept the reported split as training-governing. Re-express the benchmark under `accession_grouped` before any comparison is treated as meaningful."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\yugandhar2014affinity.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "rodrigues2019mcsm_ppi2",
+      "title": "mCSM-PPI2: predicting the effects of mutations on protein-protein interactions",
+      "doi": "https://doi.org/10.1093/nar/gkz383",
+      "task_group": "mutation_effect_prediction",
+      "claimed_dataset": "CAPRI blind-test benchmark",
+      "claimed_split": {
+        "description": "Benchmarking includes CAPRI blind tests, which function as an external holdout regime.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_plus_evolution",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "CAPRI blind tests"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "rodrigues2019mcsm_ppi2",
+        "title": "mCSM-PPI2: predicting the effects of mutations on protein-protein interactions",
+        "doi": "https://doi.org/10.1093/nar/gkz383",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split in a `paper_faithful_external` audit lane only; do not treat it as the default canonical split for training or headline benchmarking."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\rodrigues2019mcsm_ppi2.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "wang2020nettree",
+      "title": "A topology-based network tree for the prediction of protein-protein binding affinity changes following mutation",
+      "doi": "https://doi.org/10.1038/s42256-020-0149-6",
+      "task_group": "mutation_effect_prediction",
+      "claimed_dataset": "AB-Bind S645 plus blind homology subset",
+      "claimed_split": {
+        "description": "Reported on AB-Bind S645 plus a blind homology subset.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_only",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "AB-Bind S645",
+        "blind homology subset"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "wang2020nettree",
+        "title": "A topology-based network tree for the prediction of protein-protein binding affinity changes following mutation",
+        "doi": "https://doi.org/10.1038/s42256-020-0149-6",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split in a `paper_faithful_external` audit lane only; do not treat it as the default canonical split for training or headline benchmarking."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\wang2020nettree.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "zhang2020mutabind2",
+      "title": "MutaBind2: Predicting the Impacts of Single and Multiple Mutations on Protein-Protein Interactions",
+      "doi": "https://doi.org/10.1016/j.isci.2020.100939",
+      "task_group": "mutation_effect_prediction",
+      "claimed_dataset": "Single- and multiple-mutation benchmark",
+      "claimed_split": {
+        "description": "Single- and multiple-mutation benchmarking is claimed, but the supplied list does not provide the roster or split construction details.",
+        "style": "held_out_test",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "held_out_test",
+      "resolved_split_policy": {
+        "policy": "accession_grouped",
+        "reason": "Beta split compiler groups by exact accession signatures, not single-accession holdout.",
+        "recommended_for_training": true,
+        "paper_faithful_only": false
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_plus_conservation",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "blocked_pending_mapping",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "single and multiple mutations"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "zhang2020mutabind2",
+        "title": "MutaBind2: Predicting the Impacts of Single and Multiple Mutations on Protein-Protein Interactions",
+        "doi": "https://doi.org/10.1016/j.isci.2020.100939",
+        "project_status": "blocked_pending_mapping",
+        "narrative_verdict": "incomplete because required evidence is missing",
+        "resolved_split_policy": "accession_grouped",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Treat the paper as blocked pending roster mapping. If recovered later, canonicalize it under `accession_grouped` rather than trusting the paper split verbatim."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\zhang2020mutabind2.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "zhou2024ddmut_ppi",
+      "title": "DDMut-PPI: predicting effects of mutations on protein-protein interactions using graph-based deep learning",
+      "doi": "https://doi.org/10.1093/nar/gkae412",
+      "task_group": "mutation_effect_prediction",
+      "claimed_dataset": "SM1124 and related mutation sets",
+      "claimed_split": {
+        "description": "Evaluation is reported on single- and multiple-mutation sets including SM1124.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "graph_plus_plm",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`.",
+        "Source family `uniprot` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "SM1124",
+        "single and multiple mutants"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "zhou2024ddmut_ppi",
+        "title": "DDMut-PPI: predicting effects of mutations on protein-protein interactions using graph-based deep learning",
+        "doi": "https://doi.org/10.1093/nar/gkae412",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split in a `paper_faithful_external` audit lane only; do not treat it as the default canonical split for training or headline benchmarking."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\zhou2024ddmut_ppi.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "bryant2022af2_ppi",
+      "title": "Improved prediction of protein-protein interactions using AlphaFold2",
+      "doi": "https://doi.org/10.1038/s41467-022-28865-w",
+      "task_group": "complex_prediction",
+      "claimed_dataset": "Heterodimer prediction benchmark",
+      "claimed_split": {
+        "description": "Direct heterodimer complex prediction with ranked evaluation against docking baselines.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_prediction",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `alphafold` is not materialized in `warehouse_sources`.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "heterodimers",
+        "CAPRI docking baseline"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "bryant2022af2_ppi",
+        "title": "Improved prediction of protein-protein interactions using AlphaFold2",
+        "doi": "https://doi.org/10.1038/s41467-022-28865-w",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split in a `paper_faithful_external` audit lane only; do not treat it as the default canonical split for training or headline benchmarking."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\bryant2022af2_ppi.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    },
+    {
+      "paper_id": "gao2022af2complex",
+      "title": "AF2Complex predicts direct physical interactions in multimeric proteins with deep learning",
+      "doi": "https://doi.org/10.1038/s41467-022-29394-2",
+      "task_group": "complex_prediction",
+      "claimed_dataset": "Large-scale E. coli multimeric test",
+      "claimed_split": {
+        "description": "Large-scale E. coli test for multimeric direct interaction identification.",
+        "style": "external_holdout",
+        "member_type": "unspecified",
+        "train_member_count": 0,
+        "val_member_count": 0,
+        "test_member_count": 0,
+        "mapping_input_completeness": "paper_notes_only"
+      },
+      "claimed_split_policy": "external_holdout",
+      "resolved_split_policy": {
+        "policy": "paper_faithful_external",
+        "reason": "Reviewable beta split lane can now hold out external source components for audit and comparison workflows without becoming the default recommended split.",
+        "recommended_for_training": false,
+        "paper_faithful_only": true
+      },
+      "mapping_confidence": "medium",
+      "split_parse_confidence": "medium",
+      "provenance_grade": "weak",
+      "overlap_metrics": {
+        "direct_overlap_count": 0,
+        "accession_root_overlap_count": 0,
+        "uniref100_overlap_count": 0,
+        "uniref90_overlap_count": 0,
+        "uniref50_overlap_count": 0,
+        "shared_partner_overlap_count": 0,
+        "ligand_identity_overlap_count": 0,
+        "ligand_chemical_series_overlap_count": 0,
+        "motif_domain_overlap_count": 0,
+        "source_family_overlap_count": 0,
+        "assay_family_overlap_count": 0,
+        "shared_ligand_identity_sample": [],
+        "shared_ligand_chemical_series_sample": [],
+        "shared_motif_domain_sample": [],
+        "shared_source_family_sample": [],
+        "shared_assay_family_sample": [],
+        "train_resolved_count": 0,
+        "test_resolved_count": 0,
+        "train_unresolved_count": 0,
+        "test_unresolved_count": 0
+      },
+      "leakage_flags": [],
+      "deterministic_signature_checks": {
+        "evaluated_axes": [
+          "pdb_id",
+          "protein_accession",
+          "accession_root",
+          "uniref_cluster",
+          "ligand_identity",
+          "ligand_chemical_series",
+          "motif_domain",
+          "source_family",
+          "assay_family"
+        ],
+        "llm_required_for_overlap_calls": false,
+        "warehouse_signature_coverage": {
+          "ligand_signature_rows": 16320,
+          "canonical_smiles_signature_rows": 16320,
+          "chemical_series_signature_rows": 16320,
+          "motif_domain_signature_rows": 5437413,
+          "motif_domain_namespaces": {
+            "feature_modified residue": 268774,
+            "feature_site": 69435,
+            "InterPro": 2603102,
+            "feature_lipid moiety-binding region": 14059,
+            "Motivated Proteins": 14502,
+            "feature_binding site": 1287550,
+            "feature_active site": 179698,
+            "Pfam": 872787,
+            "ELM": 947,
+            "feature_glycosylation site": 126559
+          },
+          "ligand_chemistry_signature_rows": 16320
+        }
+      },
+      "modality_status": {
+        "required_modality": "structure_prediction",
+        "structure_required": true,
+        "status": "not_member_validated",
+        "missing_modalities": []
+      },
+      "eligibility_status": "audit_only",
+      "verdict": "audit_only",
+      "evidence_resolution_status": "blocked_needs_source_materialization_or_official_roster",
+      "reason_codes": [
+        "INSUFFICIENT_PROVENANCE",
+        "UNRESOLVED_SPLIT_MEMBERSHIP",
+        "WAREHOUSE_COVERAGE_GAP"
+      ],
+      "warnings": [
+        "Paper evidence is too weak to treat the claimed split as governing.",
+        "Source family `alphafold` is not materialized in `warehouse_sources`.",
+        "Source family `rcsb_pdbe` is not materialized in `warehouse_sources`."
+      ],
+      "blockers": [
+        "The paper does not expose enough roster detail to reconstruct the split deterministically.",
+        "The warehouse does not fully materialize the source or benchmark surface needed for this paper."
+      ],
+      "needs_human_review": false,
+      "provenance_notes": [
+        "Primary evidence came from the condensed warehouse catalog, manifest, runtime validation artifact, source registry, and Model Studio split-policy logic.",
+        "best_evidence was treated as the default logical read view.",
+        "No explicit roster was resolved, so the verdict relies on paper-level claims plus warehouse capabilities.",
+        "A warehouse-facing paper split audit surface is available under the reference library control root."
+      ],
+      "source_family_findings": [],
+      "member_resolution": {
+        "status": "missing_membership",
+        "member_type": "",
+        "resolved_members": {
+          "train": {},
+          "val": {},
+          "test": {}
+        },
+        "unresolved_members": {
+          "train": [],
+          "val": [],
+          "test": []
+        }
+      },
+      "named_entities": [
+        "multimeric complexes",
+        "E. coli test"
+      ],
+      "notes": [],
+      "supplemental_evidence": null,
+      "warehouse_audit_surface": {
+        "paper_id": "gao2022af2complex",
+        "title": "AF2Complex predicts direct physical interactions in multimeric proteins with deep learning",
+        "doi": "https://doi.org/10.1038/s41467-022-29394-2",
+        "project_status": "audit_only",
+        "narrative_verdict": "audit-useful but non-canonical",
+        "resolved_split_policy": "paper_faithful_external",
+        "audit_surface_status": "paper_summary_only",
+        "benchmark_membership_materialized": false,
+        "identifier_bridge_requirements": [],
+        "supplemental_evidence": null,
+        "evidence_notes": {
+          "direct_overlap_status": "not_computable",
+          "uniref_overlap_status": "theoretically_supported",
+          "leakage_status": "preflight_only",
+          "blockers": [
+            "paper-specific train/test membership roster is absent from the condensed warehouse"
+          ],
+          "warnings": [],
+          "recommended_canonical_treatment": "Keep the paper split in a `paper_faithful_external` audit lane only; do not treat it as the default canonical split for training or headline benchmarking."
+        },
+        "source_artifact_path": "D:\\documents\\ProteoSphereV2\\artifacts\\status\\paper_split_list\\gao2022af2complex.json"
+      },
+      "warehouse_identifier_bridge": null,
+      "bridge_resolution": null,
+      "identifier_bridge_requirements": []
+    }
+  ]
+}
